@@ -1,6 +1,6 @@
 # NetBeans Color Codes Preview Plugin
 
-This plugin shows a color codes preview in a sidebar for an editor.
+This plugin shows a color codes preview in an editor's sidebar.
 
 ![screenshot](https://dl.dropboxusercontent.com/u/10953443/netbeans/color-codes-preview/netbeans-color-codes-preview-screenshot.png)
 
@@ -19,7 +19,7 @@ Check/Uncheck `View > Show Colors`
 
 ## Multiple colors
 
-- Show two colors in a sidebar if there are multiple colors in a line.
+- Show top two colors in a sidebar if there are multiple colors in a line.
 - If you want to check all colors, please click a specific rectangular. They will be shown as a list.
 
 ## NOTE
