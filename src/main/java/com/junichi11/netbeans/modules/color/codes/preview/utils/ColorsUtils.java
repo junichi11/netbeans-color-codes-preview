@@ -79,6 +79,8 @@ public final class ColorsUtils {
     private static final String GROUP_BLUE = "b"; // NOI18N
     private static final String GROUP_ALPHA = "a"; // NOI18N
 
+    private static final Comparator COLOR_VALUE_COMPARATOR = new ColorValueComparator();
+
     private ColorsUtils() {
     }
 
@@ -332,20 +334,25 @@ public final class ColorsUtils {
      * @param colorValues
      */
     public static void sort(List<ColorValue> colorValues) {
-        Collections.sort(colorValues, new Comparator<ColorValue>() {
+        Collections.sort(colorValues, COLOR_VALUE_COMPARATOR);
+    }
 
-            @Override
-            public int compare(ColorValue c1, ColorValue c2) {
-                int line1 = c1.getLine();
-                int line2 = c2.getLine();
-                if (line1 == line2) {
-                    int startOffset1 = c1.getStartOffset();
-                    int startOffset2 = c2.getStartOffset();
-                    return startOffset1 - startOffset2;
-                } else {
-                    return line1 - line2;
-                }
+    private static class ColorValueComparator implements Comparator<ColorValue> {
+
+        public ColorValueComparator() {
+        }
+
+        @Override
+        public int compare(ColorValue c1, ColorValue c2) {
+            int line1 = c1.getLine();
+            int line2 = c2.getLine();
+            if (line1 == line2) {
+                int startOffset1 = c1.getStartOffset();
+                int startOffset2 = c2.getStartOffset();
+                return startOffset1 - startOffset2;
+            } else {
+                return line1 - line2;
             }
-        });
+        }
     }
 }
