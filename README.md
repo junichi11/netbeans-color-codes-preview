@@ -20,7 +20,7 @@ Check/Uncheck `View > Show Colors`
 ## Multiple colors
 
 - Show top two colors in a sidebar if there are multiple colors in a line.
-- If you want to check all colors, please click a specific rectangular. They will be shown as a list.
+- If you want to check all colors, please click a specific rectangle. They will be shown as a list.
 
 ## NOTE
 
