@@ -43,15 +43,15 @@ package com.junichi11.netbeans.modules.color.codes.preview.utils;
 
 import java.awt.Color;
 
-public class CssIntRGBColorValue extends ColorValue {
+public class CssHSLColorValue extends ColorValue {
 
-    public CssIntRGBColorValue(String value, int startOffset, int endOffset, int line) {
+    public CssHSLColorValue(String value, int startOffset, int endOffset, int line) {
         super(value, startOffset, endOffset, line);
     }
 
     @Override
     public Color getColor() {
-        return ColorsUtils.decode(getValue(), ColorsUtils.ColorType.CSS_INT_RGB);
+        return ColorsUtils.decode(getValue(), ColorsUtils.ColorType.CSS_HSL);
     }
 
 }
