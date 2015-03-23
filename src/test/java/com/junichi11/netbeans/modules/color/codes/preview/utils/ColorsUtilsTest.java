@@ -408,8 +408,6 @@ public class ColorsUtilsTest {
         assertEquals(1, result.size());
         result = ColorsUtils.getCssIntRGBs("rgb(255, 255, 255)");
         assertEquals(1, result.size());
-        result = ColorsUtils.getCssIntRGBs("rgb(255, 255, 255)");
-        assertEquals(1, result.size());
 
         result = ColorsUtils.getCssIntRGBs("rgb(255, 255, 255) rgb(0,0,0)");
         assertEquals(2, result.size());
@@ -428,8 +426,6 @@ public class ColorsUtilsTest {
         List<ColorValue> result = ColorsUtils.getCssIntRGBs("rgb(0, 0, 0)", -1);
         assertEquals(1, result.size());
         result = ColorsUtils.getCssIntRGBs("rgb(100 , 100 , 100)", 1);
-        assertEquals(1, result.size());
-        result = ColorsUtils.getCssIntRGBs("rgb(255, 255, 255)", 1);
         assertEquals(1, result.size());
         result = ColorsUtils.getCssIntRGBs("rgb(255, 255, 255)", 1);
         assertEquals(1, result.size());
@@ -476,8 +472,6 @@ public class ColorsUtilsTest {
         List<String> result = ColorsUtils.getCssIntRGBAs("rgba(0, 0, 0, 0)");
         assertEquals(1, result.size());
         result = ColorsUtils.getCssIntRGBAs("rgba(100 , 100 , 100 , 0.5)");
-        assertEquals(1, result.size());
-        result = ColorsUtils.getCssIntRGBAs("rgba(255, 255, 255, 1)");
         assertEquals(1, result.size());
         result = ColorsUtils.getCssIntRGBAs("rgba(255, 255, 255, 1)");
         assertEquals(1, result.size());
