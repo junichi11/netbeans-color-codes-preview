@@ -58,11 +58,20 @@ public final class ColorsUtils {
 
     public enum ColorType {
 
-        HEX,
-        CSS_INT_RGB,
-        CSS_PERCENT_RGB,
-        CSS_INT_RGBA,
-        CSS_PERCENT_RGBA
+        HEX("#(?<codenumber>[0-9a-fA-F]{6,}|[0-9a-fA-F]{3,})"),
+        CSS_INT_RGB(String.format(CSS_RGB_FORMAT, INT_RGB_VALUE_FORMAT, INT_RGB_VALUE_FORMAT, INT_RGB_VALUE_FORMAT)),
+        CSS_PERCENT_RGB(String.format(CSS_RGB_FORMAT, PERCENT_VALUE_FORMAT, PERCENT_VALUE_FORMAT, PERCENT_VALUE_FORMAT)),
+        CSS_INT_RGBA(String.format(CSS_RGBA_FORMAT, INT_RGB_VALUE_FORMAT, INT_RGB_VALUE_FORMAT, INT_RGB_VALUE_FORMAT, ALPHA_VALUE_FORMAT)),
+        CSS_PERCENT_RGBA(String.format(CSS_RGBA_FORMAT, PERCENT_VALUE_FORMAT, PERCENT_VALUE_FORMAT, PERCENT_VALUE_FORMAT, ALPHA_VALUE_FORMAT));
+        private final Pattern pattern;
+
+        private ColorType(String regex) {
+            this.pattern = Pattern.compile(regex);
+        }
+
+        public Pattern getPattern() {
+            return pattern;
+        }
     }
 
     static final String PERCENT_VALUE_FORMAT = "(100|[1-9]?[0-9])%"; // NOI18N
@@ -70,11 +79,6 @@ public final class ColorsUtils {
     static final String INT_RGB_VALUE_FORMAT = "25[0-5]|2[0-4][0-9]|200|1[0-9][0-9]|100|[1-9]?[0-9]|[0-9]"; // NOI18N
     private static final String CSS_RGB_FORMAT = "(?<cssrgb>rgb\\((?<codenumber>(?<r>%s) *, *(?<g>%s) *, *(?<b>%s))\\))"; // NOI18N
     private static final String CSS_RGBA_FORMAT = "(?<cssrgba>rgba\\((?<codenumber>(?<r>%s) *, *(?<g>%s) *, *(?<b>%s) *, *(?<a>%s))\\))"; // NOI18N
-    private static final Pattern HEX_COLOR_CODE_PATTERN = Pattern.compile("#(?<codenumber>[0-9a-fA-F]{6,}|[0-9a-fA-F]{3,})"); // NOI18N
-    private static final Pattern CSS_INT_RGB_PATTERN = Pattern.compile(String.format(CSS_RGB_FORMAT, INT_RGB_VALUE_FORMAT, INT_RGB_VALUE_FORMAT, INT_RGB_VALUE_FORMAT));
-    private static final Pattern CSS_PERCENT_RGB_PATTERN = Pattern.compile(String.format(CSS_RGB_FORMAT, PERCENT_VALUE_FORMAT, PERCENT_VALUE_FORMAT, PERCENT_VALUE_FORMAT));
-    private static final Pattern CSS_INT_RGBA_PATTERN = Pattern.compile(String.format(CSS_RGBA_FORMAT, INT_RGB_VALUE_FORMAT, INT_RGB_VALUE_FORMAT, INT_RGB_VALUE_FORMAT, ALPHA_VALUE_FORMAT));
-    private static final Pattern CSS_PERCENT_RGBA_PATTERN = Pattern.compile(String.format(CSS_RGBA_FORMAT, PERCENT_VALUE_FORMAT, PERCENT_VALUE_FORMAT, PERCENT_VALUE_FORMAT, ALPHA_VALUE_FORMAT));
 
     // group names
     private static final String GROUP_CODENUMBER = "codenumber"; // NOI18N
@@ -97,7 +101,7 @@ public final class ColorsUtils {
      * @return hex color codes
      */
     public static List<String> getHexColorCodes(String line) {
-        Matcher matcher = HEX_COLOR_CODE_PATTERN.matcher(line);
+        Matcher matcher = getColorMatcher(line, ColorType.HEX);
         int startPosition = 0;
         ArrayList<String> colorCodes = new ArrayList<>();
         while (matcher.find(startPosition)) {
@@ -125,7 +129,7 @@ public final class ColorsUtils {
      * @return hex color codes
      */
     public static List<ColorValue> getHexColorCodes(String line, int lineNumber) {
-        Matcher matcher = HEX_COLOR_CODE_PATTERN.matcher(line);
+        Matcher matcher = getColorMatcher(line, ColorType.HEX);
         int startPosition = 0;
         ArrayList<ColorValue> colorValues = new ArrayList<>();
         while (matcher.find(startPosition)) {
@@ -154,7 +158,7 @@ public final class ColorsUtils {
      * @return RGB codes
      */
     public static List<String> getCssIntRGBs(String line) {
-        Matcher matcher = CSS_INT_RGB_PATTERN.matcher(line);
+        Matcher matcher = getColorMatcher(line, ColorType.CSS_INT_RGB);
         int startPosition = 0;
         ArrayList<String> colorCodes = new ArrayList<>();
         while (matcher.find(startPosition)) {
@@ -194,7 +198,7 @@ public final class ColorsUtils {
      * @return RGBA color values
      */
     public static List<String> getCssIntRGBAs(String line) {
-        Matcher matcher = CSS_INT_RGBA_PATTERN.matcher(line);
+        Matcher matcher = getColorMatcher(line, ColorType.CSS_INT_RGBA);
         int startPosition = 0;
         ArrayList<String> colorCodes = new ArrayList<>();
         while (matcher.find(startPosition)) {
@@ -228,7 +232,7 @@ public final class ColorsUtils {
     }
 
     private static List<ColorValue> getCssColorValues(String line, int lineNumber, ColorType type) {
-        Matcher matcher = getCssColorMatcher(line, type);
+        Matcher matcher = getColorMatcher(line, type);
         ArrayList<ColorValue> colorCodes = new ArrayList<>();
         String groupName = getCssColorGroupName(type);
         while (matcher.find()) {
@@ -241,19 +245,8 @@ public final class ColorsUtils {
         return colorCodes;
     }
 
-    private static Matcher getCssColorMatcher(String line, ColorType type) {
-        switch (type) {
-            case CSS_INT_RGB:
-                return CSS_INT_RGB_PATTERN.matcher(line);
-            case CSS_INT_RGBA:
-                return CSS_INT_RGBA_PATTERN.matcher(line);
-            case CSS_PERCENT_RGB:
-                return CSS_PERCENT_RGB_PATTERN.matcher(line);
-            case CSS_PERCENT_RGBA:
-                return CSS_PERCENT_RGBA_PATTERN.matcher(line);
-            default:
-                throw new AssertionError();
-        }
+    private static Matcher getColorMatcher(String line, ColorType type) {
+        return type.getPattern().matcher(line);
     }
 
     private static String getCssColorGroupName(ColorType type) {
@@ -337,7 +330,7 @@ public final class ColorsUtils {
 
     @CheckForNull
     private static Color decodeHexColorCode(String code) {
-        Matcher matcher = HEX_COLOR_CODE_PATTERN.matcher(code);
+        Matcher matcher = getColorMatcher(code, ColorType.HEX);
         if (matcher.matches()) {
             int length = code.length();
             if (length == 4) {
@@ -352,7 +345,7 @@ public final class ColorsUtils {
 
     @CheckForNull
     private static Color decodeCssIntRGB(String code) {
-        Matcher matcher = CSS_INT_RGB_PATTERN.matcher(code);
+        Matcher matcher = getColorMatcher(code, ColorType.CSS_INT_RGB);
         if (matcher.matches()) {
             return new Color(Integer.parseInt(matcher.group(GROUP_RED)), Integer.parseInt(matcher.group(GROUP_GREEN)), Integer.parseInt(matcher.group(GROUP_BLUE)));
         }
@@ -361,7 +354,7 @@ public final class ColorsUtils {
 
     @CheckForNull
     private static Color decodeCssPercentRGB(String code) {
-        Matcher matcher = CSS_PERCENT_RGB_PATTERN.matcher(code);
+        Matcher matcher = getColorMatcher(code, ColorType.CSS_PERCENT_RGB);
         if (matcher.matches()) {
             String red = matcher.group(GROUP_RED).replace("%", ""); // NOI18N
             String green = matcher.group(GROUP_GREEN).replace("%", ""); // NOI18N
@@ -373,7 +366,7 @@ public final class ColorsUtils {
 
     @CheckForNull
     private static Color decodeCssIntRGBA(String code) {
-        Matcher matcher = CSS_INT_RGBA_PATTERN.matcher(code);
+        Matcher matcher = getColorMatcher(code, ColorType.CSS_INT_RGBA);
         if (matcher.matches()) {
             Float alpha = Float.valueOf(matcher.group(GROUP_ALPHA));
             int intAlpha = (int) (255 * alpha);
@@ -384,7 +377,7 @@ public final class ColorsUtils {
 
     @CheckForNull
     private static Color decodeCssPercentRGBA(String code) {
-        Matcher matcher = CSS_PERCENT_RGBA_PATTERN.matcher(code);
+        Matcher matcher = getColorMatcher(code, ColorType.CSS_PERCENT_RGBA);
         if (matcher.matches()) {
             Float alpha = Float.valueOf(matcher.group(GROUP_ALPHA));
             String red = matcher.group(GROUP_RED).replace("%", ""); // NOI18N
