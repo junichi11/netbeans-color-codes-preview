@@ -51,7 +51,7 @@ public class CssIntRGBColorValue extends ColorValue {
 
     @Override
     public Color getColor() {
-        return ColorsUtils.decode(getValue(), ColorsUtils.ColorType.CSS_INT_RBG);
+        return ColorsUtils.decode(getValue(), ColorsUtils.ColorType.CSS_INT_RGB);
     }
 
 }

@@ -59,7 +59,7 @@ public final class ColorsUtils {
     public enum ColorType {
 
         HEX,
-        CSS_INT_RBG,
+        CSS_INT_RGB,
         CSS_PERCENT_RGB,
         CSS_INT_RGBA,
         CSS_PERCENT_RGBA
@@ -174,7 +174,7 @@ public final class ColorsUtils {
      * @return RGB codes
      */
     public static List<ColorValue> getCssIntRGBs(String line, int lineNumber) {
-        return getCssColorValues(line, lineNumber, ColorType.CSS_INT_RBG);
+        return getCssColorValues(line, lineNumber, ColorType.CSS_INT_RGB);
     }
 
     /**
@@ -243,7 +243,7 @@ public final class ColorsUtils {
 
     private static Matcher getCssColorMatcher(String line, ColorType type) {
         switch (type) {
-            case CSS_INT_RBG:
+            case CSS_INT_RGB:
                 return CSS_INT_RGB_PATTERN.matcher(line);
             case CSS_INT_RGBA:
                 return CSS_INT_RGBA_PATTERN.matcher(line);
@@ -258,7 +258,7 @@ public final class ColorsUtils {
 
     private static String getCssColorGroupName(ColorType type) {
         switch (type) {
-            case CSS_INT_RBG:
+            case CSS_INT_RGB:
                 return GROUP_CSS_RGB;
             case CSS_INT_RGBA:
                 return GROUP_CSS_RGBA;
@@ -273,7 +273,7 @@ public final class ColorsUtils {
 
     private static ColorValue createCssColorValue(String value, int startOffset, int endOffset, int lineNumber, ColorType type) {
         switch (type) {
-            case CSS_INT_RBG:
+            case CSS_INT_RGB:
                 return new CssIntRGBColorValue(value, startOffset, endOffset, lineNumber);
             case CSS_INT_RGBA:
                 return new CssIntRGBAColorValue(value, startOffset, endOffset, lineNumber);
@@ -322,7 +322,7 @@ public final class ColorsUtils {
         switch (type) {
             case HEX:
                 return decodeHexColorCode(code);
-            case CSS_INT_RBG:
+            case CSS_INT_RGB:
                 return decodeCssIntRGB(code);
             case CSS_PERCENT_RGB:
                 return decodeCssPercentRGB(code);
