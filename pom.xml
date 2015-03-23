@@ -119,5 +119,6 @@
 &lt;ul&gt;
 &lt;li&gt;Hex color code (e.g. #ffffff, #000)&lt;/li&gt;
 &lt;li&gt;Css rgb/rgba value (e.g. rgb(0,0,0), rgba(255, 255, 255, 0.8))&lt;/li&gt;
+&lt;li&gt;Css hsl/hsla values (e.g. hsl(0, 100%, 50%), hsla(120, 100%, 50%, 0.5))&lt;/li&gt;
 &lt;/ul&gt;</description>
 </project>
