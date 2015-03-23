@@ -15,7 +15,8 @@ Check/Uncheck `View > Show Colors`
 ## Supported color patterns
 
 - Hex color code (e.g. #fff #000000)
-- Css rgb/rgba values (e.g. rgb(0, 0, 0), rgba(255,255,255, 0.8))
+- Css rgb/rgba values (e.g. rgb(0, 0, 0), rgb(50%, 0%, 100%), rgba(255,255,255, 0.8))
+- Css hsl/hsla values (e.g. hsl(0, 100%, 50%), hsla(120, 100%, 50%, 0.5))
 
 ## Multiple colors
 
