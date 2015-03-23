@@ -163,6 +163,24 @@ public class ColorsUtilsTest {
     }
 
     /**
+     * Test of INT_RGB_VALUE_FORMAT regex, of class ColorsUtils.
+     */
+    @Test
+    public void testHueValueRegex() {
+        Pattern pattern = Pattern.compile(ColorsUtils.HUE_VALUE_FORMAT);
+        for (int i = 0; i <= 360; i++) {
+            Matcher matcher = pattern.matcher(String.valueOf(i));
+            Assert.assertTrue(matcher.matches());
+        }
+
+        Matcher matcher = pattern.matcher("-1");
+        Assert.assertFalse(matcher.matches());
+        matcher = pattern.matcher("361");
+        Assert.assertFalse(matcher.matches());
+    }
+
+    // decode
+    /**
      * Test of decode method, of class ColorsUtils.
      */
     @Test
@@ -333,6 +351,85 @@ public class ColorsUtilsTest {
         Assert.assertNull(result);
     }
 
+    /**
+     * Test of decode method, of class ColorsUtils.
+     */
+    @Test
+    public void testDecodeCssHSL() {
+        Color result = ColorsUtils.decode("hsl(0, 0%, 0%)");
+        Assert.assertNotNull(result);
+        result = ColorsUtils.decode("hsl(180, 50%, 50%)");
+        Assert.assertNotNull(result);
+        result = ColorsUtils.decode("hsl(360,100%,100%)");
+        Assert.assertNotNull(result);
+
+        result = ColorsUtils.decode("hsl(-1, 0%, 0%)");
+        Assert.assertNull(result);
+        result = ColorsUtils.decode("hsl(361, 0%, 0%)");
+        Assert.assertNull(result);
+        result = ColorsUtils.decode("hsl(0, -1%, 0%)");
+        Assert.assertNull(result);
+        result = ColorsUtils.decode("hsl(0, 101%, 0%)");
+        Assert.assertNull(result);
+        result = ColorsUtils.decode("hsl(0, 0%, -1%)");
+        Assert.assertNull(result);
+        result = ColorsUtils.decode("hsl(0, 0%, 101%)");
+        Assert.assertNull(result);
+
+        result = ColorsUtils.decode("hsl(100%, 0%, 0%)");
+        Assert.assertNull(result);
+        result = ColorsUtils.decode("hsl(0, 0, 0%)");
+        Assert.assertNull(result);
+        result = ColorsUtils.decode("hsl(0, 0%, 0)");
+        Assert.assertNull(result);
+        result = ColorsUtils.decode("hsl(0, 0%, 100%, 0.1)");
+        Assert.assertNull(result);
+        result = ColorsUtils.decode("test hsl(0, 100%, 50%)");
+        Assert.assertNull(result);
+    }
+
+    /**
+     * Test of decode method, of class ColorsUtils.
+     */
+    @Test
+    public void testDecodeCssHSLA() {
+        Color result = ColorsUtils.decode("hsla(0, 0%, 0%, 0)");
+        Assert.assertNotNull(result);
+        result = ColorsUtils.decode("hsla(180, 50%, 50%, 0.5)");
+        Assert.assertNotNull(result);
+        result = ColorsUtils.decode("hsla(360,100%,100%, 1)");
+        Assert.assertNotNull(result);
+
+        result = ColorsUtils.decode("hsla(-1, 0%, 0%, 0)");
+        Assert.assertNull(result);
+        result = ColorsUtils.decode("hsla(361, 0%, 0%, 0)");
+        Assert.assertNull(result);
+        result = ColorsUtils.decode("hsla(0, -1%, 0%, 1)");
+        Assert.assertNull(result);
+        result = ColorsUtils.decode("hsla(0, 101%, 0%, 1)");
+        Assert.assertNull(result);
+        result = ColorsUtils.decode("hsla(0, 0%, -1%), 1");
+        Assert.assertNull(result);
+        result = ColorsUtils.decode("hsla(0, 0%, 101%, 1)");
+        Assert.assertNull(result);
+        result = ColorsUtils.decode("hsla(0, 0%, 100%, -0.1)");
+        Assert.assertNull(result);
+        result = ColorsUtils.decode("hsla(0, 0%, 100%, 1.1)");
+        Assert.assertNull(result);
+
+        result = ColorsUtils.decode("hsla(100%, 0%, 0%, 0)");
+        Assert.assertNull(result);
+        result = ColorsUtils.decode("hsla(0, 0, 0%, 0)");
+        Assert.assertNull(result);
+        result = ColorsUtils.decode("hsla(0, 0%, 0, 0)");
+        Assert.assertNull(result);
+        result = ColorsUtils.decode("hsla(0, 0%, 0%, 0%)");
+        Assert.assertNull(result);
+        result = ColorsUtils.decode("test hsla(0, 100%, 50%, 0.5)");
+        Assert.assertNull(result);
+    }
+
+    // Colors
     /**
      * Test of getHexColorCodes method, of class ColorsUtils.
      */
@@ -561,6 +658,90 @@ public class ColorsUtilsTest {
         result = ColorsUtils.getCssPercentRGBAs("rgba(0, 0, 0, 0.50)", 1);
         assertEquals(0, result.size());
         result = ColorsUtils.getCssPercentRGBAs("rgb(0, 0, 0)", 1);
+        assertEquals(0, result.size());
+    }
+
+    /**
+     * Test of getCssHSLs method, of class ColorsUtils.
+     */
+    @Test
+    public void testGetCssHSLColorValues() {
+        List<ColorValue> result = ColorsUtils.getCssHSLs("hsl(0, 0%, 0%)", -1);
+        assertEquals(1, result.size());
+        result = ColorsUtils.getCssHSLs("hsl(180, 50%, 50%)", 1);
+        assertEquals(1, result.size());
+        result = ColorsUtils.getCssHSLs("hsl(360, 100%, 100%)", 1);
+        assertEquals(1, result.size());
+
+        // multiple values
+        result = ColorsUtils.getCssHSLs("hsl(0, 100%, 100%) hsl(0,0%,0%)", 1);
+        assertEquals(2, result.size());
+        result = ColorsUtils.getCssHSLs("hsl(-1, 100%, 100%) test hsl(0,0%,0%)", 1);
+        assertEquals(1, result.size());
+
+        // no colors
+        result = ColorsUtils.getCssHSLs("test", 1);
+        assertEquals(0, result.size());
+        result = ColorsUtils.getCssHSLs("hsl(-1, 100%, 100%)", 1);
+        assertEquals(0, result.size());
+        result = ColorsUtils.getCssHSLs("hsl(361, 100%, 100%)", 1);
+        assertEquals(0, result.size());
+        result = ColorsUtils.getCssHSLs("hsl(0, -1%, 0%)", 1);
+        assertEquals(0, result.size());
+        result = ColorsUtils.getCssHSLs("hsl(0, 101%, 0%)", 1);
+        assertEquals(0, result.size());
+        result = ColorsUtils.getCssHSLs("hsl(0, 0%, -1%)", 1);
+        assertEquals(0, result.size());
+        result = ColorsUtils.getCssHSLs("hsl(0, 0%, 101%)", 1);
+        assertEquals(0, result.size());
+
+        result = ColorsUtils.getCssHSLs("hsl(0, 0%, 0%, 0)", 1);
+        assertEquals(0, result.size());
+        result = ColorsUtils.getCssHSLs("hsla(0, 0%, 0%, 0)", 1);
+        assertEquals(0, result.size());
+    }
+
+    /**
+     * Test of getCssHSLAs method, of class ColorsUtils.
+     */
+    @Test
+    public void testGetCssHSLAColorValues() {
+        List<ColorValue> result = ColorsUtils.getCssHSLAs("hsla(0, 0%, 0%, 0)", -1);
+        assertEquals(1, result.size());
+        result = ColorsUtils.getCssHSLAs("hsla(180, 50%, 50%, 0.5)", 1);
+        assertEquals(1, result.size());
+        result = ColorsUtils.getCssHSLAs("hsla(360, 100%, 100%, 1)", 1);
+        assertEquals(1, result.size());
+
+        // multiple values
+        result = ColorsUtils.getCssHSLAs("hsla(0, 100%, 100%, 1) hsla(0,0%,0%, 0.8)", 1);
+        assertEquals(2, result.size());
+        result = ColorsUtils.getCssHSLAs("hsla(180, 100%, 100%, -1) test hsla(0,0%,0%, 0)", 1);
+        assertEquals(1, result.size());
+
+        // no colors
+        result = ColorsUtils.getCssHSLAs("test", 1);
+        assertEquals(0, result.size());
+        result = ColorsUtils.getCssHSLAs("hsla(-1, 100%, 100%, 0)", 1);
+        assertEquals(0, result.size());
+        result = ColorsUtils.getCssHSLAs("hsla(361, 100%, 100%, 0)", 1);
+        assertEquals(0, result.size());
+        result = ColorsUtils.getCssHSLAs("hsla(0, -1%, 0%, 0)", 1);
+        assertEquals(0, result.size());
+        result = ColorsUtils.getCssHSLAs("hsla(0, 101%, 0%, 0)", 1);
+        assertEquals(0, result.size());
+        result = ColorsUtils.getCssHSLAs("hsla(0, 0%, -1%, 0)", 1);
+        assertEquals(0, result.size());
+        result = ColorsUtils.getCssHSLAs("hsla(0, 0%, 101%, 0)", 1);
+        assertEquals(0, result.size());
+        result = ColorsUtils.getCssHSLAs("hsla(0, 0%, 100%, -0.1)", 1);
+        assertEquals(0, result.size());
+        result = ColorsUtils.getCssHSLAs("hsla(0, 0%, 100%, 1.1)", 1);
+        assertEquals(0, result.size());
+
+        result = ColorsUtils.getCssHSLAs("hsla(0, 0%, 0%)", 1);
+        assertEquals(0, result.size());
+        result = ColorsUtils.getCssHSLAs("hsl(0, 0%, 0%)", 1);
         assertEquals(0, result.size());
     }
 }

@@ -246,6 +246,8 @@ public final class DrawingPanel extends JPanel implements PreferenceChangeListen
         colorValues.addAll(ColorsUtils.getCssIntRGBAs(line, lineNumber));
         colorValues.addAll(ColorsUtils.getCssPercentRGBs(line, lineNumber));
         colorValues.addAll(ColorsUtils.getCssPercentRGBAs(line, lineNumber));
+        colorValues.addAll(ColorsUtils.getCssHSLs(line, lineNumber));
+        colorValues.addAll(ColorsUtils.getCssHSLAs(line, lineNumber));
         return colorValues;
     }
 
