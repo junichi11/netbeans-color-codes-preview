@@ -244,6 +244,8 @@ public final class DrawingPanel extends JPanel implements PreferenceChangeListen
         List<ColorValue> colorValues = new LinkedList<>(hexColorValues);
         colorValues.addAll(ColorsUtils.getCssIntRGBs(line, lineNumber));
         colorValues.addAll(ColorsUtils.getCssIntRGBAs(line, lineNumber));
+        colorValues.addAll(ColorsUtils.getCssPercentRGBs(line, lineNumber));
+        colorValues.addAll(ColorsUtils.getCssPercentRGBAs(line, lineNumber));
         return colorValues;
     }
 
