@@ -411,6 +411,13 @@ public final class ColorsUtils {
         return brightness < 130 ? Color.WHITE : Color.BLACK;
     }
 
+    /**
+     * Compute a brightness value.
+     * {@link http://www.w3.org/TR/AERT#color-contrast}
+     *
+     * @param color Color
+     * @return a brightness value
+     */
     private static int getBrightness(Color color) {
         return (color.getRed() * 299 + color.getGreen() * 578 + color.getBlue() * 114) / 1000;
     }
