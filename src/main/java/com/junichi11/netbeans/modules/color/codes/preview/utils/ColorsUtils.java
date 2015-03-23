@@ -173,18 +173,8 @@ public final class ColorsUtils {
      * @param line a line
      * @return RGB codes
      */
-    public static List<ColorValue> getCssIntRGBs(String line, int lineNubmer) {
-        Matcher matcher = CSS_INT_RGB_PATTERN.matcher(line);
-        int startPosition = 0;
-        ArrayList<ColorValue> colorCodes = new ArrayList<>();
-        while (matcher.find(startPosition)) {
-            final String colorCode = matcher.group(GROUP_CSS_RGB);
-
-            int indexOf = line.indexOf(colorCode, startPosition);
-            startPosition = indexOf + colorCode.length();
-            colorCodes.add(new CssIntRGBColorValue(colorCode, indexOf, startPosition, lineNubmer));
-        }
-        return colorCodes;
+    public static List<ColorValue> getCssIntRGBs(String line, int lineNumber) {
+        return getCssColorValues(line, lineNumber, ColorType.CSS_INT_RBG);
     }
 
     /**
@@ -194,16 +184,7 @@ public final class ColorsUtils {
      * @return RGB color values
      */
     public static List<ColorValue> getCssPercentRGBs(String line, int lineNumber) {
-        Matcher matcher = CSS_PERCENT_RGB_PATTERN.matcher(line);
-        int startPosition = 0;
-        ArrayList<ColorValue> colorCodes = new ArrayList<>();
-        while (matcher.find()) {
-            final String colorCode = matcher.group(GROUP_CSS_RGB);
-            int indexOf = line.indexOf(colorCode, startPosition);
-            startPosition = indexOf + colorCode.length();
-            colorCodes.add(new CssPercentRGBColorValue(colorCode, indexOf, startPosition, lineNumber));
-        }
-        return colorCodes;
+        return getCssColorValues(line, lineNumber, ColorType.CSS_PERCENT_RGB);
     }
 
     /**
@@ -233,17 +214,7 @@ public final class ColorsUtils {
      * @return RGBA color values
      */
     public static List<ColorValue> getCssIntRGBAs(String line, int lineNumber) {
-        Matcher matcher = CSS_INT_RGBA_PATTERN.matcher(line);
-        int startPosition = 0;
-        ArrayList<ColorValue> colorCodes = new ArrayList<>();
-        while (matcher.find(startPosition)) {
-            final String colorCode = matcher.group(GROUP_CSS_RGBA);
-
-            int indexOf = line.indexOf(colorCode, startPosition);
-            startPosition = indexOf + colorCode.length();
-            colorCodes.add(new CssIntRGBAColorValue(colorCode, indexOf, startPosition, lineNumber));
-        }
-        return colorCodes;
+        return getCssColorValues(line, lineNumber, ColorType.CSS_INT_RGBA);
     }
 
     /**
@@ -253,16 +224,66 @@ public final class ColorsUtils {
      * @return RGBA color values
      */
     public static List<ColorValue> getCssPercentRGBAs(String line, int lineNumber) {
-        Matcher matcher = CSS_PERCENT_RGBA_PATTERN.matcher(line);
-        int startPosition = 0;
+        return getCssColorValues(line, lineNumber, ColorType.CSS_PERCENT_RGBA);
+    }
+
+    private static List<ColorValue> getCssColorValues(String line, int lineNumber, ColorType type) {
+        Matcher matcher = getCssColorMatcher(line, type);
         ArrayList<ColorValue> colorCodes = new ArrayList<>();
+        String groupName = getCssColorGroupName(type);
         while (matcher.find()) {
-            final String colorCode = matcher.group(GROUP_CSS_RGBA);
-            int indexOf = line.indexOf(colorCode, startPosition);
-            startPosition = indexOf + colorCode.length();
-            colorCodes.add(new CssPercentRGBAColorValue(colorCode, indexOf, startPosition, lineNumber));
+            final String colorCode = matcher.group(groupName);
+            ColorValue colorValue = createCssColorValue(colorCode, matcher.start(), matcher.end(), lineNumber, type);
+            if (colorValue != null) {
+                colorCodes.add(colorValue);
+            }
         }
         return colorCodes;
+    }
+
+    private static Matcher getCssColorMatcher(String line, ColorType type) {
+        switch (type) {
+            case CSS_INT_RBG:
+                return CSS_INT_RGB_PATTERN.matcher(line);
+            case CSS_INT_RGBA:
+                return CSS_INT_RGBA_PATTERN.matcher(line);
+            case CSS_PERCENT_RGB:
+                return CSS_PERCENT_RGB_PATTERN.matcher(line);
+            case CSS_PERCENT_RGBA:
+                return CSS_PERCENT_RGBA_PATTERN.matcher(line);
+            default:
+                throw new AssertionError();
+        }
+    }
+
+    private static String getCssColorGroupName(ColorType type) {
+        switch (type) {
+            case CSS_INT_RBG:
+                return GROUP_CSS_RGB;
+            case CSS_INT_RGBA:
+                return GROUP_CSS_RGBA;
+            case CSS_PERCENT_RGB:
+                return GROUP_CSS_RGB;
+            case CSS_PERCENT_RGBA:
+                return GROUP_CSS_RGBA;
+            default:
+                throw new AssertionError();
+        }
+    }
+
+    private static ColorValue createCssColorValue(String value, int startOffset, int endOffset, int lineNumber, ColorType type) {
+        switch (type) {
+            case CSS_INT_RBG:
+                return new CssIntRGBColorValue(value, startOffset, endOffset, lineNumber);
+            case CSS_INT_RGBA:
+                return new CssIntRGBAColorValue(value, startOffset, endOffset, lineNumber);
+            case CSS_PERCENT_RGB:
+                return new CssPercentRGBColorValue(value, startOffset, endOffset, lineNumber);
+            case CSS_PERCENT_RGBA:
+                return new CssPercentRGBAColorValue(value, startOffset, endOffset, lineNumber);
+            default:
+                throw new AssertionError();
+        }
     }
 
     /**
