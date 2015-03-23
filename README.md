@@ -24,7 +24,6 @@ Check/Uncheck `View > Show Colors`
 
 ## NOTE
 
-- RGB % values(e.g. rgb(80%, 80%, 80%)) are not available
 - Colors may be shown if they are not color codes. e.g. "#feature" contains `#fea`. This plugin recognizes it as a hex color codes. 
 
 ## License
