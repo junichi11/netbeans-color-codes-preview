@@ -34,6 +34,7 @@ Check/Uncheck `View > Show Colors`
 
 - Colors may be shown if they are not color codes. e.g. "#feature" contains `#fea`. This plugin recognizes it as a hex color codes. 
 - If you use the GTK Look and Feel, you cannot change an alpha value in the color chooser.
+- Hsl or hsla color values may not be changed correctly when you use the color chooser. (There may be 1% errors.) 
 
 ## License
 
