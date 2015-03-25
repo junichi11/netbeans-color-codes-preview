@@ -119,9 +119,8 @@ public final class ColorsUtils {
      */
     public static List<String> getHexColorCodes(String line) {
         Matcher matcher = getColorMatcher(line, ColorType.HEX);
-        int startPosition = 0;
         ArrayList<String> colorCodes = new ArrayList<>();
-        while (matcher.find(startPosition)) {
+        while (matcher.find()) {
             final String colorCode = matcher.group(GROUP_CODENUMBER);
             int length = colorCode.length();
             String hexCode = colorCode;
@@ -132,9 +131,6 @@ public final class ColorsUtils {
             if (hexCode.length() == 6) {
                 colorCodes.add(String.format("#%s", hexCode)); // NOI18N
             }
-
-            int indexOf = line.indexOf(colorCode, startPosition);
-            startPosition = indexOf + length;
         }
         return colorCodes;
     }
@@ -147,9 +143,8 @@ public final class ColorsUtils {
      */
     public static List<ColorValue> getHexColorCodes(String line, int lineNumber) {
         Matcher matcher = getColorMatcher(line, ColorType.HEX);
-        int startPosition = 0;
         ArrayList<ColorValue> colorValues = new ArrayList<>();
-        while (matcher.find(startPosition)) {
+        while (matcher.find()) {
             final String colorCode = matcher.group(GROUP_CODENUMBER);
             int length = colorCode.length();
             String hexCode = colorCode;
@@ -157,10 +152,8 @@ public final class ColorsUtils {
                 hexCode = convertToRRGGBB(colorCode);
             }
 
-            int indexOf = line.indexOf(colorCode, startPosition);
-            startPosition = indexOf + length;
             if (hexCode.length() == 6) {
-                ColorValue colorValue = new HexColorValue(String.format("#%s", hexCode), --indexOf, startPosition, lineNumber); // NOI18N
+                ColorValue colorValue = new HexColorValue(String.format("#%s", hexCode), matcher.start(), matcher.end(), lineNumber); // NOI18N
                 colorValues.add(colorValue);
             }
 
@@ -176,14 +169,10 @@ public final class ColorsUtils {
      */
     public static List<String> getCssIntRGBs(String line) {
         Matcher matcher = getColorMatcher(line, ColorType.CSS_INT_RGB);
-        int startPosition = 0;
         ArrayList<String> colorCodes = new ArrayList<>();
-        while (matcher.find(startPosition)) {
+        while (matcher.find()) {
             final String colorCode = matcher.group(GROUP_CSS_RGB);
             colorCodes.add(colorCode);
-
-            int indexOf = line.indexOf(colorCode, startPosition);
-            startPosition = indexOf + colorCode.length();
         }
         return colorCodes;
     }
@@ -216,14 +205,10 @@ public final class ColorsUtils {
      */
     public static List<String> getCssIntRGBAs(String line) {
         Matcher matcher = getColorMatcher(line, ColorType.CSS_INT_RGBA);
-        int startPosition = 0;
         ArrayList<String> colorCodes = new ArrayList<>();
-        while (matcher.find(startPosition)) {
+        while (matcher.find()) {
             final String colorCode = matcher.group(GROUP_CSS_RGBA);
             colorCodes.add(colorCode);
-
-            int indexOf = line.indexOf(colorCode, startPosition);
-            startPosition = indexOf + colorCode.length();
         }
         return colorCodes;
     }
@@ -416,7 +401,7 @@ public final class ColorsUtils {
             String red = matcher.group(GROUP_RED).replace("%", ""); // NOI18N
             String green = matcher.group(GROUP_GREEN).replace("%", ""); // NOI18N
             String blue = matcher.group(GROUP_BLUE).replace("%", ""); // NOI18N
-            return new Color((float) (Float.parseFloat(red) * 0.01), (float) (Float.parseFloat(green) * 0.01), (float) (Float.parseFloat(blue) * 0.01));
+            return new Color((float) (Float.parseFloat(red) * 0.01f), (float) (Float.parseFloat(green) * 0.01f), (float) (Float.parseFloat(blue) * 0.01f));
         }
         return null;
     }
@@ -440,7 +425,7 @@ public final class ColorsUtils {
             String red = matcher.group(GROUP_RED).replace("%", ""); // NOI18N
             String green = matcher.group(GROUP_GREEN).replace("%", ""); // NOI18N
             String blue = matcher.group(GROUP_BLUE).replace("%", ""); // NOI18N
-            return new Color((float) (Float.parseFloat(red) * 0.01), (float) (Float.parseFloat(green) * 0.01), (float) (Float.parseFloat(blue) * 0.01), alpha);
+            return new Color((float) (Float.parseFloat(red) * 0.01f), (float) (Float.parseFloat(green) * 0.01f), (float) (Float.parseFloat(blue) * 0.01f), alpha);
         }
         return null;
     }
@@ -452,8 +437,8 @@ public final class ColorsUtils {
             String hue = matcher.group(GROUP_HUE);
             String saturation = matcher.group(GROUP_SATURATION).replace("%", ""); // NOI18N
             String lightness = matcher.group(GROUP_LIGHTNESS).replace("%", ""); // NOI18N
-            float huef = (float) (Float.parseFloat(hue) / 360);
-            return getHSLColor(huef, (float) (Float.parseFloat(saturation) * 0.01), (float) (Float.parseFloat(lightness) * 0.01));
+            float huef = (float) (Float.parseFloat(hue) / 360.0f);
+            return getHSLColor(huef, (float) (Float.parseFloat(saturation) * 0.01f), (float) (Float.parseFloat(lightness) * 0.01f));
         }
         return null;
     }
@@ -467,8 +452,8 @@ public final class ColorsUtils {
             String lightness = matcher.group(GROUP_LIGHTNESS).replace("%", ""); // NOI18N
             Float alpha = Float.valueOf(matcher.group(GROUP_ALPHA));
             int intAlpha = (int) (255 * alpha);
-            float huef = (float) (Float.parseFloat(hue) / 360);
-            Color hslColor = getHSLColor(huef, (float) (Float.parseFloat(saturation) * 0.01), (float) (Float.parseFloat(lightness) * 0.01));
+            float huef = (float) (Float.parseFloat(hue) / 360.0f);
+            Color hslColor = getHSLColor(huef, (float) (Float.parseFloat(saturation) * 0.01f), (float) (Float.parseFloat(lightness) * 0.01f));
             return new Color(hslColor.getRed(), hslColor.getGreen(), hslColor.getBlue(), intAlpha);
         }
         return null;
@@ -515,38 +500,38 @@ public final class ColorsUtils {
     }
 
     private static float[] hslToRgb(float h, float s, float l) {
-        if (s == 0) {
+        if (s == 0.0f) {
             return new float[]{l, l, l};
         }
         float m2;
-        if (l <= 0.5) {
-            m2 = l * (s + 1f);
+        if (l <= 0.5f) {
+            m2 = l * (s + 1.0f);
         } else {
             m2 = l + s - l * s;
         }
 
-        float m1 = l * 2f - m2;
-        float r = hueToRgb(m1, m2, h + 1f / 3f);
+        float m1 = l * 2.0f - m2;
+        float r = hueToRgb(m1, m2, h + 1.0f / 3.0f);
         float g = hueToRgb(m1, m2, h);
-        float b = hueToRgb(m1, m2, h - 1f / 3f);
+        float b = hueToRgb(m1, m2, h - 1.0f / 3.0f);
         return new float[]{r, g, b};
     }
 
     private static float hueToRgb(float m1, float m2, float h) {
-        if (h < 0) {
-            h = h + 1f;
+        if (h < 0.0f) {
+            h = h + 1.0f;
         }
-        if (h > 1) {
-            h = h - 1f;
+        if (h > 1.0f) {
+            h = h - 1.0f;
         }
-        if (h * 6f < 1f) {
-            return m1 + (m2 - m1) * h * 6f;
+        if (h * 6.0f < 1.0f) {
+            return m1 + (m2 - m1) * h * 6.0f;
         }
-        if (h * 2f < 1f) {
+        if (h * 2.0f < 1.0f) {
             return m2;
         }
-        if (h * 3f < 2f) {
-            return m1 + (m2 - m1) * (2f / 3f - h) * 6f;
+        if (h * 3.0f < 2.0f) {
+            return m1 + (m2 - m1) * (2.0f / 3.0f - h) * 6.0f;
         }
         return m1;
     }
