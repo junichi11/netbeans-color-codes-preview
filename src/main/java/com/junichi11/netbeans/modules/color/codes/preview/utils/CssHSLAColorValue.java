@@ -54,4 +54,9 @@ public class CssHSLAColorValue extends ColorValue {
         return ColorsUtils.decode(getValue(), ColorsUtils.ColorType.CSS_HSLA);
     }
 
+    @Override
+    public ColorsUtils.ColorType getType() {
+        return ColorsUtils.ColorType.CSS_HSLA;
+    }
+
 }

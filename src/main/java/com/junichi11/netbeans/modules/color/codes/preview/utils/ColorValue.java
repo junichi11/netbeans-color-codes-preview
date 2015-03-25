@@ -41,6 +41,7 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.utils;
 
+import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils.ColorType;
 import java.awt.Color;
 import org.netbeans.api.annotations.common.NonNull;
 
@@ -80,6 +81,10 @@ public class ColorValue {
 
     public Color getColor() {
         return ColorsUtils.decode(value);
+    }
+
+    public ColorType getType() {
+        return ColorType.HEX;
     }
 
 }

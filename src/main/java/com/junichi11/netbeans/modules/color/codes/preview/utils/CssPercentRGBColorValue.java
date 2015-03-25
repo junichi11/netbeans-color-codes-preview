@@ -54,4 +54,9 @@ public class CssPercentRGBColorValue extends ColorValue {
         return ColorsUtils.decode(getValue(), ColorsUtils.ColorType.CSS_PERCENT_RGB);
     }
 
+    @Override
+    public ColorsUtils.ColorType getType() {
+        return ColorsUtils.ColorType.CSS_PERCENT_RGB;
+    }
+
 }

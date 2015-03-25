@@ -23,9 +23,18 @@ Check/Uncheck `View > Show Colors`
 - Show top two colors in a sidebar if there are multiple colors in a line.
 - If you want to check all colors, please click a specific rectangle. They will be shown as a list.
 
+## Change a color using the color chooser
+
+- Click a colored rectangle
+- Click a color value of a list
+- Select a new color in the color chooser
+- An old color value will be changed to new one with the same format
+
 ## NOTE
 
 - Colors may be shown if they are not color codes. e.g. "#feature" contains `#fea`. This plugin recognizes it as a hex color codes. 
+- If you use the GTK Look and Feel, you cannot change an alpha value in the color chooser.
+- Hsl or hsla color values may not be changed correctly when you use the color chooser. (There may be 1% errors.) 
 
 ## License
 

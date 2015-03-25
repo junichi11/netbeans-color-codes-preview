@@ -42,6 +42,8 @@
 package com.junichi11.netbeans.modules.color.codes.preview.utils;
 
 import java.awt.Color;
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -78,13 +80,18 @@ public final class ColorsUtils {
 
     static final String PERCENT_VALUE_FORMAT = "(100|[1-9]?[0-9])%"; // NOI18N
     static final String ALPHA_VALUE_FORMAT = "0|1|0\\.[1-9]{1,2}|0\\.0?[1-9]"; // NOI18N
-    static final String INT_RGB_VALUE_FORMAT = "25[0-5]|2[0-4][0-9]|200|1[0-9][0-9]|100|[1-9]?[0-9]|[0-9]"; // NOI18N
+    static final String INT_RGB_VALUE_FORMAT = "25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]"; // NOI18N
     static final String HUE_VALUE_FORMAT = "(360|3[0-5][0-9]|[1-2][0-9][0-9]|[1-9]?[0-9])"; // NOI18N
     private static final String CSS_RGB_FORMAT = "(?<cssrgb>rgb\\((?<codenumber>(?<r>%s) *, *(?<g>%s) *, *(?<b>%s))\\))"; // NOI18N
     private static final String CSS_RGBA_FORMAT = "(?<cssrgba>rgba\\((?<codenumber>(?<r>%s) *, *(?<g>%s) *, *(?<b>%s) *, *(?<a>%s))\\))"; // NOI18N
     private static final String CSS_HSL_FORMAT = "(?<csshsl>hsl\\((?<codenumber>(?<h>%s) *, *(?<s>%s) *, *(?<l>%s))\\))"; // NOI18N
     private static final String CSS_HSLA_FORMAT = "(?<csshsla>hsla\\((?<codenumber>(?<h>%s) *, *(?<s>%s) *, *(?<l>%s) *, *(?<a>%s))\\))"; // NOI18N
 
+    private static final String HEX_VALUE_FORMAT = "#%02x%02x%02x"; // NOI18N
+    private static final String RGB_VALUE_FORMAT = "rgb(%s, %s, %s)"; // NOI18N
+    private static final String RGBA_VALUE_FORMAT = "rgba(%s, %s, %s, %s)"; // NOI18N
+    private static final String HSL_VALUE_FORMAT = "hsl(%s, %s, %s)"; // NOI18N
+    private static final String HSLA_VALUE_FORMAT = "hsla(%s, %s, %s, %s)"; // NOI18N
     // group names
     private static final String GROUP_CODENUMBER = "codenumber"; // NOI18N
     private static final String GROUP_CSS_RGB = "cssrgb"; // NOI18N
@@ -112,9 +119,8 @@ public final class ColorsUtils {
      */
     public static List<String> getHexColorCodes(String line) {
         Matcher matcher = getColorMatcher(line, ColorType.HEX);
-        int startPosition = 0;
         ArrayList<String> colorCodes = new ArrayList<>();
-        while (matcher.find(startPosition)) {
+        while (matcher.find()) {
             final String colorCode = matcher.group(GROUP_CODENUMBER);
             int length = colorCode.length();
             String hexCode = colorCode;
@@ -125,9 +131,6 @@ public final class ColorsUtils {
             if (hexCode.length() == 6) {
                 colorCodes.add(String.format("#%s", hexCode)); // NOI18N
             }
-
-            int indexOf = line.indexOf(colorCode, startPosition);
-            startPosition = indexOf + length;
         }
         return colorCodes;
     }
@@ -140,9 +143,8 @@ public final class ColorsUtils {
      */
     public static List<ColorValue> getHexColorCodes(String line, int lineNumber) {
         Matcher matcher = getColorMatcher(line, ColorType.HEX);
-        int startPosition = 0;
         ArrayList<ColorValue> colorValues = new ArrayList<>();
-        while (matcher.find(startPosition)) {
+        while (matcher.find()) {
             final String colorCode = matcher.group(GROUP_CODENUMBER);
             int length = colorCode.length();
             String hexCode = colorCode;
@@ -150,10 +152,8 @@ public final class ColorsUtils {
                 hexCode = convertToRRGGBB(colorCode);
             }
 
-            int indexOf = line.indexOf(colorCode, startPosition);
-            startPosition = indexOf + length;
             if (hexCode.length() == 6) {
-                ColorValue colorValue = new HexColorValue(String.format("#%s", hexCode), indexOf, startPosition, lineNumber); // NOI18N
+                ColorValue colorValue = new HexColorValue(String.format("#%s", hexCode), matcher.start(), matcher.end(), lineNumber); // NOI18N
                 colorValues.add(colorValue);
             }
 
@@ -169,14 +169,10 @@ public final class ColorsUtils {
      */
     public static List<String> getCssIntRGBs(String line) {
         Matcher matcher = getColorMatcher(line, ColorType.CSS_INT_RGB);
-        int startPosition = 0;
         ArrayList<String> colorCodes = new ArrayList<>();
-        while (matcher.find(startPosition)) {
+        while (matcher.find()) {
             final String colorCode = matcher.group(GROUP_CSS_RGB);
             colorCodes.add(colorCode);
-
-            int indexOf = line.indexOf(colorCode, startPosition);
-            startPosition = indexOf + colorCode.length();
         }
         return colorCodes;
     }
@@ -209,14 +205,10 @@ public final class ColorsUtils {
      */
     public static List<String> getCssIntRGBAs(String line) {
         Matcher matcher = getColorMatcher(line, ColorType.CSS_INT_RGBA);
-        int startPosition = 0;
         ArrayList<String> colorCodes = new ArrayList<>();
-        while (matcher.find(startPosition)) {
+        while (matcher.find()) {
             final String colorCode = matcher.group(GROUP_CSS_RGBA);
             colorCodes.add(colorCode);
-
-            int indexOf = line.indexOf(colorCode, startPosition);
-            startPosition = indexOf + colorCode.length();
         }
         return colorCodes;
     }
@@ -409,7 +401,7 @@ public final class ColorsUtils {
             String red = matcher.group(GROUP_RED).replace("%", ""); // NOI18N
             String green = matcher.group(GROUP_GREEN).replace("%", ""); // NOI18N
             String blue = matcher.group(GROUP_BLUE).replace("%", ""); // NOI18N
-            return new Color((float) (Float.parseFloat(red) * 0.01), (float) (Float.parseFloat(green) * 0.01), (float) (Float.parseFloat(blue) * 0.01));
+            return new Color((float) (Float.parseFloat(red) * 0.01f), (float) (Float.parseFloat(green) * 0.01f), (float) (Float.parseFloat(blue) * 0.01f));
         }
         return null;
     }
@@ -433,7 +425,7 @@ public final class ColorsUtils {
             String red = matcher.group(GROUP_RED).replace("%", ""); // NOI18N
             String green = matcher.group(GROUP_GREEN).replace("%", ""); // NOI18N
             String blue = matcher.group(GROUP_BLUE).replace("%", ""); // NOI18N
-            return new Color((float) (Float.parseFloat(red) * 0.01), (float) (Float.parseFloat(green) * 0.01), (float) (Float.parseFloat(blue) * 0.01), alpha);
+            return new Color((float) (Float.parseFloat(red) * 0.01f), (float) (Float.parseFloat(green) * 0.01f), (float) (Float.parseFloat(blue) * 0.01f), alpha);
         }
         return null;
     }
@@ -445,8 +437,8 @@ public final class ColorsUtils {
             String hue = matcher.group(GROUP_HUE);
             String saturation = matcher.group(GROUP_SATURATION).replace("%", ""); // NOI18N
             String lightness = matcher.group(GROUP_LIGHTNESS).replace("%", ""); // NOI18N
-            float huef = (float) (Float.parseFloat(hue) / 360);
-            return getHSLColor(huef, (float) (Float.parseFloat(saturation) * 0.01), (float) (Float.parseFloat(lightness) * 0.01));
+            float huef = (float) (Float.parseFloat(hue) / 360.0f);
+            return getHSLColor(huef, (float) (Float.parseFloat(saturation) * 0.01f), (float) (Float.parseFloat(lightness) * 0.01f));
         }
         return null;
     }
@@ -460,8 +452,8 @@ public final class ColorsUtils {
             String lightness = matcher.group(GROUP_LIGHTNESS).replace("%", ""); // NOI18N
             Float alpha = Float.valueOf(matcher.group(GROUP_ALPHA));
             int intAlpha = (int) (255 * alpha);
-            float huef = (float) (Float.parseFloat(hue) / 360);
-            Color hslColor = getHSLColor(huef, (float) (Float.parseFloat(saturation) * 0.01), (float) (Float.parseFloat(lightness) * 0.01));
+            float huef = (float) (Float.parseFloat(hue) / 360.0f);
+            Color hslColor = getHSLColor(huef, (float) (Float.parseFloat(saturation) * 0.01f), (float) (Float.parseFloat(lightness) * 0.01f));
             return new Color(hslColor.getRed(), hslColor.getGreen(), hslColor.getBlue(), intAlpha);
         }
         return null;
@@ -508,40 +500,76 @@ public final class ColorsUtils {
     }
 
     private static float[] hslToRgb(float h, float s, float l) {
-        if (s == 0) {
+        if (s == 0.0f) {
             return new float[]{l, l, l};
         }
         float m2;
-        if (l <= 0.5) {
-            m2 = l * (s + 1f);
+        if (l <= 0.5f) {
+            m2 = l * (s + 1.0f);
         } else {
             m2 = l + s - l * s;
         }
 
-        float m1 = l * 2f - m2;
-        float r = hueToRgb(m1, m2, h + 1f / 3f);
+        float m1 = l * 2.0f - m2;
+        float r = hueToRgb(m1, m2, h + 1.0f / 3.0f);
         float g = hueToRgb(m1, m2, h);
-        float b = hueToRgb(m1, m2, h - 1f / 3f);
+        float b = hueToRgb(m1, m2, h - 1.0f / 3.0f);
         return new float[]{r, g, b};
     }
 
     private static float hueToRgb(float m1, float m2, float h) {
-        if (h < 0) {
-            h = h + 1f;
+        if (h < 0.0f) {
+            h = h + 1.0f;
         }
-        if (h > 1) {
-            h = h - 1f;
+        if (h > 1.0f) {
+            h = h - 1.0f;
         }
-        if (h * 6f < 1f) {
-            return m1 + (m2 - m1) * h * 6f;
+        if (h * 6.0f < 1.0f) {
+            return m1 + (m2 - m1) * h * 6.0f;
         }
-        if (h * 2f < 1f) {
+        if (h * 2.0f < 1.0f) {
             return m2;
         }
-        if (h * 3f < 2f) {
-            return m1 + (m2 - m1) * (2f / 3f - h) * 6f;
+        if (h * 3.0f < 2.0f) {
+            return m1 + (m2 - m1) * (2.0f / 3.0f - h) * 6.0f;
         }
         return m1;
+    }
+
+    /**
+     * RGB to HSL
+     *
+     * @param red the red value [0,255]
+     * @param green the green value [0,255]
+     * @param blue the blue value [0,255]
+     * @return HSL values as an array. h:[0,360], s:[0,1], l[0,1]
+     */
+    public static float[] rgbToHsl(int red, int green, int blue) {
+        float r = (float) red / 255.0f;
+        float g = (float) green / 255.0f;
+        float b = (float) blue / 255.0f;
+        float max = Math.max(r, Math.max(g, b));
+        float min = Math.min(r, Math.min(g, b));
+        float d = max - min;
+        float l = (max + min) / 2.0f;
+        float h;
+        float s;
+        if (max == min) {
+            h = s = 0.0f;
+        } else {
+            if (max == r) {
+                h = 60.0f * (((g - b) / d) % 6.0f);
+                if (h < 0) {
+                    h += 360.0f;
+                }
+            } else if (max == g) {
+                h = 60.0f * (((b - r) / d) + 2.0f);
+            } else {
+                h = 60.0f * (((r - g) / d) + 4.0f);
+            }
+            s = l < 0.5f ? d / (max + min) : d / (2.0f - max - min);
+        }
+        return new float[]{h, s, l};
     }
 
     /**
@@ -573,6 +601,144 @@ public final class ColorsUtils {
      */
     public static void sort(List<ColorValue> colorValues) {
         Collections.sort(colorValues, COLOR_VALUE_COMPARATOR);
+    }
+
+    /**
+     * A specific color to a hex color code string.(e.g #999999)
+     *
+     * @param color a Color
+     * @return hex color code
+     */
+    public static String hexValueString(Color color) {
+        return String.format(HEX_VALUE_FORMAT, color.getRed(), color.getGreen(), color.getBlue());
+    }
+
+    /**
+     * Convert a specific color to a css rgb color int value string. (e.g.
+     * rgb(0, 0, 0))
+     *
+     * @param color a Color
+     * @return a rgb color value string
+     */
+    public static String RGBIntValueString(Color color) {
+        return String.format(RGB_VALUE_FORMAT, color.getRed(), color.getGreen(), color.getBlue());
+    }
+
+    /**
+     * Convert a specific color to a css rgb color percent value string. (e.g.
+     * rgb(50%, 10%, 0%))
+     *
+     * @param color a Color
+     * @return a rgb color value string
+     */
+    public static String RGBPercentValueString(Color color) {
+        NumberFormat percentFormat = NumberFormat.getPercentInstance();
+        String r = percentFormat.format((double) color.getRed() / 255.0d);
+        String g = percentFormat.format((double) color.getGreen() / 255.0d);
+        String b = percentFormat.format((double) color.getBlue() / 255.0d);
+        return String.format(RGB_VALUE_FORMAT, r, g, b);
+    }
+
+    /**
+     * Convert a specific color to a css rgba color int value string. (e.g.
+     * rgba(0, 0, 0, 0))
+     *
+     * @param color a Color
+     * @return a rgba color value string
+     */
+    public static String RGBAIntValueString(Color color) {
+        String a = alphaValueString(color.getAlpha());
+        return String.format(RGBA_VALUE_FORMAT, color.getRed(), color.getGreen(), color.getBlue(), a);
+    }
+
+    /**
+     * Convert a specific color to a css rgba color percent value string. (e.g.
+     * rgba(50%, 10%, 0%, 0.5))
+     *
+     * @param color a Color
+     * @return a rgba color value string
+     */
+    public static String RGBAPercentValueString(Color color) {
+        NumberFormat percentFormat = NumberFormat.getPercentInstance();
+        String r = percentFormat.format((double) color.getRed() / 255.0d);
+        String g = percentFormat.format((double) color.getGreen() / 255.0d);
+        String b = percentFormat.format((double) color.getBlue() / 255.0d);
+        String a = alphaValueString(color.getAlpha());
+        return String.format(RGBA_VALUE_FORMAT, r, g, b, a);
+    }
+
+    private static String alphaValueString(int alpha) {
+        double a = (double) alpha / 255.0d;
+        BigDecimal bd = new BigDecimal(a);
+        BigDecimal scaledBd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+        a = scaledBd.doubleValue();
+        return a == (int) a ? String.format("%d", (int) a) : String.format("%s", a); // NOI18N
+    }
+
+    /**
+     * Convert a specific color to a css hsl color value string. (e.g. hsl(120,
+     * 100%, 50%))
+     *
+     * @param color a Color
+     * @return hsl color value string
+     */
+    public static String HSLValueString(Color color) {
+        float[] hsl = rgbToHsl(color.getRed(), color.getGreen(), color.getBlue());
+        NumberFormat percentFormat = NumberFormat.getPercentInstance();
+        BigDecimal hbd = new BigDecimal(hsl[0]);
+        BigDecimal scaled = hbd.setScale(0, BigDecimal.ROUND_HALF_UP);
+        String h = scaled.toString();
+        String s = percentFormat.format(hsl[1]);
+        String l = percentFormat.format(hsl[2]);
+        return String.format(HSL_VALUE_FORMAT, h, s, l);
+    }
+
+    /**
+     * Convert a specific color to a css hsl color value string. (e.g. hsl(120,
+     * 100%, 50%))
+     *
+     * @param color a Color
+     * @return
+     */
+    public static String HSLAValueString(Color color) {
+        float[] hsl = rgbToHsl(color.getRed(), color.getGreen(), color.getBlue());
+        NumberFormat percentFormat = NumberFormat.getPercentInstance();
+        BigDecimal hbd = new BigDecimal(hsl[0]);
+        BigDecimal scaled = hbd.setScale(0, BigDecimal.ROUND_HALF_UP);
+        String h = scaled.toString();
+        String s = percentFormat.format(hsl[1]);
+        String l = percentFormat.format(hsl[2]);
+        String a = alphaValueString(color.getAlpha());
+        return String.format(HSLA_VALUE_FORMAT, h, s, l, a);
+    }
+
+    /**
+     * Convert a specified color to a formatted string for a ColorType. Hex
+     * color code is returned as default.
+     *
+     * @param color a Color
+     * @param type ColorType
+     * @return formatted string
+     */
+    public static String toFormattedString(Color color, ColorType type) {
+        switch (type) {
+            case HEX:
+                return hexValueString(color);
+            case CSS_INT_RGB:
+                return RGBIntValueString(color);
+            case CSS_PERCENT_RGB:
+                return RGBPercentValueString(color);
+            case CSS_INT_RGBA:
+                return RGBAIntValueString(color);
+            case CSS_PERCENT_RGBA:
+                return RGBAPercentValueString(color);
+            case CSS_HSL:
+                return HSLValueString(color);
+            case CSS_HSLA:
+                return HSLAValueString(color);
+            default:
+                return hexValueString(color);
+        }
     }
 
     private static class ColorValueComparator implements Comparator<ColorValue> {

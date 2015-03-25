@@ -66,6 +66,8 @@ import java.util.prefs.Preferences;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.plaf.TextUI;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
@@ -96,12 +98,13 @@ import org.openide.util.WeakListeners;
  *
  * @author junichi11
  */
-public final class DrawingPanel extends JPanel implements PreferenceChangeListener, ComponentListener, FoldHierarchyListener {
+public final class DrawingPanel extends JPanel implements DocumentListener, PreferenceChangeListener, ComponentListener, FoldHierarchyListener {
 
     private Color backgroundColor = Color.WHITE;
     private boolean enabled;
     private final FoldHierarchy foldHierarchy;
     private final JTextComponent textComponent;
+    private final BaseDocument document;
     private final Preferences prefs;
     private final LookupListener lookupListener;
 
@@ -112,6 +115,7 @@ public final class DrawingPanel extends JPanel implements PreferenceChangeListen
     public DrawingPanel(JTextComponent editor) {
         super(new BorderLayout());
         this.textComponent = editor;
+        this.document = (BaseDocument) editor.getDocument();
         this.foldHierarchy = FoldHierarchy.get(editor);
         updateColors();
 
@@ -180,7 +184,6 @@ public final class DrawingPanel extends JPanel implements PreferenceChangeListen
 
             if (startViewIndex >= 0 && startViewIndex < rootViewCount) {
                 int clipEndY = clip.y + clip.height;
-                Document document = component.getDocument();
                 for (int i = startViewIndex; i < rootViewCount; i++) {
                     View view = rootView.getView(i);
                     if (view == null) {
@@ -300,11 +303,13 @@ public final class DrawingPanel extends JPanel implements PreferenceChangeListen
     }
 
     private void initialize() {
+        document.addDocumentListener(this);
         textComponent.addComponentListener(this);
         foldHierarchy.addFoldHierarchyListener(this);
     }
 
     private void release() {
+        document.removeDocumentListener(this);
         textComponent.removeComponentListener(this);
         foldHierarchy.removeFoldHierarchyListener(this);
     }
@@ -359,7 +364,9 @@ public final class DrawingPanel extends JPanel implements PreferenceChangeListen
     private int getLineFromMouseEvent(MouseEvent e) {
         int line = -1;
         EditorUI editorUI = Utilities.getEditorUI(textComponent);
-        BaseDocument document = (BaseDocument) textComponent.getDocument();
+        if (document == null) {
+            return line;
+        }
         if (editorUI != null) {
             try {
                 JTextComponent component = editorUI.getComponent();
@@ -456,4 +463,28 @@ public final class DrawingPanel extends JPanel implements PreferenceChangeListen
         });
     }
 
+    @Override
+    public void insertUpdate(DocumentEvent e) {
+        refresh();
+    }
+
+    @Override
+    public void removeUpdate(DocumentEvent e) {
+        refresh();
+    }
+
+    @Override
+    public void changedUpdate(DocumentEvent e) {
+        refresh();
+    }
+
+    private void refresh() {
+        SwingUtilities.invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+                repaint();
+            }
+        });
+    }
 }

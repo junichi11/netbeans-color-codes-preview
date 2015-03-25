@@ -54,4 +54,9 @@ public class HexColorValue extends ColorValue {
         return ColorsUtils.decode(getValue(), ColorsUtils.ColorType.HEX);
     }
 
+    @Override
+    public ColorsUtils.ColorType getType() {
+        return ColorsUtils.ColorType.HEX;
+    }
+
 }

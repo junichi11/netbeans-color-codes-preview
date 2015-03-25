@@ -54,4 +54,9 @@ public class CssIntRGBAColorValue extends ColorValue {
         return ColorsUtils.decode(getValue(), ColorsUtils.ColorType.CSS_INT_RGBA);
     }
 
+    @Override
+    public final ColorsUtils.ColorType getType() {
+        return ColorsUtils.ColorType.CSS_INT_RGBA;
+    }
+
 }
