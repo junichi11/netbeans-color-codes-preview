@@ -42,6 +42,8 @@
 package com.junichi11.netbeans.modules.color.codes.preview.utils;
 
 import java.awt.Color;
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -85,6 +87,11 @@ public final class ColorsUtils {
     private static final String CSS_HSL_FORMAT = "(?<csshsl>hsl\\((?<codenumber>(?<h>%s) *, *(?<s>%s) *, *(?<l>%s))\\))"; // NOI18N
     private static final String CSS_HSLA_FORMAT = "(?<csshsla>hsla\\((?<codenumber>(?<h>%s) *, *(?<s>%s) *, *(?<l>%s) *, *(?<a>%s))\\))"; // NOI18N
 
+    private static final String HEX_VALUE_FORMAT = "#%02x%02x%02x"; // NOI18N
+    private static final String RGB_VALUE_FORMAT = "rgb(%s, %s, %s)"; // NOI18N
+    private static final String RGBA_VALUE_FORMAT = "rgba(%s, %s, %s, %s)"; // NOI18N
+    private static final String HSL_VALUE_FORMAT = "hsl(%s, %s, %s)"; // NOI18N
+    private static final String HSLA_VALUE_FORMAT = "hsla(%s, %s, %s, %s)"; // NOI18N
     // group names
     private static final String GROUP_CODENUMBER = "codenumber"; // NOI18N
     private static final String GROUP_CSS_RGB = "cssrgb"; // NOI18N
@@ -153,7 +160,7 @@ public final class ColorsUtils {
             int indexOf = line.indexOf(colorCode, startPosition);
             startPosition = indexOf + length;
             if (hexCode.length() == 6) {
-                ColorValue colorValue = new HexColorValue(String.format("#%s", hexCode), indexOf, startPosition, lineNumber); // NOI18N
+                ColorValue colorValue = new HexColorValue(String.format("#%s", hexCode), --indexOf, startPosition, lineNumber); // NOI18N
                 colorValues.add(colorValue);
             }
 
@@ -545,6 +552,42 @@ public final class ColorsUtils {
     }
 
     /**
+     * RGB to HSL
+     *
+     * @param red the red value [0,255]
+     * @param green the green value [0,255]
+     * @param blue the blue value [0,255]
+     * @return HSL values as an array. h:[0,360], s:[0,1], l[0,1]
+     */
+    public static float[] rgbToHsl(int red, int green, int blue) {
+        float r = (float) red / 255.0f;
+        float g = (float) green / 255.0f;
+        float b = (float) blue / 255.0f;
+        float max = Math.max(r, Math.max(g, b));
+        float min = Math.min(r, Math.min(g, b));
+        float d = max - min;
+        float l = (max + min) / 2.0f;
+        float h;
+        float s;
+        if (max == min) {
+            h = s = 0.0f;
+        } else {
+            if (max == r) {
+                h = 60.0f * (((g - b) / d) % 6.0f);
+                if (h < 0) {
+                    h += 360.0f;
+                }
+            } else if (max == g) {
+                h = 60.0f * (((b - r) / d) + 2.0f);
+            } else {
+                h = 60.0f * (((r - g) / d) + 4.0f);
+            }
+            s = l < 0.5f ? d / (max + min) : d / (2.0f - max - min);
+        }
+        return new float[]{h, s, l};
+    }
+
+    /**
      * Get a foreground color for a background color.
      *
      * @param bgColor
@@ -573,6 +616,144 @@ public final class ColorsUtils {
      */
     public static void sort(List<ColorValue> colorValues) {
         Collections.sort(colorValues, COLOR_VALUE_COMPARATOR);
+    }
+
+    /**
+     * A specific color to a hex color code string.(e.g #999999)
+     *
+     * @param color a Color
+     * @return hex color code
+     */
+    public static String hexValueString(Color color) {
+        return String.format(HEX_VALUE_FORMAT, color.getRed(), color.getGreen(), color.getBlue());
+    }
+
+    /**
+     * Convert a specific color to a css rgb color int value string. (e.g.
+     * rgb(0, 0, 0))
+     *
+     * @param color a Color
+     * @return a rgb color value string
+     */
+    public static String RGBIntValueString(Color color) {
+        return String.format(RGB_VALUE_FORMAT, color.getRed(), color.getGreen(), color.getBlue());
+    }
+
+    /**
+     * Convert a specific color to a css rgb color percent value string. (e.g.
+     * rgb(50%, 10%, 0%))
+     *
+     * @param color a Color
+     * @return a rgb color value string
+     */
+    public static String RGBPercentValueString(Color color) {
+        NumberFormat percentFormat = NumberFormat.getPercentInstance();
+        String r = percentFormat.format((double) color.getRed() / 255.0d);
+        String g = percentFormat.format((double) color.getGreen() / 255.0d);
+        String b = percentFormat.format((double) color.getBlue() / 255.0d);
+        return String.format(RGB_VALUE_FORMAT, r, g, b);
+    }
+
+    /**
+     * Convert a specific color to a css rgba color int value string. (e.g.
+     * rgba(0, 0, 0, 0))
+     *
+     * @param color a Color
+     * @return a rgba color value string
+     */
+    public static String RGBAIntValueString(Color color) {
+        String a = alphaValueString(color.getAlpha());
+        return String.format(RGBA_VALUE_FORMAT, color.getRed(), color.getGreen(), color.getBlue(), a);
+    }
+
+    /**
+     * Convert a specific color to a css rgba color percent value string. (e.g.
+     * rgba(50%, 10%, 0%, 0.5))
+     *
+     * @param color a Color
+     * @return a rgba color value string
+     */
+    public static String RGBAPercentValueString(Color color) {
+        NumberFormat percentFormat = NumberFormat.getPercentInstance();
+        String r = percentFormat.format((double) color.getRed() / 255.0d);
+        String g = percentFormat.format((double) color.getGreen() / 255.0d);
+        String b = percentFormat.format((double) color.getBlue() / 255.0d);
+        String a = alphaValueString(color.getAlpha());
+        return String.format(RGBA_VALUE_FORMAT, r, g, b, a);
+    }
+
+    private static String alphaValueString(int alpha) {
+        double a = (double) alpha / 255.0d;
+        BigDecimal bd = new BigDecimal(a);
+        BigDecimal scaledBd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+        a = scaledBd.doubleValue();
+        return a == (int) a ? String.format("%d", (int) a) : String.format("%s", a); // NOI18N
+    }
+
+    /**
+     * Convert a specific color to a css hsl color value string. (e.g. hsl(120,
+     * 100%, 50%))
+     *
+     * @param color a Color
+     * @return hsl color value string
+     */
+    public static String HSLValueString(Color color) {
+        float[] hsl = rgbToHsl(color.getRed(), color.getGreen(), color.getBlue());
+        NumberFormat percentFormat = NumberFormat.getPercentInstance();
+        BigDecimal hbd = new BigDecimal(hsl[0]);
+        BigDecimal scaled = hbd.setScale(0, BigDecimal.ROUND_HALF_UP);
+        String h = scaled.toString();
+        String s = percentFormat.format(hsl[1]);
+        String l = percentFormat.format(hsl[2]);
+        return String.format(HSL_VALUE_FORMAT, h, s, l);
+    }
+
+    /**
+     * Convert a specific color to a css hsl color value string. (e.g. hsl(120,
+     * 100%, 50%))
+     *
+     * @param color a Color
+     * @return
+     */
+    public static String HSLAValueString(Color color) {
+        float[] hsl = rgbToHsl(color.getRed(), color.getGreen(), color.getBlue());
+        NumberFormat percentFormat = NumberFormat.getPercentInstance();
+        BigDecimal hbd = new BigDecimal(hsl[0]);
+        BigDecimal scaled = hbd.setScale(0, BigDecimal.ROUND_HALF_UP);
+        String h = scaled.toString();
+        String s = percentFormat.format(hsl[1]);
+        String l = percentFormat.format(hsl[2]);
+        String a = alphaValueString(color.getAlpha());
+        return String.format(HSLA_VALUE_FORMAT, h, s, l, a);
+    }
+
+    /**
+     * Convert a specified color to a formatted string for a ColorType. Hex
+     * color code is returned as default.
+     *
+     * @param color a Color
+     * @param type ColorType
+     * @return formatted string
+     */
+    public static String toFormattedString(Color color, ColorType type) {
+        switch (type) {
+            case HEX:
+                return hexValueString(color);
+            case CSS_INT_RGB:
+                return RGBIntValueString(color);
+            case CSS_PERCENT_RGB:
+                return RGBPercentValueString(color);
+            case CSS_INT_RGBA:
+                return RGBAIntValueString(color);
+            case CSS_PERCENT_RGBA:
+                return RGBAPercentValueString(color);
+            case CSS_HSL:
+                return HSLValueString(color);
+            case CSS_HSLA:
+                return HSLAValueString(color);
+            default:
+                return hexValueString(color);
+        }
     }
 
     private static class ColorValueComparator implements Comparator<ColorValue> {
