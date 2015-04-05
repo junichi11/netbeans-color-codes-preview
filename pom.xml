@@ -154,6 +154,16 @@
 &lt;li&gt;An old color value will be changed to new one with the same format&lt;/li&gt;
 &lt;/ul&gt;
 
+&lt;h2&gt;Options&lt;/h2&gt;
+
+        Tools &gt; Options &gt; Miscellaneous &gt; Color Codes Preview
+
+&lt;h3&gt;Regex for enabled mime-types&lt;/h3&gt;
+
+        Default value is `^text/(x-)?(css|less|sass|scss)$`.
+        If you would like to disable/enable some mime-types, please change the default regex.
+        This pattern is used when the plugin checks a mime-type.
+
 &lt;h2&gt;NOTE&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;Colors may be shown if they are not color codes. e.g. "#feature" contains #fea. This plugin recognizes it as a hex color code.&lt;/li&gt;
