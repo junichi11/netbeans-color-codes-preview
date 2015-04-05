@@ -41,6 +41,7 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.ui;
 
+import com.junichi11.netbeans.modules.color.codes.preview.options.ColorCodesPreviewOptions;
 import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils;
 import java.awt.AWTEvent;
@@ -121,7 +122,8 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
 
         prefs = MimeLookup.getLookup(MimePath.EMPTY).lookup(Preferences.class);
         prefs.addPreferenceChangeListener(WeakListeners.create(PreferenceChangeListener.class, this, prefs));
-
+        ColorCodesPreviewOptions options = ColorCodesPreviewOptions.getInstance();
+        options.addPreferenceChangeListener(WeakListeners.create(PreferenceChangeListener.class, this, prefs));
         // lookup listener
         Lookup.Result<FontColorSettings> lookupResult = MimeLookup.getLookup(MimePath.get(NbEditorUtilities.getMimeType(textComponent))).lookupResult(FontColorSettings.class);
         lookupListener = new LookupListener() {
@@ -316,8 +318,11 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
 
     @Override
     public void preferenceChange(PreferenceChangeEvent evt) {
-        if (evt == null || ColorsSideBarFactory.KEY_COLORS.equals(evt.getKey())) {
-            enabled = prefs.getBoolean(ColorsSideBarFactory.KEY_COLORS, ColorsSideBarFactory.DEFAULT_COLORS);
+        if (evt == null
+                || ColorsSideBarFactory.KEY_COLORS.equals(evt.getKey())
+                || ColorCodesPreviewOptions.MIME_TYPE_REGEX.equals(evt.getKey())) {
+            enabled = prefs.getBoolean(ColorsSideBarFactory.KEY_COLORS, ColorsSideBarFactory.DEFAULT_COLORS)
+                    && isMimeTypeEnabled();
             setVisible(enabled);
             if (!enabled) {
                 release();
@@ -326,6 +331,15 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
                 initialize();
             }
         }
+    }
+
+    private boolean isMimeTypeEnabled() {
+        String mimeType = NbEditorUtilities.getMimeType(textComponent);
+        if (mimeType != null) {
+            ColorCodesPreviewOptions options = ColorCodesPreviewOptions.getInstance();
+            return mimeType.matches(options.getMimeTypeRegex());
+        }
+        return false;
     }
 
     @Override
