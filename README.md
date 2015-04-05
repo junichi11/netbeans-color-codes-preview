@@ -30,6 +30,16 @@ Check/Uncheck `View > Show Colors`
 - Select a new color in the color chooser
 - An old color value will be changed to new one with the same format
 
+## Options
+
+Tools > Options > Miscellaneous > Color Codes Preview
+
+### Regex for enabled mime-types
+
+Default value is `^text/(x-)?(css|less|sass|scss)$`.
+If you would like to disable/enable some mime-types, please change the default regex.
+This pattern is used when the plugin checks a mime-type.
+
 ## NOTE
 
 - Colors may be shown if they are not color codes. e.g. "#feature" contains `#fea`. This plugin recognizes it as a hex color code.
