@@ -7,7 +7,7 @@
     <packaging>nbm</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <netbeans.api.version>RELEASE80</netbeans.api.version>
+        <netbeans.api.version>RELEASE81-BETA</netbeans.api.version>
     </properties>
     <build>
         <plugins>
@@ -74,6 +74,11 @@
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util</artifactId>
+            <version>${netbeans.api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util-ui</artifactId>
             <version>${netbeans.api.version}</version>
         </dependency>
         <dependency>
