@@ -79,7 +79,7 @@ public final class ColorsUtils {
     }
 
     static final String PERCENT_VALUE_FORMAT = "(100|[1-9]?[0-9])%"; // NOI18N
-    static final String ALPHA_VALUE_FORMAT = "0|1|0\\.[1-9]{1,2}|0\\.0?[1-9]"; // NOI18N
+    static final String ALPHA_VALUE_FORMAT = "0|1|0?\\.[1-9]{1,2}|0?\\.0?[1-9]"; // NOI18N
     static final String INT_RGB_VALUE_FORMAT = "25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]"; // NOI18N
     static final String HUE_VALUE_FORMAT = "(360|3[0-5][0-9]|[1-2][0-9][0-9]|[1-9]?[0-9])"; // NOI18N
     private static final String CSS_RGB_FORMAT = "(?<cssrgb>rgb\\((?<codenumber>(?<r>%s) *, *(?<g>%s) *, *(?<b>%s))\\))"; // NOI18N

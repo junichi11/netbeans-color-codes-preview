@@ -133,10 +133,26 @@ public class ColorsUtilsTest {
             Assert.assertTrue(matcher.matches());
         }
 
+        for (int i = 1; i < 10; i++) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(".").append(i);
+            Matcher matcher = pattern.matcher(sb.toString());
+            Assert.assertTrue(matcher.matches());
+        }
+
         // 0.01-0.99 without 0.10-0.90
         for (int i = 0; i < 10; i++) {
             StringBuilder sb = new StringBuilder();
             sb.append("0.").append(i);
+            for (int j = 1; j < 10; j++) {
+                Matcher matcher = pattern.matcher(sb.toString() + j);
+                Assert.assertTrue(matcher.matches());
+            }
+        }
+
+        for (int i = 0; i < 10; i++) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(".").append(i);
             for (int j = 1; j < 10; j++) {
                 Matcher matcher = pattern.matcher(sb.toString() + j);
                 Assert.assertTrue(matcher.matches());
@@ -159,6 +175,8 @@ public class ColorsUtilsTest {
         matcher = pattern.matcher("1.0");
         Assert.assertFalse(matcher.matches());
         matcher = pattern.matcher("1.1");
+        Assert.assertFalse(matcher.matches());
+        matcher = pattern.matcher(".0");
         Assert.assertFalse(matcher.matches());
     }
 
@@ -278,10 +296,14 @@ public class ColorsUtilsTest {
         Assert.assertNotNull(result);
         result = ColorsUtils.decode("rgba(255,255,255, 1)");
         Assert.assertNotNull(result);
+        result = ColorsUtils.decode("rgba(120,120,120, .9)");
+        Assert.assertNotNull(result);
 
         result = ColorsUtils.decode("rgba(0, 0, 0, 0.0)");
         Assert.assertNull(result);
         result = ColorsUtils.decode("rgba(0, 0, 0, 0.50)");
+        Assert.assertNull(result);
+        result = ColorsUtils.decode("rgba(0, 0, 0, .50)");
         Assert.assertNull(result);
         result = ColorsUtils.decode("rgba(0, 0, 0, 1.0)");
         Assert.assertNull(result);
@@ -318,12 +340,16 @@ public class ColorsUtilsTest {
         Assert.assertNotNull(result);
         result = ColorsUtils.decode("rgba(50%, 50%, 50%, 0.5)");
         Assert.assertNotNull(result);
+        result = ColorsUtils.decode("rgba(50%, 50%, 50%, .5)");
+        Assert.assertNotNull(result);
         result = ColorsUtils.decode("rgba(100%,100%,100%, 1)");
         Assert.assertNotNull(result);
 
         result = ColorsUtils.decode("rgba(0%, 0%, 0%, 0.0)");
         Assert.assertNull(result);
         result = ColorsUtils.decode("rgba(0%, 0%, 0%, 0.50)");
+        Assert.assertNull(result);
+        result = ColorsUtils.decode("rgba(0%, 0%, 0%, .50)");
         Assert.assertNull(result);
         result = ColorsUtils.decode("rgba(0%, 0%, 0%, 1.0)");
         Assert.assertNull(result);
@@ -397,9 +423,13 @@ public class ColorsUtilsTest {
         Assert.assertNotNull(result);
         result = ColorsUtils.decode("hsla(180, 50%, 50%, 0.5)");
         Assert.assertNotNull(result);
+        result = ColorsUtils.decode("hsla(180, 50%, 50%, .5)");
+        Assert.assertNotNull(result);
         result = ColorsUtils.decode("hsla(360,100%,100%, 1)");
         Assert.assertNotNull(result);
 
+        result = ColorsUtils.decode("hsla(360,100%,100%, .10)");
+        Assert.assertNull(result);
         result = ColorsUtils.decode("hsla(-1, 0%, 0%, 0)");
         Assert.assertNull(result);
         result = ColorsUtils.decode("hsla(361, 0%, 0%, 0)");
