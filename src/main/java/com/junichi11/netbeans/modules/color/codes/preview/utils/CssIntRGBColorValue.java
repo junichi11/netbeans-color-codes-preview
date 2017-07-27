@@ -43,7 +43,7 @@ package com.junichi11.netbeans.modules.color.codes.preview.utils;
 
 import java.awt.Color;
 
-public class CssIntRGBColorValue extends ColorValue {
+public class CssIntRGBColorValue extends ColorValueImp {
 
     public CssIntRGBColorValue(String value, int startOffset, int endOffset, int line) {
         super(value, startOffset, endOffset, line);

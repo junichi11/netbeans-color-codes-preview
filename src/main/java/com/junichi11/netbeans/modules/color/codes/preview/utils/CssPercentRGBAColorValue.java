@@ -43,7 +43,7 @@ package com.junichi11.netbeans.modules.color.codes.preview.utils;
 
 import java.awt.Color;
 
-public class CssPercentRGBAColorValue extends ColorValue {
+public class CssPercentRGBAColorValue extends ColorValueImp {
 
     public CssPercentRGBAColorValue(String value, int startOffset, int endOffset, int line) {
         super(value, startOffset, endOffset, line);

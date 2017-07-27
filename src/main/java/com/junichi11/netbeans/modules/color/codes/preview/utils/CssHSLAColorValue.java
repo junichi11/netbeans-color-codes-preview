@@ -43,7 +43,7 @@ package com.junichi11.netbeans.modules.color.codes.preview.utils;
 
 import java.awt.Color;
 
-public class CssHSLAColorValue extends ColorValue {
+public class CssHSLAColorValue extends ColorValueImp {
 
     public CssHSLAColorValue(String value, int startOffset, int endOffset, int line) {
         super(value, startOffset, endOffset, line);

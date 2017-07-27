@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright 2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2017 Oracle and/or its affiliates. All rights reserved.
  *
  * Oracle and Java are registered trademarks of Oracle and/or its affiliates.
  * Other names may be trademarks of their respective owners.
@@ -36,55 +36,27 @@
  * made subject to such option by the copyright holder.
  *
  * Contributor(s):
- *
- * Portions Copyrighted 2015 Sun Microsystems, Inc.
  */
 package com.junichi11.netbeans.modules.color.codes.preview.utils;
 
-import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils.ColorType;
 import java.awt.Color;
-import org.netbeans.api.annotations.common.NonNull;
 
 /**
  *
  * @author junichi11
  */
-public class ColorValue {
+public interface ColorValue {
 
-    private final int line;
-    private final int startOffset;
-    private final int endOffset;
-    private final String value;
+    Color getColor();
 
-    public ColorValue(@NonNull String value, int startOffset, int endOffset, int line) {
-        this.value = value;
-        this.startOffset = startOffset;
-        this.endOffset = endOffset;
-        this.line = line;
-    }
+    int getEndOffset();
 
-    public int getLine() {
-        return line;
-    }
+    int getLine();
 
-    public int getStartOffset() {
-        return startOffset;
-    }
+    int getStartOffset();
 
-    public int getEndOffset() {
-        return endOffset;
-    }
+    ColorsUtils.ColorType getType();
 
-    public String getValue() {
-        return value;
-    }
-
-    public Color getColor() {
-        return ColorsUtils.decode(value);
-    }
-
-    public ColorType getType() {
-        return ColorType.HEX;
-    }
+    String getValue();
 
 }

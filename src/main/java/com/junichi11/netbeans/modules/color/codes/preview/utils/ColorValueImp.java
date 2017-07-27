@@ -41,22 +41,56 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.utils;
 
+import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils.ColorType;
 import java.awt.Color;
+import org.netbeans.api.annotations.common.NonNull;
 
-public class CssPercentRGBColorValue extends ColorValueImp {
+/**
+ *
+ * @author junichi11
+ */
+public class ColorValueImp implements ColorValue {
 
-    public CssPercentRGBColorValue(String value, int startOffset, int endOffset, int line) {
-        super(value, startOffset, endOffset, line);
+    private final int line;
+    private final int startOffset;
+    private final int endOffset;
+    private final String value;
+
+    public ColorValueImp(@NonNull String value, int startOffset, int endOffset, int line) {
+        this.value = value;
+        this.startOffset = startOffset;
+        this.endOffset = endOffset;
+        this.line = line;
+    }
+
+    @Override
+    public int getLine() {
+        return line;
+    }
+
+    @Override
+    public int getStartOffset() {
+        return startOffset;
+    }
+
+    @Override
+    public int getEndOffset() {
+        return endOffset;
+    }
+
+    @Override
+    public String getValue() {
+        return value;
     }
 
     @Override
     public Color getColor() {
-        return ColorsUtils.decode(getValue(), ColorsUtils.ColorType.CSS_PERCENT_RGB);
+        return ColorsUtils.decode(value);
     }
 
     @Override
-    public ColorsUtils.ColorType getType() {
-        return ColorsUtils.ColorType.CSS_PERCENT_RGB;
+    public ColorType getType() {
+        return ColorType.HEX;
     }
 
 }
