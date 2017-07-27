@@ -39,58 +39,25 @@
  *
  * Portions Copyrighted 2015 Sun Microsystems, Inc.
  */
-package com.junichi11.netbeans.modules.color.codes.preview.utils;
+package com.junichi11.netbeans.modules.color.codes.preview.colors;
 
-import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils.ColorType;
+import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils;
 import java.awt.Color;
-import org.netbeans.api.annotations.common.NonNull;
 
-/**
- *
- * @author junichi11
- */
-public class ColorValueImp implements ColorValue {
+public class CssIntRGBAColorValue extends ColorValueImp {
 
-    private final int line;
-    private final int startOffset;
-    private final int endOffset;
-    private final String value;
-
-    public ColorValueImp(@NonNull String value, int startOffset, int endOffset, int line) {
-        this.value = value;
-        this.startOffset = startOffset;
-        this.endOffset = endOffset;
-        this.line = line;
-    }
-
-    @Override
-    public int getLine() {
-        return line;
-    }
-
-    @Override
-    public int getStartOffset() {
-        return startOffset;
-    }
-
-    @Override
-    public int getEndOffset() {
-        return endOffset;
-    }
-
-    @Override
-    public String getValue() {
-        return value;
+    public CssIntRGBAColorValue(String value, int startOffset, int endOffset, int line) {
+        super(value, startOffset, endOffset, line);
     }
 
     @Override
     public Color getColor() {
-        return ColorsUtils.decode(value);
+        return ColorsUtils.decode(getValue(), ColorsUtils.ColorType.CSS_INT_RGBA);
     }
 
     @Override
-    public ColorType getType() {
-        return ColorType.HEX;
+    public final ColorsUtils.ColorType getType() {
+        return ColorsUtils.ColorType.CSS_INT_RGBA;
     }
 
 }

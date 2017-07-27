@@ -42,7 +42,7 @@
 package com.junichi11.netbeans.modules.color.codes.preview.ui;
 
 import com.junichi11.netbeans.modules.color.codes.preview.options.ColorCodesPreviewOptions;
-import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.ColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils;
 import java.awt.AWTEvent;
 import java.awt.BasicStroke;

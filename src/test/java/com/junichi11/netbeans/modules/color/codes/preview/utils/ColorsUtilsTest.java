@@ -41,6 +41,7 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.utils;
 
+import com.junichi11.netbeans.modules.color.codes.preview.colors.ColorValue;
 import java.awt.Color;
 import java.util.List;
 import java.util.regex.Matcher;

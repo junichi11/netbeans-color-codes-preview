@@ -41,6 +41,14 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.utils;
 
+import com.junichi11.netbeans.modules.color.codes.preview.colors.CssIntRGBColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.CssPercentRGBColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.CssHSLAColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.ColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.CssIntRGBAColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.CssHSLColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.HexColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.CssPercentRGBAColorValue;
 import java.awt.Color;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
