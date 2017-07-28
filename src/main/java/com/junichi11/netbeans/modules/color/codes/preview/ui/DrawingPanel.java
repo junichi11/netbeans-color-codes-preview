@@ -75,6 +75,7 @@ import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.Position;
 import javax.swing.text.View;
+import org.netbeans.api.editor.document.LineDocumentUtils;
 import org.netbeans.api.editor.fold.FoldHierarchy;
 import org.netbeans.api.editor.fold.FoldHierarchyEvent;
 import org.netbeans.api.editor.fold.FoldHierarchyListener;
@@ -391,7 +392,7 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
                 if (component != null) {
                     TextUI textUI = component.getUI();
                     int clickOffset = textUI.viewToModel(component, new Point(0, e.getY()));
-                    line = Utilities.getLineOffset(document, clickOffset);
+                    line = LineDocumentUtils.getLineIndex(document, clickOffset);
                 }
             } catch (BadLocationException ex) {
                 LOGGER.log(Level.WARNING, "getLineFromMouseEvent", ex); // NOI18N
@@ -411,12 +412,12 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
         if (document == null || line < 0) {
             return ""; // NOI18N
         }
-        int startOffset = Utilities.getRowStartFromLineOffset(document, line);
+        int startOffset = LineDocumentUtils.getLineStartFromIndex(document, line);
         if (startOffset == -1) {
             return ""; // NOI18N
         }
         try {
-            int endOffset = Utilities.getRowEnd(document, startOffset);
+            int endOffset = LineDocumentUtils.getLineEnd(document, startOffset);
             if (endOffset == -1) {
                 return ""; // NOI18N
             }
