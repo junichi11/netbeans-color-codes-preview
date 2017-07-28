@@ -50,14 +50,14 @@ import org.netbeans.api.annotations.common.NonNull;
  *
  * @author junichi11
  */
-public class ColorValueImp implements ColorValue {
+public class ColorValueImpl implements ColorValue {
 
     private final int line;
     private final int startOffset;
     private final int endOffset;
     private final String value;
 
-    public ColorValueImp(@NonNull String value, int startOffset, int endOffset, int line) {
+    public ColorValueImpl(@NonNull String value, int startOffset, int endOffset, int line) {
         this.value = value;
         this.startOffset = startOffset;
         this.endOffset = endOffset;

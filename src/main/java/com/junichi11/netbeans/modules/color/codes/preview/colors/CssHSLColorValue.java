@@ -44,7 +44,7 @@ package com.junichi11.netbeans.modules.color.codes.preview.colors;
 import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils;
 import java.awt.Color;
 
-public class CssHSLColorValue extends ColorValueImp {
+public class CssHSLColorValue extends ColorValueImpl {
 
     public CssHSLColorValue(String value, int startOffset, int endOffset, int line) {
         super(value, startOffset, endOffset, line);
