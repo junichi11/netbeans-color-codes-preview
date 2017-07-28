@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.junichi11</groupId>
     <artifactId>netbeans-color-codes-preview</artifactId>
-    <version>0.5.0</version>
+    <version>0.6.0</version>
     <packaging>nbm</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -29,8 +29,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.5.1</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -137,6 +137,11 @@
             <artifactId>org-openide-awt</artifactId>
             <version>${netbeans.api.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-netbeans-modules-editor-document</artifactId>
+            <version>${netbeans.api.version}</version>
+        </dependency>
     </dependencies>
     <name>Color Codes Preview</name>
     <description>Show color codes preview per line in a sidebar area of an editor.
@@ -148,6 +153,7 @@
 &lt;li&gt;Hex color code (e.g. #ffffff, #000)&lt;/li&gt;
 &lt;li&gt;Css rgb/rgba values (e.g. rgb(0,0,0), rgba(255, 255, 255, 0.8))&lt;/li&gt;
 &lt;li&gt;Css hsl/hsla values (e.g. hsl(0, 100%, 50%), hsla(120, 100%, 50%, 0.5))&lt;/li&gt;
+&lt;li&gt;Named colors (e.g. red, blue)&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2&gt;Multiple colors&lt;/h2&gt;
@@ -173,6 +179,10 @@
         Default value is `^text/(x-)?(css|less|sass|scss)$`.
         If you would like to disable/enable some mime-types, please change the default regex.
         This pattern is used when the plugin checks a mime-type.
+
+&lt;h3&gt;Named Colors&lt;/h3&gt;
+
+        This option is `false` by default. If you would like to show named colors, please check it.
 
 &lt;h2&gt;NOTE&lt;/h2&gt;
 &lt;ul&gt;

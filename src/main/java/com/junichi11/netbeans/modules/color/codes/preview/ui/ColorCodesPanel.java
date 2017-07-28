@@ -41,7 +41,7 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.ui;
 
-import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.ColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils;
 import java.awt.Color;
 import java.awt.Font;
@@ -59,8 +59,8 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.StyledDocument;
 import org.netbeans.api.editor.EditorRegistry;
+import org.netbeans.api.editor.document.LineDocumentUtils;
 import org.netbeans.editor.BaseDocument;
-import org.netbeans.editor.Utilities;
 import org.openide.text.NbDocument;
 import org.openide.util.NbBundle;
 
@@ -116,7 +116,7 @@ public class ColorCodesPanel extends JComponent {
                         if (line < 0) {
                             return;
                         }
-                        final int lineOffset = Utilities.getRowStartFromLineOffset(document, line);
+                        final int lineOffset = LineDocumentUtils.getLineStartFromIndex(document, line);
                         try {
                             // replace a color value
                             NbDocument.runAtomicAsUser((StyledDocument) document, new Runnable() {

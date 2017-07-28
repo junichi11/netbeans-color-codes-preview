@@ -41,13 +41,24 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.utils;
 
+import com.junichi11.netbeans.modules.color.codes.preview.colors.CssIntRGBColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.CssPercentRGBColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.CssHSLAColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.ColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.CssIntRGBAColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.CssHSLColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.HexColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.CssPercentRGBAColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.NamedColorValue;
 import java.awt.Color;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.netbeans.api.annotations.common.CheckForNull;
@@ -60,17 +71,19 @@ public final class ColorsUtils {
 
     public enum ColorType {
 
-        HEX("#(?<codenumber>[0-9a-fA-F]{6,}|[0-9a-fA-F]{3,})"),
+        HEX("#(?<codenumber>[0-9a-fA-F]{6,}|[0-9a-fA-F]{3,})"), // NOI18N
         CSS_INT_RGB(String.format(CSS_RGB_FORMAT, INT_RGB_VALUE_FORMAT, INT_RGB_VALUE_FORMAT, INT_RGB_VALUE_FORMAT)),
         CSS_PERCENT_RGB(String.format(CSS_RGB_FORMAT, PERCENT_VALUE_FORMAT, PERCENT_VALUE_FORMAT, PERCENT_VALUE_FORMAT)),
         CSS_INT_RGBA(String.format(CSS_RGBA_FORMAT, INT_RGB_VALUE_FORMAT, INT_RGB_VALUE_FORMAT, INT_RGB_VALUE_FORMAT, ALPHA_VALUE_FORMAT)),
         CSS_PERCENT_RGBA(String.format(CSS_RGBA_FORMAT, PERCENT_VALUE_FORMAT, PERCENT_VALUE_FORMAT, PERCENT_VALUE_FORMAT, ALPHA_VALUE_FORMAT)),
         CSS_HSL(String.format(CSS_HSL_FORMAT, HUE_VALUE_FORMAT, PERCENT_VALUE_FORMAT, PERCENT_VALUE_FORMAT)),
-        CSS_HSLA(String.format(CSS_HSLA_FORMAT, HUE_VALUE_FORMAT, PERCENT_VALUE_FORMAT, PERCENT_VALUE_FORMAT, ALPHA_VALUE_FORMAT));
+        CSS_HSLA(String.format(CSS_HSLA_FORMAT, HUE_VALUE_FORMAT, PERCENT_VALUE_FORMAT, PERCENT_VALUE_FORMAT, ALPHA_VALUE_FORMAT)),
+        NAMED_COLORS(NAMED_COLORS_REGEX),
+        ;
         private final Pattern pattern;
 
         private ColorType(String regex) {
-            this.pattern = Pattern.compile(regex);
+            this.pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
         }
 
         public Pattern getPattern() {
@@ -86,6 +99,18 @@ public final class ColorsUtils {
     private static final String CSS_RGBA_FORMAT = "(?<cssrgba>rgba\\((?<codenumber>(?<r>%s) *, *(?<g>%s) *, *(?<b>%s) *, *(?<a>%s))\\))"; // NOI18N
     private static final String CSS_HSL_FORMAT = "(?<csshsl>hsl\\((?<codenumber>(?<h>%s) *, *(?<s>%s) *, *(?<l>%s))\\))"; // NOI18N
     private static final String CSS_HSLA_FORMAT = "(?<csshsla>hsla\\((?<codenumber>(?<h>%s) *, *(?<s>%s) *, *(?<l>%s) *, *(?<a>%s))\\))"; // NOI18N
+    private static final String NAMED_COLORS_REGEX = "(" // NOI18N
+            + "indianred|lightcoral|salmon|darksalmon|lightsalmon|crimson|red|firebrick|darkred|" // NOI18N
+            + "pink|lightpink|hotpink|deeppink|mediumvioletred|palevioletred|" // NOI18N
+            + "palevioletred|coral|tomato|orangered|darkorange|orange|" // NOI18N
+            + "gold|lightyellow|lemonchiffon|lightgoldenrodyellow|papayawhip|moccasin|peachpuff|palegoldenrod|khaki|darkkhaki|" // NOI18N
+            + "lavender|thistle|plum|violet|orchid|fuchsia|magenta|mediumorchid|mediumpurple|rebeccapurple|blueviolet|darkviolet|darkorchid|darkmagenta|purple|indigo|slateblue|darkslateblue|mediumslateblue|" // NOI18N
+            + "greenyellow|chartreuse|lawngreen|lime|limegreen|palegreen|lightgreen|mediumspringgreen|springgreen|mediumseagreen|seagreen|forestgreen|green|darkgreen|yellowgreen|olivedrab|olive|darkolivegreen|mediumaquamarine|darkseagreen|lightseagreen|darkcyan|teal|yellow|" // NOI18N
+            + "aqua|cyan|lightcyan|paleturquoise|aquamarine|turquoise|mediumturquoise|darkturquoise|cadetblue|steelblue|lightsteelblue|powderblue|lightblue|skyblue|lightskyblue|deepskyblue|dodgerblue|cornflowerblue|mediumslateblue|royalblue|blue|mediumblue|darkblue|navy|midnightblue|" // NOI18N
+            + "cornsilk|blanchedalmond|bisque|navajowhite|wheat|burlywood|tan|rosybrown|sandybrown|goldenrod|darkgoldenrod|peru|chocolate|saddlebrown|sienna|brown|maroon|" // NOI18N
+            + "white|snow|honeydew|mintcream|azure|aliceblue|ghostwhite|whitesmoke|seashell|beige|oldlace|floralwhite|ivory|antiquewhite|linen|lavenderblush|mistyrose|" // NOI18N
+            + "gainsboro|lightgray|silver|darkgray|gray|dimgray|lightslategray|slategray|darkslategray|black" // NOI18N
+            + ")"; // NOI18N
 
     private static final String HEX_VALUE_FORMAT = "#%02x%02x%02x"; // NOI18N
     private static final String RGB_VALUE_FORMAT = "rgb(%s, %s, %s)"; // NOI18N
@@ -107,6 +132,173 @@ public final class ColorsUtils {
     private static final String GROUP_LIGHTNESS = "l"; // NOI18N
 
     private static final Comparator COLOR_VALUE_COMPARATOR = new ColorValueComparator();
+
+    private static final Map<String, String> NAMED_COLOR_TABLE = new HashMap<>();
+
+    static {
+        // red html color names
+        NAMED_COLOR_TABLE.put("indianred", "#cd5c5c"); // NOI18N
+        NAMED_COLOR_TABLE.put("lightcoral", "#f08080"); // NOI18N
+        NAMED_COLOR_TABLE.put("salmon", "#fa8072"); // NOI18N
+        NAMED_COLOR_TABLE.put("darksalmon", "#e9967a"); // NOI18N
+        NAMED_COLOR_TABLE.put("lightsalmon", "#ffa07a"); // NOI18N
+        NAMED_COLOR_TABLE.put("crimson", "#dc143c"); // NOI18N
+        NAMED_COLOR_TABLE.put("red", "#ff0000"); // NOI18N
+        NAMED_COLOR_TABLE.put("firebrick", "#b22222"); // NOI18N
+        NAMED_COLOR_TABLE.put("darkred", "#8b0000"); // NOI18N
+
+        // pink html color names
+        NAMED_COLOR_TABLE.put("pink", "#ffc0cb"); // NOI18N
+        NAMED_COLOR_TABLE.put("lightpink", "#ffb6c1"); // NOI18N
+        NAMED_COLOR_TABLE.put("hotpink", "#ff69b4"); // NOI18N
+        NAMED_COLOR_TABLE.put("deeppink", "#ff1493"); // NOI18N
+        NAMED_COLOR_TABLE.put("mediumvioletred", "#c71585"); // NOI18N
+        NAMED_COLOR_TABLE.put("palevioletred", "#db7093"); // NOI18N
+
+        // orange html color names
+        NAMED_COLOR_TABLE.put("lightsalmon", "#ffa07a"); // NOI18N
+        NAMED_COLOR_TABLE.put("coral", "#ff7f50"); // NOI18N
+        NAMED_COLOR_TABLE.put("tomato", "#ff6347"); // NOI18N
+        NAMED_COLOR_TABLE.put("orangered", "#ff4500"); // NOI18N
+        NAMED_COLOR_TABLE.put("darkorange", "#ff8c00"); // NOI18N
+        NAMED_COLOR_TABLE.put("orange", "#ffa500"); // NOI18N
+
+        // yellow html color names
+        NAMED_COLOR_TABLE.put("gold", "#ffd700"); // NOI18N
+        NAMED_COLOR_TABLE.put("yellow", "#ffff00"); // NOI18N
+        NAMED_COLOR_TABLE.put("lightyellow", "#ffffe0"); // NOI18N
+        NAMED_COLOR_TABLE.put("lemonchiffon", "#fffacd"); // NOI18N
+        NAMED_COLOR_TABLE.put("lightgoldenrodyellow", "#fafad2"); // NOI18N
+        NAMED_COLOR_TABLE.put("papayawhip", "#ffefd5"); // NOI18N
+        NAMED_COLOR_TABLE.put("moccasin", "#ffe4b5"); // NOI18N
+        NAMED_COLOR_TABLE.put("peachpuff", "#ffdab9"); // NOI18N
+        NAMED_COLOR_TABLE.put("palegoldenrod", "#eee8aa"); // NOI18N
+        NAMED_COLOR_TABLE.put("khaki", "#f0e68c"); // NOI18N
+        NAMED_COLOR_TABLE.put("darkkhaki", "#bdb76b"); // NOI18N
+
+        // purple html color names
+        NAMED_COLOR_TABLE.put("lavender", "#e6e6fa"); // NOI18N
+        NAMED_COLOR_TABLE.put("thistle", "#d8bfd8"); // NOI18N
+        NAMED_COLOR_TABLE.put("plum", "#dda0dd"); // NOI18N
+        NAMED_COLOR_TABLE.put("violet", "#ee82ee"); // NOI18N
+        NAMED_COLOR_TABLE.put("orchid", "#da70d6"); // NOI18N
+        NAMED_COLOR_TABLE.put("fuchsia", "#ff00ff"); // NOI18N
+        NAMED_COLOR_TABLE.put("magenta", "#ff00ff"); // NOI18N
+        NAMED_COLOR_TABLE.put("mediumorchid", "#ba55d3"); // NOI18N
+        NAMED_COLOR_TABLE.put("mediumpurple", "#9370db"); // NOI18N
+        NAMED_COLOR_TABLE.put("rebeccapurple", "#663399"); // NOI18N
+        NAMED_COLOR_TABLE.put("blueviolet", "#8a2be2"); // NOI18N
+        NAMED_COLOR_TABLE.put("darkviolet", "#9400d3"); // NOI18N
+        NAMED_COLOR_TABLE.put("darkorchid", "#9932cc"); // NOI18N
+        NAMED_COLOR_TABLE.put("darkmagenta", "#8b008b"); // NOI18N
+        NAMED_COLOR_TABLE.put("purple", "#800080"); // NOI18N
+        NAMED_COLOR_TABLE.put("indigo", "#4b0082"); // NOI18N
+        NAMED_COLOR_TABLE.put("slateblue", "#6a5acd"); // NOI18N
+        NAMED_COLOR_TABLE.put("darkslateblue", "#483d8b"); // NOI18N
+        NAMED_COLOR_TABLE.put("mediumslateblue", "#7b68ee"); // NOI18N
+
+        // green html color names
+        NAMED_COLOR_TABLE.put("greenyellow", "#adff2f"); // NOI18N
+        NAMED_COLOR_TABLE.put("chartreuse", "#7fff00"); // NOI18N
+        NAMED_COLOR_TABLE.put("lawngreen", "#7cfc00"); // NOI18N
+        NAMED_COLOR_TABLE.put("lime", "#00ff00"); // NOI18N
+        NAMED_COLOR_TABLE.put("limegreen", "#32cd32"); // NOI18N
+        NAMED_COLOR_TABLE.put("palegreen", "#98fb98"); // NOI18N
+        NAMED_COLOR_TABLE.put("lightgreen", "#90ee90"); // NOI18N
+        NAMED_COLOR_TABLE.put("mediumspringgreen", "#00fa9a"); // NOI18N
+        NAMED_COLOR_TABLE.put("springgreen", "#00ff7f"); // NOI18N
+        NAMED_COLOR_TABLE.put("mediumseagreen", "#3cb371"); // NOI18N
+        NAMED_COLOR_TABLE.put("seagreen", "#2e8b57"); // NOI18N
+        NAMED_COLOR_TABLE.put("forestgreen", "#228b22"); // NOI18N
+        NAMED_COLOR_TABLE.put("green", "#008000"); // NOI18N
+        NAMED_COLOR_TABLE.put("darkgreen", "#006400"); // NOI18N
+        NAMED_COLOR_TABLE.put("yellowgreen", "#9acd32"); // NOI18N
+        NAMED_COLOR_TABLE.put("olivedrab", "#6b8e23"); // NOI18N
+        NAMED_COLOR_TABLE.put("olive", "#808000"); // NOI18N
+        NAMED_COLOR_TABLE.put("darkolivegreen", "#556b2f"); // NOI18N
+        NAMED_COLOR_TABLE.put("mediumaquamarine", "#66cdaa"); // NOI18N
+        NAMED_COLOR_TABLE.put("darkseagreen", "#8fbc8b"); // NOI18N
+        NAMED_COLOR_TABLE.put("lightseagreen", "#20b2aa"); // NOI18N
+        NAMED_COLOR_TABLE.put("darkcyan", "#008b8b"); // NOI18N
+        NAMED_COLOR_TABLE.put("teal", "#008080"); // NOI18N
+
+        // blue html color names
+        NAMED_COLOR_TABLE.put("aqua", "#00ffff"); // NOI18N
+        NAMED_COLOR_TABLE.put("cyan", "#00ffff"); // NOI18N
+        NAMED_COLOR_TABLE.put("lightcyan", "#e0ffff"); // NOI18N
+        NAMED_COLOR_TABLE.put("paleturquoise", "#afeeee"); // NOI18N
+        NAMED_COLOR_TABLE.put("aquamarine", "#7fffd4"); // NOI18N
+        NAMED_COLOR_TABLE.put("turquoise", "#40e0d0"); // NOI18N
+        NAMED_COLOR_TABLE.put("mediumturquoise", "#48d1cc"); // NOI18N
+        NAMED_COLOR_TABLE.put("darkturquoise", "#00ced1"); // NOI18N
+        NAMED_COLOR_TABLE.put("cadetblue", "#5f9ea0"); // NOI18N
+        NAMED_COLOR_TABLE.put("steelblue", "#4682b4"); // NOI18N
+        NAMED_COLOR_TABLE.put("lightsteelblue", "#b0c4de"); // NOI18N
+        NAMED_COLOR_TABLE.put("powderblue", "#b0e0e6"); // NOI18N
+        NAMED_COLOR_TABLE.put("lightblue", "#add8e6"); // NOI18N
+        NAMED_COLOR_TABLE.put("skyblue", "#87ceeb"); // NOI18N
+        NAMED_COLOR_TABLE.put("lightskyblue", "#87cefa"); // NOI18N
+        NAMED_COLOR_TABLE.put("deepskyblue", "#00bfff"); // NOI18N
+        NAMED_COLOR_TABLE.put("dodgerblue", "#1e90ff"); // NOI18N
+        NAMED_COLOR_TABLE.put("cornflowerblue", "#6495ed"); // NOI18N
+        NAMED_COLOR_TABLE.put("mediumslateblue", "#7b68ee"); // NOI18N
+        NAMED_COLOR_TABLE.put("royalblue", "#4169e1"); // NOI18N
+        NAMED_COLOR_TABLE.put("blue", "#0000ff"); // NOI18N
+        NAMED_COLOR_TABLE.put("mediumblue", "#0000cd"); // NOI18N
+        NAMED_COLOR_TABLE.put("darkblue", "#00008b"); // NOI18N
+        NAMED_COLOR_TABLE.put("navy", "#000080"); // NOI18N
+        NAMED_COLOR_TABLE.put("midnightblue", "#191970"); // NOI18N
+
+        // brown html color names
+        NAMED_COLOR_TABLE.put("cornsilk", "#fff8dc"); // NOI18N
+        NAMED_COLOR_TABLE.put("blanchedalmond", "#ffebcd"); // NOI18N
+        NAMED_COLOR_TABLE.put("bisque", "#ffe4c4"); // NOI18N
+        NAMED_COLOR_TABLE.put("navajowhite", "#ffdead"); // NOI18N
+        NAMED_COLOR_TABLE.put("wheat", "#f5deb3"); // NOI18N
+        NAMED_COLOR_TABLE.put("burlywood", "#deb887"); // NOI18N
+        NAMED_COLOR_TABLE.put("tan", "#d2b48c"); // NOI18N
+        NAMED_COLOR_TABLE.put("rosybrown", "#bc8f8f"); // NOI18N
+        NAMED_COLOR_TABLE.put("sandybrown", "#f4a460"); // NOI18N
+        NAMED_COLOR_TABLE.put("goldenrod", "#daa520"); // NOI18N
+        NAMED_COLOR_TABLE.put("darkgoldenrod", "#b8860b"); // NOI18N
+        NAMED_COLOR_TABLE.put("peru", "#cd853f"); // NOI18N
+        NAMED_COLOR_TABLE.put("chocolate", "#d2691e"); // NOI18N
+        NAMED_COLOR_TABLE.put("saddlebrown", "#8b4513"); // NOI18N
+        NAMED_COLOR_TABLE.put("sienna", "#a0522d"); // NOI18N
+        NAMED_COLOR_TABLE.put("brown", "#a52a2a"); // NOI18N
+        NAMED_COLOR_TABLE.put("maroon", "#800000"); // NOI18N
+
+        // white html color names
+        NAMED_COLOR_TABLE.put("white", "#ffffff"); // NOI18N
+        NAMED_COLOR_TABLE.put("snow", "#fffafa"); // NOI18N
+        NAMED_COLOR_TABLE.put("honeydew", "#f0fff0"); // NOI18N
+        NAMED_COLOR_TABLE.put("mintcream", "#f5fffa"); // NOI18N
+        NAMED_COLOR_TABLE.put("azure", "#f0ffff"); // NOI18N
+        NAMED_COLOR_TABLE.put("aliceblue", "#f0f8ff"); // NOI18N
+        NAMED_COLOR_TABLE.put("ghostwhite", "#f8f8ff"); // NOI18N
+        NAMED_COLOR_TABLE.put("whitesmoke", "#f5f5f5"); // NOI18N
+        NAMED_COLOR_TABLE.put("seashell", "#fff5ee"); // NOI18N
+        NAMED_COLOR_TABLE.put("beige", "#f5f5dc"); // NOI18N
+        NAMED_COLOR_TABLE.put("oldlace", "#fdf5e6"); // NOI18N
+        NAMED_COLOR_TABLE.put("floralwhite", "#fffaf0"); // NOI18N
+        NAMED_COLOR_TABLE.put("ivory", "#fffff0"); // NOI18N
+        NAMED_COLOR_TABLE.put("antiquewhite", "#faebd7"); // NOI18N
+        NAMED_COLOR_TABLE.put("linen", "#faf0e6"); // NOI18N
+        NAMED_COLOR_TABLE.put("lavenderblush", "#fff0f5"); // NOI18N
+        NAMED_COLOR_TABLE.put("mistyrose", "#ffe4e1"); // NOI18N
+
+        // gray html color names
+        NAMED_COLOR_TABLE.put("gainsboro", "#dcdcdc"); // NOI18N
+        NAMED_COLOR_TABLE.put("lightgray", "#d3d3d3"); // NOI18N
+        NAMED_COLOR_TABLE.put("silver", "#c0c0c0"); // NOI18N
+        NAMED_COLOR_TABLE.put("darkgray", "#a9a9a9"); // NOI18N
+        NAMED_COLOR_TABLE.put("gray", "#808080"); // NOI18N
+        NAMED_COLOR_TABLE.put("dimgray", "#696969"); // NOI18N
+        NAMED_COLOR_TABLE.put("lightslategray", "#778899"); // NOI18N
+        NAMED_COLOR_TABLE.put("slategray", "#708090"); // NOI18N
+        NAMED_COLOR_TABLE.put("darkslategray", "#2f4f4f"); // NOI18N
+        NAMED_COLOR_TABLE.put("black", "#000000"); // NOI18N
+    }
 
     private ColorsUtils() {
     }
@@ -157,6 +349,23 @@ public final class ColorsUtils {
                 colorValues.add(colorValue);
             }
 
+        }
+        return colorValues;
+    }
+
+    /**
+     * Get named colors. (e.g. red)
+     *
+     * @param line target text
+     * @return named colors
+     */
+    public static List<ColorValue> getNamedColors(String line, int lineNumber) {
+        Matcher matcher = getColorMatcher(line, ColorType.NAMED_COLORS);
+        ArrayList<ColorValue> colorValues = new ArrayList<>();
+        while (matcher.find()) {
+            final String namedColor = matcher.group(1);
+            ColorValue colorValue = new NamedColorValue(namedColor, matcher.start(), matcher.end(), lineNumber);
+            colorValues.add(colorValue);
         }
         return colorValues;
     }
@@ -353,6 +562,8 @@ public final class ColorsUtils {
         switch (type) {
             case HEX:
                 return decodeHexColorCode(code);
+            case NAMED_COLORS:
+                return decodeNamedColor(code);
             case CSS_INT_RGB:
                 return decodeCssIntRGB(code);
             case CSS_PERCENT_RGB:
@@ -381,6 +592,16 @@ public final class ColorsUtils {
             if (length == 7) {
                 return Color.decode(code);
             }
+        }
+        return null;
+    }
+
+    @CheckForNull
+    private static Color decodeNamedColor(String code) {
+        Matcher matcher = getColorMatcher(code, ColorType.NAMED_COLORS);
+        if (matcher.matches()) {
+            String hexColorCode = NAMED_COLOR_TABLE.get(code.toLowerCase());
+            return decodeHexColorCode(hexColorCode);
         }
         return null;
     }

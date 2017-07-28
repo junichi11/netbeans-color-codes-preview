@@ -39,55 +39,25 @@
  *
  * Portions Copyrighted 2015 Sun Microsystems, Inc.
  */
-package com.junichi11.netbeans.modules.color.codes.preview.options;
+package com.junichi11.netbeans.modules.color.codes.preview.colors;
 
-import java.util.prefs.PreferenceChangeListener;
-import java.util.prefs.Preferences;
-import org.openide.util.NbPreferences;
+import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils;
+import java.awt.Color;
 
-/**
- *
- * @author junichi11
- */
-public final class ColorCodesPreviewOptions {
+public class CssPercentRGBColorValue extends ColorValueImpl {
 
-    private static final String DEFAULT_MIME_TYPE_REGEX = "^text/(x-)?(css|less|sass|scss)$"; // NOI18N
-    public static final String MIME_TYPE_REGEX = "color.codes.preview.mimetype.regex"; // NOI18N
-    public static final String NAMED_COLORS = "color.codes.preview.color.types.named"; // NOI18N
-    private static final ColorCodesPreviewOptions INSTANCE = new ColorCodesPreviewOptions();
-
-    private ColorCodesPreviewOptions() {
+    public CssPercentRGBColorValue(String value, int startOffset, int endOffset, int line) {
+        super(value, startOffset, endOffset, line);
     }
 
-    public static ColorCodesPreviewOptions getInstance() {
-        return INSTANCE;
+    @Override
+    public Color getColor() {
+        return ColorsUtils.decode(getValue(), ColorsUtils.ColorType.CSS_PERCENT_RGB);
     }
 
-    public String getMimeTypeRegex() {
-        return getPreferences().get(MIME_TYPE_REGEX, DEFAULT_MIME_TYPE_REGEX);
+    @Override
+    public ColorsUtils.ColorType getType() {
+        return ColorsUtils.ColorType.CSS_PERCENT_RGB;
     }
 
-    public void setMimeTypeRegex(String regex) {
-        getPreferences().put(MIME_TYPE_REGEX, regex);
-    }
-
-    public boolean useNamedColors() {
-        return getPreferences().getBoolean(NAMED_COLORS, false);
-    }
-
-    public void setNamedColors(boolean use) {
-        getPreferences().putBoolean(NAMED_COLORS, use);
-    }
-
-    public void addPreferenceChangeListener(PreferenceChangeListener listener) {
-        getPreferences().addPreferenceChangeListener(listener);
-    }
-
-    public void removePreferenceChangeListener(PreferenceChangeListener listener) {
-        getPreferences().removePreferenceChangeListener(listener);
-    }
-
-    private Preferences getPreferences() {
-        return NbPreferences.forModule(ColorCodesPreviewOptions.class);
-    }
 }

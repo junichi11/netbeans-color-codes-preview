@@ -42,7 +42,7 @@
 package com.junichi11.netbeans.modules.color.codes.preview.ui;
 
 import com.junichi11.netbeans.modules.color.codes.preview.options.ColorCodesPreviewOptions;
-import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.ColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils;
 import java.awt.AWTEvent;
 import java.awt.BasicStroke;
@@ -56,8 +56,8 @@ import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -75,6 +75,7 @@ import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.Position;
 import javax.swing.text.View;
+import org.netbeans.api.editor.document.LineDocumentUtils;
 import org.netbeans.api.editor.fold.FoldHierarchy;
 import org.netbeans.api.editor.fold.FoldHierarchyEvent;
 import org.netbeans.api.editor.fold.FoldHierarchyListener;
@@ -246,13 +247,17 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
 
     private List<ColorValue> getAllColorValues(String line, int lineNumber) {
         List<ColorValue> hexColorValues = ColorsUtils.getHexColorCodes(line, lineNumber);
-        List<ColorValue> colorValues = new LinkedList<>(hexColorValues);
+        List<ColorValue> colorValues = new ArrayList<>(hexColorValues);
         colorValues.addAll(ColorsUtils.getCssIntRGBs(line, lineNumber));
         colorValues.addAll(ColorsUtils.getCssIntRGBAs(line, lineNumber));
         colorValues.addAll(ColorsUtils.getCssPercentRGBs(line, lineNumber));
         colorValues.addAll(ColorsUtils.getCssPercentRGBAs(line, lineNumber));
         colorValues.addAll(ColorsUtils.getCssHSLs(line, lineNumber));
         colorValues.addAll(ColorsUtils.getCssHSLAs(line, lineNumber));
+        ColorCodesPreviewOptions options = ColorCodesPreviewOptions.getInstance();
+        if (options.useNamedColors()) {
+            colorValues.addAll(ColorsUtils.getNamedColors(line, lineNumber));
+        }
         return colorValues;
     }
 
@@ -387,7 +392,7 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
                 if (component != null) {
                     TextUI textUI = component.getUI();
                     int clickOffset = textUI.viewToModel(component, new Point(0, e.getY()));
-                    line = Utilities.getLineOffset(document, clickOffset);
+                    line = LineDocumentUtils.getLineIndex(document, clickOffset);
                 }
             } catch (BadLocationException ex) {
                 LOGGER.log(Level.WARNING, "getLineFromMouseEvent", ex); // NOI18N
@@ -407,12 +412,12 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
         if (document == null || line < 0) {
             return ""; // NOI18N
         }
-        int startOffset = Utilities.getRowStartFromLineOffset(document, line);
+        int startOffset = LineDocumentUtils.getLineStartFromIndex(document, line);
         if (startOffset == -1) {
             return ""; // NOI18N
         }
         try {
-            int endOffset = Utilities.getRowEnd(document, startOffset);
+            int endOffset = LineDocumentUtils.getLineEnd(document, startOffset);
             if (endOffset == -1) {
                 return ""; // NOI18N
             }

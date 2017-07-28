@@ -41,6 +41,7 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.utils;
 
+import com.junichi11.netbeans.modules.color.codes.preview.colors.ColorValue;
 import java.awt.Color;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -459,6 +460,20 @@ public class ColorsUtilsTest {
         Assert.assertNull(result);
     }
 
+    /**
+     * Test of decode method, of class ColorsUtils.
+     */
+    @Test
+    public void testDecodeNamedColor() {
+        Color result = ColorsUtils.decode("black");
+        Assert.assertNotNull(result);
+        result = ColorsUtils.decode("RED");
+        Assert.assertNotNull(result);
+
+        result = ColorsUtils.decode("test invalid");
+        Assert.assertNull(result);
+    }
+
     // Colors
     /**
      * Test of getHexColorCodes method, of class ColorsUtils.
@@ -772,6 +787,47 @@ public class ColorsUtilsTest {
         result = ColorsUtils.getCssHSLAs("hsla(0, 0%, 0%)", 1);
         assertEquals(0, result.size());
         result = ColorsUtils.getCssHSLAs("hsl(0, 0%, 0%)", 1);
+        assertEquals(0, result.size());
+    }
+
+    /**
+     * Test of getNamedColors method, of class ColorsUtils.
+     */
+    @Test
+    public void testGetNamedColorValues() {
+        List<ColorValue> result = ColorsUtils.getNamedColors("black", -1);
+        assertEquals(1, result.size());
+        result = ColorsUtils.getNamedColors("BLACK", 1);
+        assertEquals(1, result.size());
+        result = ColorsUtils.getNamedColors("yellow", 1);
+        assertEquals(1, result.size());
+        result = ColorsUtils.getNamedColors("green", 1);
+        assertEquals(1, result.size());
+        result = ColorsUtils.getNamedColors("yellowgreen", 1);
+        assertEquals(1, result.size());
+        result = ColorsUtils.getNamedColors("greenyellow", 1);
+        assertEquals(1, result.size());
+        result = ColorsUtils.getNamedColors("orangered", 1);
+        assertEquals(1, result.size());
+        result = ColorsUtils.getNamedColors("red", 1);
+        assertEquals(1, result.size());
+        result = ColorsUtils.getNamedColors("orange", 1);
+        assertEquals(1, result.size());
+        result = ColorsUtils.getNamedColors("mediumslateblue", 1);
+        assertEquals(1, result.size());
+        result = ColorsUtils.getNamedColors("blue", 1);
+        assertEquals(1, result.size());
+        result = ColorsUtils.getNamedColors("mediumblue", 1);
+        assertEquals(1, result.size());
+        result = ColorsUtils.getNamedColors("aquamarine", 1);
+        assertEquals(1, result.size());
+        result = ColorsUtils.getNamedColors("aqua", 1);
+        assertEquals(1, result.size());
+
+        result = ColorsUtils.getNamedColors("green yellow", 1);
+        assertEquals(2, result.size());
+
+        result = ColorsUtils.getNamedColors("invalidName", 1);
         assertEquals(0, result.size());
     }
 }

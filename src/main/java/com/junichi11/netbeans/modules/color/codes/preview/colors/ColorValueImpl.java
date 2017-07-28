@@ -39,55 +39,59 @@
  *
  * Portions Copyrighted 2015 Sun Microsystems, Inc.
  */
-package com.junichi11.netbeans.modules.color.codes.preview.options;
+package com.junichi11.netbeans.modules.color.codes.preview.colors;
 
-import java.util.prefs.PreferenceChangeListener;
-import java.util.prefs.Preferences;
-import org.openide.util.NbPreferences;
+import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils;
+import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils.ColorType;
+import java.awt.Color;
+import org.netbeans.api.annotations.common.NonNull;
 
 /**
  *
  * @author junichi11
  */
-public final class ColorCodesPreviewOptions {
+public class ColorValueImpl implements ColorValue {
 
-    private static final String DEFAULT_MIME_TYPE_REGEX = "^text/(x-)?(css|less|sass|scss)$"; // NOI18N
-    public static final String MIME_TYPE_REGEX = "color.codes.preview.mimetype.regex"; // NOI18N
-    public static final String NAMED_COLORS = "color.codes.preview.color.types.named"; // NOI18N
-    private static final ColorCodesPreviewOptions INSTANCE = new ColorCodesPreviewOptions();
+    private final int line;
+    private final int startOffset;
+    private final int endOffset;
+    private final String value;
 
-    private ColorCodesPreviewOptions() {
+    public ColorValueImpl(@NonNull String value, int startOffset, int endOffset, int line) {
+        this.value = value;
+        this.startOffset = startOffset;
+        this.endOffset = endOffset;
+        this.line = line;
     }
 
-    public static ColorCodesPreviewOptions getInstance() {
-        return INSTANCE;
+    @Override
+    public int getLine() {
+        return line;
     }
 
-    public String getMimeTypeRegex() {
-        return getPreferences().get(MIME_TYPE_REGEX, DEFAULT_MIME_TYPE_REGEX);
+    @Override
+    public int getStartOffset() {
+        return startOffset;
     }
 
-    public void setMimeTypeRegex(String regex) {
-        getPreferences().put(MIME_TYPE_REGEX, regex);
+    @Override
+    public int getEndOffset() {
+        return endOffset;
     }
 
-    public boolean useNamedColors() {
-        return getPreferences().getBoolean(NAMED_COLORS, false);
+    @Override
+    public String getValue() {
+        return value;
     }
 
-    public void setNamedColors(boolean use) {
-        getPreferences().putBoolean(NAMED_COLORS, use);
+    @Override
+    public Color getColor() {
+        return ColorsUtils.decode(value);
     }
 
-    public void addPreferenceChangeListener(PreferenceChangeListener listener) {
-        getPreferences().addPreferenceChangeListener(listener);
+    @Override
+    public ColorType getType() {
+        return ColorType.HEX;
     }
 
-    public void removePreferenceChangeListener(PreferenceChangeListener listener) {
-        getPreferences().removePreferenceChangeListener(listener);
-    }
-
-    private Preferences getPreferences() {
-        return NbPreferences.forModule(ColorCodesPreviewOptions.class);
-    }
 }

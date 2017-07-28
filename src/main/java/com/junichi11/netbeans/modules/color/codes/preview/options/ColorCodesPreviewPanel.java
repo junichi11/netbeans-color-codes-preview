@@ -61,6 +61,13 @@ final class ColorCodesPreviewPanel extends javax.swing.JPanel {
         mimeTypeRegexTextField.setText(regex);
     }
 
+    public boolean useNamedColors() {
+        return namedColorsCheckBox.isSelected();
+    }
+
+    private void setNamedColors(boolean use) {
+        namedColorsCheckBox.setSelected(use);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -71,10 +78,16 @@ final class ColorCodesPreviewPanel extends javax.swing.JPanel {
 
         fileTypesLabel = new javax.swing.JLabel();
         mimeTypeRegexTextField = new javax.swing.JTextField();
+        colorTypesLabel = new javax.swing.JLabel();
+        namedColorsCheckBox = new javax.swing.JCheckBox();
 
         org.openide.awt.Mnemonics.setLocalizedText(fileTypesLabel, org.openide.util.NbBundle.getMessage(ColorCodesPreviewPanel.class, "ColorCodesPreviewPanel.fileTypesLabel.text")); // NOI18N
 
         mimeTypeRegexTextField.setText(org.openide.util.NbBundle.getMessage(ColorCodesPreviewPanel.class, "ColorCodesPreviewPanel.mimeTypeRegexTextField.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(colorTypesLabel, org.openide.util.NbBundle.getMessage(ColorCodesPreviewPanel.class, "ColorCodesPreviewPanel.colorTypesLabel.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(namedColorsCheckBox, org.openide.util.NbBundle.getMessage(ColorCodesPreviewPanel.class, "ColorCodesPreviewPanel.namedColorsCheckBox.text")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -82,10 +95,21 @@ final class ColorCodesPreviewPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(fileTypesLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(mimeTypeRegexTextField)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(namedColorsCheckBox)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(fileTypesLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(mimeTypeRegexTextField))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(colorTypesLabel)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -94,6 +118,10 @@ final class ColorCodesPreviewPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(fileTypesLabel)
                     .addComponent(mimeTypeRegexTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(colorTypesLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(namedColorsCheckBox)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -101,11 +129,13 @@ final class ColorCodesPreviewPanel extends javax.swing.JPanel {
     void load() {
         ColorCodesPreviewOptions options = ColorCodesPreviewOptions.getInstance();
         setMimeTypeRegex(options.getMimeTypeRegex());
+        setNamedColors(options.useNamedColors());
     }
 
     void store() {
         ColorCodesPreviewOptions options = ColorCodesPreviewOptions.getInstance();
         options.setMimeTypeRegex(getMimeTypeRegex());
+        options.setNamedColors(useNamedColors());
     }
 
     boolean valid() {
@@ -114,7 +144,9 @@ final class ColorCodesPreviewPanel extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel colorTypesLabel;
     private javax.swing.JLabel fileTypesLabel;
     private javax.swing.JTextField mimeTypeRegexTextField;
+    private javax.swing.JCheckBox namedColorsCheckBox;
     // End of variables declaration//GEN-END:variables
 }

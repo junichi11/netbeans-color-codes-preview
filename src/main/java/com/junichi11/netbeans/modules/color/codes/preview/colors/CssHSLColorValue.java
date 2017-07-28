@@ -39,24 +39,25 @@
  *
  * Portions Copyrighted 2015 Sun Microsystems, Inc.
  */
-package com.junichi11.netbeans.modules.color.codes.preview.utils;
+package com.junichi11.netbeans.modules.color.codes.preview.colors;
 
+import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils;
 import java.awt.Color;
 
-public class HexColorValue extends ColorValue {
+public class CssHSLColorValue extends ColorValueImpl {
 
-    public HexColorValue(String value, int startOffset, int endOffset, int line) {
+    public CssHSLColorValue(String value, int startOffset, int endOffset, int line) {
         super(value, startOffset, endOffset, line);
     }
 
     @Override
     public Color getColor() {
-        return ColorsUtils.decode(getValue(), ColorsUtils.ColorType.HEX);
+        return ColorsUtils.decode(getValue(), ColorsUtils.ColorType.CSS_HSL);
     }
 
     @Override
     public ColorsUtils.ColorType getType() {
-        return ColorsUtils.ColorType.HEX;
+        return ColorsUtils.ColorType.CSS_HSL;
     }
 
 }
