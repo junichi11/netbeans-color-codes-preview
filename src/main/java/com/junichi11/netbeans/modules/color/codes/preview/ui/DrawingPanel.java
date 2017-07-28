@@ -56,8 +56,8 @@ import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -246,13 +246,17 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
 
     private List<ColorValue> getAllColorValues(String line, int lineNumber) {
         List<ColorValue> hexColorValues = ColorsUtils.getHexColorCodes(line, lineNumber);
-        List<ColorValue> colorValues = new LinkedList<>(hexColorValues);
+        List<ColorValue> colorValues = new ArrayList<>(hexColorValues);
         colorValues.addAll(ColorsUtils.getCssIntRGBs(line, lineNumber));
         colorValues.addAll(ColorsUtils.getCssIntRGBAs(line, lineNumber));
         colorValues.addAll(ColorsUtils.getCssPercentRGBs(line, lineNumber));
         colorValues.addAll(ColorsUtils.getCssPercentRGBAs(line, lineNumber));
         colorValues.addAll(ColorsUtils.getCssHSLs(line, lineNumber));
         colorValues.addAll(ColorsUtils.getCssHSLAs(line, lineNumber));
+        ColorCodesPreviewOptions options = ColorCodesPreviewOptions.getInstance();
+        if (options.useNamedColors()) {
+            colorValues.addAll(ColorsUtils.getNamedColors(line, lineNumber));
+        }
         return colorValues;
     }
 
