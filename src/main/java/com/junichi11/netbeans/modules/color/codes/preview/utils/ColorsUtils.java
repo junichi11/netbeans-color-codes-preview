@@ -99,7 +99,8 @@ public final class ColorsUtils {
     private static final String CSS_RGBA_FORMAT = "(?<cssrgba>rgba\\((?<codenumber>(?<r>%s) *, *(?<g>%s) *, *(?<b>%s) *, *(?<a>%s))\\))"; // NOI18N
     private static final String CSS_HSL_FORMAT = "(?<csshsl>hsl\\((?<codenumber>(?<h>%s) *, *(?<s>%s) *, *(?<l>%s))\\))"; // NOI18N
     private static final String CSS_HSLA_FORMAT = "(?<csshsla>hsla\\((?<codenumber>(?<h>%s) *, *(?<s>%s) *, *(?<l>%s) *, *(?<a>%s))\\))"; // NOI18N
-    private static final String NAMED_COLORS_REGEX = "(" // NOI18N
+    // To prevent unexpected matches, check suffix and prefix
+    private static final String NAMED_COLORS_REGEX = "[ :,\"](" // NOI18N
             + "indianred|lightcoral|salmon|darksalmon|lightsalmon|crimson|red|firebrick|darkred|" // NOI18N
             + "pink|lightpink|hotpink|deeppink|mediumvioletred|palevioletred|" // NOI18N
             + "palevioletred|coral|tomato|orangered|darkorange|orange|" // NOI18N
@@ -110,7 +111,7 @@ public final class ColorsUtils {
             + "cornsilk|blanchedalmond|bisque|navajowhite|wheat|burlywood|tan|rosybrown|sandybrown|goldenrod|darkgoldenrod|peru|chocolate|saddlebrown|sienna|brown|maroon|" // NOI18N
             + "white|snow|honeydew|mintcream|azure|aliceblue|ghostwhite|whitesmoke|seashell|beige|oldlace|floralwhite|ivory|antiquewhite|linen|lavenderblush|mistyrose|" // NOI18N
             + "gainsboro|lightgray|silver|darkgray|gray|dimgray|lightslategray|slategray|darkslategray|black" // NOI18N
-            + ")"; // NOI18N
+            + ")[ ;,\"]"; // NOI18N
 
     private static final String HEX_VALUE_FORMAT = "#%02x%02x%02x"; // NOI18N
     private static final String RGB_VALUE_FORMAT = "rgb(%s, %s, %s)"; // NOI18N
@@ -363,7 +364,7 @@ public final class ColorsUtils {
         Matcher matcher = getColorMatcher(line, ColorType.NAMED_COLORS);
         ArrayList<ColorValue> colorValues = new ArrayList<>();
         while (matcher.find()) {
-            final String namedColor = matcher.group(1);
+            final String namedColor = matcher.group(0);
             ColorValue colorValue = new NamedColorValue(namedColor, matcher.start(), matcher.end(), lineNumber);
             colorValues.add(colorValue);
         }
@@ -600,7 +601,7 @@ public final class ColorsUtils {
     private static Color decodeNamedColor(String code) {
         Matcher matcher = getColorMatcher(code, ColorType.NAMED_COLORS);
         if (matcher.matches()) {
-            String hexColorCode = NAMED_COLOR_TABLE.get(code.toLowerCase());
+            String hexColorCode = NAMED_COLOR_TABLE.get(matcher.group(1).toLowerCase());
             return decodeHexColorCode(hexColorCode);
         }
         return null;
