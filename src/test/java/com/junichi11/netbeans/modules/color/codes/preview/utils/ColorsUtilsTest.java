@@ -465,9 +465,19 @@ public class ColorsUtilsTest {
      */
     @Test
     public void testDecodeNamedColor() {
-        Color result = ColorsUtils.decode("black");
+        Color result = ColorsUtils.decode(" black ");
         Assert.assertNotNull(result);
-        result = ColorsUtils.decode("RED");
+        result = ColorsUtils.decode(" RED ");
+        Assert.assertNotNull(result);
+        result = ColorsUtils.decode(":RED;");
+        Assert.assertNotNull(result);
+        result = ColorsUtils.decode(" RED;");
+        Assert.assertNotNull(result);
+        result = ColorsUtils.decode(":RED ");
+        Assert.assertNotNull(result);
+        result = ColorsUtils.decode(",RED ");
+        Assert.assertNotNull(result);
+        result = ColorsUtils.decode(" RED\"");
         Assert.assertNotNull(result);
 
         result = ColorsUtils.decode("test invalid");
@@ -795,39 +805,47 @@ public class ColorsUtilsTest {
      */
     @Test
     public void testGetNamedColorValues() {
-        List<ColorValue> result = ColorsUtils.getNamedColors("black", -1);
+        List<ColorValue> result = ColorsUtils.getNamedColors(" black ", -1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getNamedColors("BLACK", 1);
+        result = ColorsUtils.getNamedColors(" BLACK ", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getNamedColors("yellow", 1);
+        result = ColorsUtils.getNamedColors(" yellow ", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getNamedColors("green", 1);
+        result = ColorsUtils.getNamedColors(" green ", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getNamedColors("yellowgreen", 1);
+        result = ColorsUtils.getNamedColors(" yellowgreen ", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getNamedColors("greenyellow", 1);
+        result = ColorsUtils.getNamedColors(" greenyellow ", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getNamedColors("orangered", 1);
+        result = ColorsUtils.getNamedColors(" orangered ", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getNamedColors("red", 1);
+        result = ColorsUtils.getNamedColors(" red ", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getNamedColors("orange", 1);
+        result = ColorsUtils.getNamedColors(" orange ", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getNamedColors("mediumslateblue", 1);
+        result = ColorsUtils.getNamedColors(" mediumslateblue ", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getNamedColors("blue", 1);
+        result = ColorsUtils.getNamedColors(" blue ", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getNamedColors("mediumblue", 1);
+        result = ColorsUtils.getNamedColors(" mediumblue ", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getNamedColors("aquamarine", 1);
+        result = ColorsUtils.getNamedColors(" aquamarine ", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getNamedColors("aqua", 1);
+        result = ColorsUtils.getNamedColors(" aqua ", 1);
+        assertEquals(1, result.size());
+        result = ColorsUtils.getNamedColors(" aqua\"", 1);
+        assertEquals(1, result.size());
+        result = ColorsUtils.getNamedColors(":red;", 1);
+        assertEquals(1, result.size());
+        result = ColorsUtils.getNamedColors(": red;", 1);
         assertEquals(1, result.size());
 
-        result = ColorsUtils.getNamedColors("green yellow", 1);
+        result = ColorsUtils.getNamedColors(" green, yellow ", 1);
         assertEquals(2, result.size());
 
         result = ColorsUtils.getNamedColors("invalidName", 1);
+        assertEquals(0, result.size());
+        result = ColorsUtils.getNamedColors("white-space", 1);
         assertEquals(0, result.size());
     }
 }
