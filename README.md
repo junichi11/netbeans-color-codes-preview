@@ -1,4 +1,4 @@
-# NetBeans Color Codes Preview Plugin [![Build Status](https://travis-ci.org/junichi11/netbeans-color-codes-preview.svg?branch=nb82)](https://travis-ci.org/junichi11/netbeans-color-codes-preview)
+# NetBeans Color Codes Preview Plugin [![Build Status](https://travis-ci.org/junichi11/netbeans-color-codes-preview.svg?branch=master)](https://travis-ci.org/junichi11/netbeans-color-codes-preview)
 
 This plugin shows a color codes preview in an editor's sidebar.
 
