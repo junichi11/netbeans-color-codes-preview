@@ -53,4 +53,4 @@ This option is `false` by default. If you would like to show named colors, pleas
 
 ## License
 
-[Common Development and Distribution License (CDDL) v1.0 and GNU General Public License (GPL) v2](http://netbeans.org/cddl-gplv2.html)
+[Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0)
