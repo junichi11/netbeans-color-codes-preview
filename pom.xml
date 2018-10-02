@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.junichi11</groupId>
     <artifactId>netbeans-color-codes-preview</artifactId>
-    <version>0.6.1</version>
+    <version>0.7.0</version>
     <packaging>nbm</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -18,7 +18,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <codeNameBase>com.junichi11.netbeans.modules.color.codes.preview</codeNameBase>
-                    <licenseName>Common Development and Distribution License (CDDL) v1.0 and GNU General Public License (GPL) v2</licenseName>
+                    <licenseName>Apache License, Version 2.0</licenseName>
                     <licenseFile>license.txt</licenseFile>
                     <author>junichi11(Junichi Yamamoto)</author>
                     <homePageUrl>https://github.com/junichi11/netbeans-color-codes-preview</homePageUrl>
