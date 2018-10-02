@@ -34,7 +34,6 @@ public class ColorsSideBarFactory implements SideBarFactory {
 
     @Override
     public JComponent createSideBar(JTextComponent editor) {
-//        return new DrawingPanel(editor);
         return new ColorsSideBarPanel(editor);
     }
 }
