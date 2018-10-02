@@ -101,13 +101,7 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
         options.addPreferenceChangeListener(WeakListeners.create(PreferenceChangeListener.class, this, prefs));
         // lookup listener
         Lookup.Result<FontColorSettings> lookupResult = MimeLookup.getLookup(MimePath.get(NbEditorUtilities.getMimeType(textComponent))).lookupResult(FontColorSettings.class);
-        lookupListener = new LookupListener() {
-
-            @Override
-            public void resultChanged(LookupEvent le) {
-                updateColors();
-            }
-        };
+        lookupListener = (LookupEvent le) -> updateColors();
         lookupResult.addLookupListener(WeakListeners.create(LookupListener.class, lookupListener, lookupResult));
         preferenceChange(null);
         enableEvents(AWTEvent.MOUSE_EVENT_MASK);
@@ -126,14 +120,7 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
             return;
         }
         super.paintComponent(g);
-        Utilities.runViewHierarchyTransaction(textComponent, true,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        paintComponentUnderLock(g);
-                    }
-                }
-        );
+        Utilities.runViewHierarchyTransaction(textComponent, true, () -> paintComponentUnderLock(g));
     }
 
     private void paintComponentUnderLock(Graphics g) {
@@ -418,12 +405,7 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
 
     @Override
     public void componentResized(ComponentEvent e) {
-        Mutex.EVENT.readAccess(new Runnable() {
-            @Override
-            public void run() {
-                revalidate();
-            }
-        });
+        Mutex.EVENT.readAccess(() -> revalidate());
     }
 
     @Override
@@ -440,18 +422,15 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
 
     @Override
     public void foldHierarchyChanged(FoldHierarchyEvent e) {
-        Mutex.EVENT.readAccess(new Runnable() {
-            @Override
-            public void run() {
-                repaint(textComponent.getVisibleRect());
-                // XXX
-                // sleep for a little time because the repaint method run
-                // before the view is changed
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException ex) {
-                    LOGGER.log(Level.WARNING, ex.getMessage());
-                }
+        Mutex.EVENT.readAccess(() -> {
+            repaint(textComponent.getVisibleRect());
+            // XXX
+            // sleep for a little time because the repaint method run
+            // before the view is changed
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ex) {
+                LOGGER.log(Level.WARNING, ex.getMessage());
             }
         });
     }
@@ -472,12 +451,6 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
     }
 
     private void refresh() {
-        SwingUtilities.invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-                repaint();
-            }
-        });
+        SwingUtilities.invokeLater(() -> repaint());
     }
 }

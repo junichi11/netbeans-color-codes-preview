@@ -93,17 +93,13 @@ public class ColorCodesPanel extends JComponent {
                         final int lineOffset = LineDocumentUtils.getLineStartFromIndex(document, line);
                         try {
                             // replace a color value
-                            NbDocument.runAtomicAsUser((StyledDocument) document, new Runnable() {
-
-                                @Override
-                                public void run() {
-                                    try {
-                                        int removeStart = lineOffset + startOffset;
-                                        document.remove(removeStart, endOffset - startOffset);
-                                        document.insertString(removeStart, ColorsUtils.toFormattedString(selectedColor, colorValue.getType()), null);
-                                    } catch (BadLocationException ex) {
-                                        LOGGER.log(Level.WARNING, ex.getMessage());
-                                    }
+                            NbDocument.runAtomicAsUser((StyledDocument) document, () -> {
+                                try {
+                                    int removeStart = lineOffset + startOffset;
+                                    document.remove(removeStart, endOffset - startOffset);
+                                    document.insertString(removeStart, ColorsUtils.toFormattedString(selectedColor, colorValue.getType()), null);
+                                } catch (BadLocationException ex) {
+                                    LOGGER.log(Level.WARNING, ex.getMessage());
                                 }
                             });
                         } catch (BadLocationException ex) {
