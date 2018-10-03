@@ -32,12 +32,16 @@ import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.PreferenceChangeEvent;
 import java.util.prefs.PreferenceChangeListener;
 import java.util.prefs.Preferences;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -86,7 +90,9 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
 
     private static final int DEFAULT_WIDTH = 16;
     private static final Logger LOGGER = Logger.getLogger(DrawingPanel.class.getName());
-    private static final long serialVersionUID = -6855366813058146020L;
+    // check sass and less variables e.g. $green: #0f0;, @green: #0f0;
+    private static final Pattern CSS_VARIABLE_PATTERN = Pattern.compile("(?<var>[\\$@][^ ]+)\\s*:\\s*(?<value>).+\\s*;"); // NOI18N
+    private static final long serialVersionUID = 8161755434377410789L;
 
     public DrawingPanel(JTextComponent editor) {
         super(new BorderLayout());
@@ -140,69 +146,117 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
         if (rootView == null) {
             return;
         }
-
         try {
-            int startPos = getPosFromY(component, textUI, clip.y);
-            int startViewIndex = rootView.getViewIndex(startPos, Position.Bias.Forward);
-            int rootViewCount = rootView.getViewCount();
+            drawColorRect(component, textUI, clip, rootView, g2d);
+        } catch (BadLocationException ex) {
+            LOGGER.log(Level.WARNING, "Incorrect offset : {0}", ex.offsetRequested()); // NOI18N
+        }
+    }
 
-            if (startViewIndex >= 0 && startViewIndex < rootViewCount) {
-                int clipEndY = clip.y + clip.height;
-                for (int i = startViewIndex; i < rootViewCount; i++) {
-                    View view = rootView.getView(i);
-                    if (view == null) {
-                        break;
+    private void drawColorRect(JTextComponent component, TextUI textUI, Rectangle clip, View rootView, Graphics2D g2d) throws BadLocationException {
+        int startPos = getPosFromY(component, textUI, clip.y);
+        int startViewIndex = rootView.getViewIndex(startPos, Position.Bias.Forward);
+        int rootViewCount = rootView.getViewCount();
+
+        if (startViewIndex >= 0 && startViewIndex < rootViewCount) {
+            Map<String, List<ColorValue>> cssVariables = new HashMap<>();
+            int clipEndY = clip.y + clip.height;
+            int start = resolveCssVariables() ? 0 : startViewIndex;
+            for (int i = start; i < rootViewCount; i++) {
+                View view = rootView.getView(i);
+                if (view == null) {
+                    break;
+                }
+
+                // for zoom-in or zoom-out
+                Rectangle rec1 = component.modelToView(view.getStartOffset());
+                Rectangle rec2 = component.modelToView(view.getEndOffset() - 1);
+                if (rec2 == null || rec1 == null) {
+                    break;
+                }
+
+                int y = rec1.y;
+                double lineHeight = (rec2.getY() + rec2.getHeight() - rec1.getY());
+                if (document != null) {
+                    String line = getLineText((BaseDocument) document, view);
+                    int indexOfLF = line.indexOf("\n"); // NOI18N
+                    if (indexOfLF != -1) {
+                        line = line.substring(0, indexOfLF);
                     }
 
-                    // for zoom-in or zoom-out
-                    Rectangle rec1 = component.modelToView(view.getStartOffset());
-                    Rectangle rec2 = component.modelToView(view.getEndOffset() - 1);
-                    if (rec2 == null || rec1 == null) {
-                        break;
+                    // get color values
+                    List<ColorValue> colorValues = getAllColorValues(line, -1); // XXX
+                    ColorsUtils.sort(colorValues);
+
+                    // for sass and less variables
+                    checkCssVariables(line, cssVariables, colorValues);
+                    if (i < startViewIndex) {
+                        continue;
                     }
-
-                    int y = rec1.y;
-                    double lineHeight = (rec2.getY() + rec2.getHeight() - rec1.getY());
-                    if (document != null) {
-                        String line = getLineText((BaseDocument) document, view);
-                        int indexOfLF = line.indexOf("\n"); // NOI18N
-                        if (indexOfLF != -1) {
-                            line = line.substring(0, indexOfLF);
-                        }
-                        // get color values
-                        List<ColorValue> colorValues = getAllColorValues(line, -1); // XXX
-                        ColorsUtils.sort(colorValues);
-                        for (ColorValue colorValue : colorValues) {
-                            g2d.setColor(colorValue.getColor());
-                            int margin = 2;
-                            int recHeight = (int) lineHeight > 8 ? (int) lineHeight - margin * 2 : (int) lineHeight;
-                            int recWidth = DEFAULT_WIDTH - margin * 2;
-
-                            if (colorValues.size() == 1) {
-                                g2d.fillRect(margin, (int) y + margin, recWidth, recHeight);
-                            } else if (colorValues.size() >= 2) {
-                                // show the second color if mulitiple color values exist
-                                g2d.fillRect(margin, (int) y + margin, recWidth / 2, recHeight);
-                                ColorValue secondColorValue = colorValues.get(1);
-                                g2d.setColor(secondColorValue.getColor());
-                                g2d.fillRect(margin + recWidth / 2, y + margin, recWidth / 2, recHeight);
-                            }
-
-                            g2d.setColor(Color.GRAY);
-                            g2d.setStroke(new BasicStroke(1));
-                            g2d.drawRect(margin, (int) y + margin, DEFAULT_WIDTH - margin * 2, recHeight);
-                            break;
-                        }
-                    }
-
-                    y += lineHeight;
-                    if (y >= clipEndY) {
-                        break;
-                    }
+                    drawColorRect(colorValues, g2d, lineHeight, y);
+                }
+                y += lineHeight;
+                if (y >= clipEndY) {
+                    break;
                 }
             }
-        } catch (BadLocationException ex) {
-            Exceptions.printStackTrace(ex);
+        }
+    }
+
+    private void drawColorRect(List<ColorValue> colorValues, Graphics2D g2d, double lineHeight, int y) {
+        for (ColorValue colorValue : colorValues) {
+            g2d.setColor(colorValue.getColor());
+            int margin = 2;
+            int recHeight = (int) lineHeight > 8 ? (int) lineHeight - margin * 2 : (int) lineHeight;
+            int recWidth = DEFAULT_WIDTH - margin * 2;
+
+            if (colorValues.size() == 1) {
+                g2d.fillRect(margin, (int) y + margin, recWidth, recHeight);
+            } else if (colorValues.size() >= 2) {
+                // show the second color if mulitiple color values exist
+                g2d.fillRect(margin, (int) y + margin, recWidth / 2, recHeight);
+                ColorValue secondColorValue = colorValues.get(1);
+                g2d.setColor(secondColorValue.getColor());
+                g2d.fillRect(margin + recWidth / 2, y + margin, recWidth / 2, recHeight);
+            }
+
+            g2d.setColor(Color.GRAY);
+            g2d.setStroke(new BasicStroke(1));
+            g2d.drawRect(margin, (int) y + margin, DEFAULT_WIDTH - margin * 2, recHeight);
+            break;
+        }
+    }
+
+    private void checkCssVariables(String line, Map<String, List<ColorValue>> cssVariables, List<ColorValue> colorValues) {
+        if (!isLessOrSass()) {
+            return;
+        }
+
+        Matcher matcher = CSS_VARIABLE_PATTERN.matcher(line);
+        if (matcher.find()) {
+            String variable = matcher.group("var"); // NOI18N
+            if (variable != null) {
+                cssVariables.put(variable, colorValues);
+            }
+        } else {
+            final String l = line;
+            Map<Integer, String> map = new HashMap<>();
+            cssVariables.forEach((String var, List<ColorValue> colors) -> {
+                if (l.contains(var)) {
+                    int indexOfVar = l.indexOf(var);
+                    int offsetBehindVariableName = indexOfVar + var.length();
+                    if (offsetBehindVariableName < l.length()) {
+                        // e.g. when searche $green, ignore $green1, $green2,...
+                        char c = l.charAt(offsetBehindVariableName);
+                        if (c == ' ' || c == ';') {
+                            map.put(indexOfVar, var);
+                        }
+                    }
+                }
+            });
+            List<Integer> offsetNumbers = new ArrayList<>(map.keySet());
+            Collections.sort(offsetNumbers);
+            offsetNumbers.forEach(offset -> colorValues.addAll(cssVariables.get(map.get(offset))));
         }
     }
 
@@ -282,6 +336,16 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
         foldHierarchy.removeFoldHierarchyListener(this);
     }
 
+    private boolean resolveCssVariables() {
+        return isLessOrSass()
+                && ColorCodesPreviewOptions.getInstance().resolveCssVariables();
+    }
+
+    private boolean isLessOrSass() {
+        String mimeType = NbEditorUtilities.getMimeType(textComponent);
+        return "text/less".equals(mimeType) || "text/scss".equals(mimeType); // NOI18N
+    }
+
     @Override
     public void preferenceChange(PreferenceChangeEvent evt) {
         if (evt == null
@@ -302,8 +366,7 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
     private boolean isMimeTypeEnabled() {
         String mimeType = NbEditorUtilities.getMimeType(textComponent);
         if (mimeType != null) {
-            ColorCodesPreviewOptions options = ColorCodesPreviewOptions.getInstance();
-            return mimeType.matches(options.getMimeTypeRegex());
+            return mimeType.matches(ColorCodesPreviewOptions.getInstance().getMimeTypeRegex());
         }
         return false;
     }
