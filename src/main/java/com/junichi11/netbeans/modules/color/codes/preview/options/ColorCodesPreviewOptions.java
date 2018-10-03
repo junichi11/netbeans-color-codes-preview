@@ -28,6 +28,8 @@ public final class ColorCodesPreviewOptions {
     private static final String DEFAULT_MIME_TYPE_REGEX = "^text/(x-)?(css|less|sass|scss)$"; // NOI18N
     public static final String MIME_TYPE_REGEX = "color.codes.preview.mimetype.regex"; // NOI18N
     public static final String NAMED_COLORS = "color.codes.preview.color.types.named"; // NOI18N
+    private static final String RESOLVE_CSS_VARIABLES = "color.codes.preview.resolve.css.variables"; // NOI18N
+
     private static final ColorCodesPreviewOptions INSTANCE = new ColorCodesPreviewOptions();
 
     private ColorCodesPreviewOptions() {
@@ -51,6 +53,14 @@ public final class ColorCodesPreviewOptions {
 
     public void setNamedColors(boolean use) {
         getPreferences().putBoolean(NAMED_COLORS, use);
+    }
+
+    public boolean resolveCssVariables() {
+        return getPreferences().getBoolean(RESOLVE_CSS_VARIABLES, false);
+    }
+
+    public void setResolveCssVariables(boolean resolve) {
+        getPreferences().putBoolean(RESOLVE_CSS_VARIABLES, resolve);
     }
 
     public void addPreferenceChangeListener(PreferenceChangeListener listener) {

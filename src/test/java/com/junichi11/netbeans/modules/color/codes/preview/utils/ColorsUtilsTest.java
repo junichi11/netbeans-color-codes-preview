@@ -59,7 +59,7 @@ public class ColorsUtilsTest {
      */
     @Test
     public void testPercentValueRegex() {
-        Pattern pattern = Pattern.compile(ColorsUtils.PERCENT_VALUE_FORMAT);
+        Pattern pattern = Pattern.compile(ColorType.PERCENT_VALUE_FORMAT);
         for (int i = 0; i < 100; i++) {
             Matcher matcher = pattern.matcher(String.valueOf(i) + "%");
             Assert.assertTrue(matcher.matches());
@@ -82,7 +82,7 @@ public class ColorsUtilsTest {
      */
     @Test
     public void testCssIntRGBValueRegex() {
-        Pattern pattern = Pattern.compile(String.format("(%s)", ColorsUtils.INT_RGB_VALUE_FORMAT));
+        Pattern pattern = Pattern.compile(String.format("(%s)", ColorType.INT_RGB_VALUE_FORMAT));
         for (int i = 0; i < 256; i++) {
             Matcher matcher = pattern.matcher(String.valueOf(i));
             Assert.assertTrue(matcher.matches());
@@ -99,7 +99,7 @@ public class ColorsUtilsTest {
      */
     @Test
     public void testAlphaValueRegex() {
-        Pattern pattern = Pattern.compile(String.format("(%s)", ColorsUtils.ALPHA_VALUE_FORMAT));
+        Pattern pattern = Pattern.compile(String.format("(%s)", ColorType.ALPHA_VALUE_FORMAT));
         // 0.1-0.9
         for (int i = 1; i < 10; i++) {
             StringBuilder sb = new StringBuilder();
@@ -160,7 +160,7 @@ public class ColorsUtilsTest {
      */
     @Test
     public void testHueValueRegex() {
-        Pattern pattern = Pattern.compile(ColorsUtils.HUE_VALUE_FORMAT);
+        Pattern pattern = Pattern.compile(ColorType.HUE_VALUE_FORMAT);
         for (int i = 0; i <= 360; i++) {
             Matcher matcher = pattern.matcher(String.valueOf(i));
             Assert.assertTrue(matcher.matches());

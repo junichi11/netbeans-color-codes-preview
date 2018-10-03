@@ -15,6 +15,7 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.colors;
 
+import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorType;
 import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils;
 import java.awt.Color;
 
@@ -26,12 +27,12 @@ public class CssIntRGBAColorValue extends ColorValueImpl {
 
     @Override
     public Color getColor() {
-        return ColorsUtils.decode(getValue(), ColorsUtils.ColorType.CSS_INT_RGBA);
+        return ColorsUtils.decode(getValue(), ColorType.CSS_INT_RGBA);
     }
 
     @Override
-    public final ColorsUtils.ColorType getType() {
-        return ColorsUtils.ColorType.CSS_INT_RGBA;
+    public final ColorType getType() {
+        return ColorType.CSS_INT_RGBA;
     }
 
 }

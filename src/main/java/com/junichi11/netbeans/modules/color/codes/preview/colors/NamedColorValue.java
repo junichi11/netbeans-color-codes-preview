@@ -15,6 +15,7 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.colors;
 
+import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorType;
 import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils;
 import java.awt.Color;
 
@@ -26,12 +27,12 @@ public class NamedColorValue extends ColorValueImpl {
 
     @Override
     public Color getColor() {
-        return ColorsUtils.decode(getValue(), ColorsUtils.ColorType.NAMED_COLORS);
+        return ColorsUtils.decode(getValue(), ColorType.NAMED_COLORS);
     }
 
     @Override
-    public ColorsUtils.ColorType getType() {
-        return ColorsUtils.ColorType.NAMED_COLORS;
+    public ColorType getType() {
+        return ColorType.NAMED_COLORS;
     }
 
 }
