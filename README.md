@@ -41,6 +41,12 @@ Default value is `^text/(x-)?(css|less|sass|scss)$`.
 If you would like to disable/enable some mime-types, please change the default regex.
 This pattern is used when the plugin checks a mime-type.
 
+### Resolve Sass and Less Variables
+
+This option is `false` by default. If you would like to resolve Sass and Less variables, please check it.
+
+**NOTE:** The simplest cases only e.g. $green: #0f0;
+
 ### Named Colors
 
 This option is `false` by default. If you would like to show named colors, please check it.
