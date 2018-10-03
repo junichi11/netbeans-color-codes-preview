@@ -15,7 +15,7 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.colors;
 
-import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils;
+import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorType;
 import java.awt.Color;
 
 /**
@@ -32,7 +32,7 @@ public interface ColorValue {
 
     int getStartOffset();
 
-    ColorsUtils.ColorType getType();
+    ColorType getType();
 
     String getValue();
 
