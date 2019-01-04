@@ -15,8 +15,9 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.ui;
 
+import com.junichi11.netbeans.modules.color.codes.preview.colors.model.ColorCodesProvider;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.model.ColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.options.ColorCodesPreviewOptions;
-import com.junichi11.netbeans.modules.color.codes.preview.colors.ColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils;
 import java.awt.AWTEvent;
 import java.awt.BasicStroke;
@@ -31,6 +32,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -40,8 +42,6 @@ import java.util.logging.Logger;
 import java.util.prefs.PreferenceChangeEvent;
 import java.util.prefs.PreferenceChangeListener;
 import java.util.prefs.Preferences;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -91,7 +91,6 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
     private static final int DEFAULT_WIDTH = 16;
     private static final Logger LOGGER = Logger.getLogger(DrawingPanel.class.getName());
     // check sass and less variables e.g. $green: #0f0;, @green: #0f0;
-    private static final Pattern CSS_VARIABLE_PATTERN = Pattern.compile("(?<var>[\\$@][^ ]+)\\s*:\\s*(?<value>).+\\s*;"); // NOI18N
     private static final long serialVersionUID = 8161755434377410789L;
 
     public DrawingPanel(JTextComponent editor) {
@@ -157,11 +156,18 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
         int startPos = getPosFromY(component, textUI, clip.y);
         int startViewIndex = rootView.getViewIndex(startPos, Position.Bias.Forward);
         int rootViewCount = rootView.getViewCount();
-
+        Collection<? extends ColorCodesProvider> providers = Lookup.getDefault().lookupAll(ColorCodesProvider.class);
+        String mimeType = NbEditorUtilities.getMimeType(textComponent);
         if (startViewIndex >= 0 && startViewIndex < rootViewCount) {
             Map<String, List<ColorValue>> cssVariables = new HashMap<>();
             int clipEndY = clip.y + clip.height;
-            int start = resolveCssVariables() ? 0 : startViewIndex;
+            boolean resolveVariables = false;
+            for (ColorCodesProvider provider : providers) {
+                if (provider.isProviderEnabled() && provider.isResolveVariablesSupported(mimeType)) {
+                    resolveVariables = true;
+                }
+            }
+            int start = resolveVariables ? 0 : startViewIndex;
             for (int i = start; i < rootViewCount; i++) {
                 View view = rootView.getView(i);
                 if (view == null) {
@@ -185,11 +191,21 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
                     }
 
                     // get color values
-                    List<ColorValue> colorValues = getAllColorValues(line, -1); // XXX
+                    List<ColorValue> colorValues = new ArrayList<>();
+
+                    for (ColorCodesProvider provider : providers) {
+                        if (provider.isProviderEnabled() && provider.isMimeTypeSupported(mimeType)) {
+                            provider.addAllColorValues(document, mimeType, line, -1, colorValues);
+                        }
+                    }
                     ColorsUtils.sort(colorValues);
 
                     // for sass and less variables
-                    checkCssVariables(line, cssVariables, colorValues);
+                    for (ColorCodesProvider provider : providers) {
+                        if (provider.isProviderEnabled() && provider.isResolveVariablesSupported(mimeType)) {
+                            provider.checkVariables(document, mimeType, line, cssVariables, colorValues);
+                        }
+                    }
                     if (i < startViewIndex) {
                         continue;
                     }
@@ -225,55 +241,6 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
             g2d.drawRect(margin, (int) y + margin, DEFAULT_WIDTH - margin * 2, recHeight);
             break;
         }
-    }
-
-    private void checkCssVariables(String line, Map<String, List<ColorValue>> cssVariables, List<ColorValue> colorValues) {
-        if (!isLessOrSass()) {
-            return;
-        }
-
-        Matcher matcher = CSS_VARIABLE_PATTERN.matcher(line);
-        if (matcher.find()) {
-            String variable = matcher.group("var"); // NOI18N
-            if (variable != null) {
-                cssVariables.put(variable, colorValues);
-            }
-        } else {
-            final String l = line;
-            Map<Integer, String> map = new HashMap<>();
-            cssVariables.forEach((String var, List<ColorValue> colors) -> {
-                if (l.contains(var)) {
-                    int indexOfVar = l.indexOf(var);
-                    int offsetBehindVariableName = indexOfVar + var.length();
-                    if (offsetBehindVariableName < l.length()) {
-                        // e.g. when searche $green, ignore $green1, $green2,...
-                        char c = l.charAt(offsetBehindVariableName);
-                        if (c == ' ' || c == ';') {
-                            map.put(indexOfVar, var);
-                        }
-                    }
-                }
-            });
-            List<Integer> offsetNumbers = new ArrayList<>(map.keySet());
-            Collections.sort(offsetNumbers);
-            offsetNumbers.forEach(offset -> colorValues.addAll(cssVariables.get(map.get(offset))));
-        }
-    }
-
-    private List<ColorValue> getAllColorValues(String line, int lineNumber) {
-        List<ColorValue> hexColorValues = ColorsUtils.getHexColorCodes(line, lineNumber);
-        List<ColorValue> colorValues = new ArrayList<>(hexColorValues);
-        colorValues.addAll(ColorsUtils.getCssIntRGBs(line, lineNumber));
-        colorValues.addAll(ColorsUtils.getCssIntRGBAs(line, lineNumber));
-        colorValues.addAll(ColorsUtils.getCssPercentRGBs(line, lineNumber));
-        colorValues.addAll(ColorsUtils.getCssPercentRGBAs(line, lineNumber));
-        colorValues.addAll(ColorsUtils.getCssHSLs(line, lineNumber));
-        colorValues.addAll(ColorsUtils.getCssHSLAs(line, lineNumber));
-        ColorCodesPreviewOptions options = ColorCodesPreviewOptions.getInstance();
-        if (options.useNamedColors()) {
-            colorValues.addAll(ColorsUtils.getNamedColors(line, lineNumber));
-        }
-        return colorValues;
     }
 
     /* from versioning.ui DiffSidebar */
@@ -336,16 +303,6 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
         foldHierarchy.removeFoldHierarchyListener(this);
     }
 
-    private boolean resolveCssVariables() {
-        return isLessOrSass()
-                && ColorCodesPreviewOptions.getInstance().resolveCssVariables();
-    }
-
-    private boolean isLessOrSass() {
-        String mimeType = NbEditorUtilities.getMimeType(textComponent);
-        return "text/less".equals(mimeType) || "text/scss".equals(mimeType); // NOI18N
-    }
-
     @Override
     public void preferenceChange(PreferenceChangeEvent evt) {
         if (evt == null
@@ -366,7 +323,12 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
     private boolean isMimeTypeEnabled() {
         String mimeType = NbEditorUtilities.getMimeType(textComponent);
         if (mimeType != null) {
-            return mimeType.matches(ColorCodesPreviewOptions.getInstance().getMimeTypeRegex());
+            Collection<? extends ColorCodesProvider> providers = Lookup.getDefault().lookupAll(ColorCodesProvider.class);
+            for (ColorCodesProvider provider : providers) {
+                if (provider.isProviderEnabled() && provider.isMimeTypeSupported(mimeType)) {
+                    return true;
+                }
+            }
         }
         return false;
     }
@@ -401,7 +363,16 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
         if (lineText == null || lineText.isEmpty()) {
             return Collections.emptyList();
         }
-        return getAllColorValues(lineText, line);
+        Collection<? extends ColorCodesProvider> providers = Lookup.getDefault().lookupAll(ColorCodesProvider.class);
+        String mimeType = NbEditorUtilities.getMimeType(textComponent);
+        List<ColorValue> colorValues = new ArrayList<>();
+        for (ColorCodesProvider provider : providers) {
+            if (provider.isProviderEnabled() && provider.isMimeTypeSupported(mimeType)) {
+                provider.addAllColorValues(document, mimeType, lineText, line, colorValues);
+            }
+        }
+        ColorsUtils.sort(colorValues);
+        return colorValues;
     }
 
     private int getLineFromMouseEvent(MouseEvent e) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 junichi11.
+ * Copyright 2019 arsi.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,29 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.junichi11.netbeans.modules.color.codes.preview.colors;
 
 import com.junichi11.netbeans.modules.color.codes.preview.colors.model.AbstractColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.model.ColorCodesProvider;
-import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorType;
-import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils;
+import com.junichi11.netbeans.modules.color.codes.preview.utils.JavaColorType;
 import java.awt.Color;
 import org.netbeans.api.annotations.common.NonNull;
 
-public class CssPercentRGBColorValue extends AbstractColorValue {
+/**
+ *
+ * @author arsi
+ */
+public class JavaIntRGBColorValue extends AbstractColorValue {
 
-    public CssPercentRGBColorValue(@NonNull ColorCodesProvider colorCodesProvider, String value, int startOffset, int endOffset, int line) {
+    private int r;
+    private int g;
+    private int b;
+
+    public JavaIntRGBColorValue(@NonNull ColorCodesProvider colorCodesProvider, String value, int startOffset, int endOffset, int line, int r, int g, int b) {
         super(colorCodesProvider, value, startOffset, endOffset, line);
+        this.r = r;
+        this.g = g;
+        this.b = b;
     }
 
     @Override
     public Color getColor() {
-        return ColorsUtils.decode(getValue(), ColorType.CSS_PERCENT_RGB);
+        return new Color(r, g, b);
     }
 
     @Override
-    public ColorType getType() {
-        return ColorType.CSS_PERCENT_RGB;
+    public JavaColorType getType() {
+        return JavaColorType.JAVA_INT_RGB;
     }
 
 }

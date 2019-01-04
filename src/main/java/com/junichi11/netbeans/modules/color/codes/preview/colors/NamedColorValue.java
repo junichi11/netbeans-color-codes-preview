@@ -15,14 +15,17 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.colors;
 
+import com.junichi11.netbeans.modules.color.codes.preview.colors.model.AbstractColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.model.ColorCodesProvider;
 import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorType;
 import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils;
 import java.awt.Color;
+import org.netbeans.api.annotations.common.NonNull;
 
-public class NamedColorValue extends ColorValueImpl {
+public class NamedColorValue extends AbstractColorValue {
 
-    public NamedColorValue(String value, int startOffset, int endOffset, int line) {
-        super(value, startOffset, endOffset, line);
+    public NamedColorValue(@NonNull ColorCodesProvider colorCodesProvider, String value, int startOffset, int endOffset, int line) {
+        super(colorCodesProvider, value, startOffset, endOffset, line);
     }
 
     @Override

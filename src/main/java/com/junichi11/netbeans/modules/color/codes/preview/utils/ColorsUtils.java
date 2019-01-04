@@ -15,15 +15,16 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.utils;
 
-import com.junichi11.netbeans.modules.color.codes.preview.colors.CssIntRGBColorValue;
-import com.junichi11.netbeans.modules.color.codes.preview.colors.CssPercentRGBColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.model.ColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.CssHSLAColorValue;
-import com.junichi11.netbeans.modules.color.codes.preview.colors.ColorValue;
-import com.junichi11.netbeans.modules.color.codes.preview.colors.CssIntRGBAColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.CssHSLColorValue;
-import com.junichi11.netbeans.modules.color.codes.preview.colors.HexColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.CssIntRGBAColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.CssIntRGBColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.CssPercentRGBAColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.CssPercentRGBColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.HexColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.NamedColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.model.ColorCodesProvider;
 import java.awt.Color;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -34,8 +35,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.netbeans.api.annotations.common.CheckForNull;
+import org.netbeans.api.annotations.common.NonNull;
 
 /**
  *
@@ -264,7 +265,7 @@ public final class ColorsUtils {
      * @param line target text
      * @return hex color codes
      */
-    public static List<ColorValue> getHexColorCodes(String line, int lineNumber) {
+    public static List<ColorValue> getHexColorCodes(@NonNull ColorCodesProvider colorCodesProvider, String line, int lineNumber) {
         Matcher matcher = getColorMatcher(line, ColorType.HEX);
         ArrayList<ColorValue> colorValues = new ArrayList<>();
         while (matcher.find()) {
@@ -276,7 +277,7 @@ public final class ColorsUtils {
             }
 
             if (hexCode.length() == 6) {
-                ColorValue colorValue = new HexColorValue(String.format("#%s", hexCode), matcher.start(), matcher.end(), lineNumber); // NOI18N
+                ColorValue colorValue = new HexColorValue(colorCodesProvider, String.format("#%s", hexCode), matcher.start(), matcher.end(), lineNumber); // NOI18N
                 colorValues.add(colorValue);
             }
 
@@ -290,12 +291,12 @@ public final class ColorsUtils {
      * @param line target text
      * @return named colors
      */
-    public static List<ColorValue> getNamedColors(String line, int lineNumber) {
+    public static List<ColorValue> getNamedColors(@NonNull ColorCodesProvider colorCodesProvider, String line, int lineNumber) {
         Matcher matcher = getColorMatcher(line, ColorType.NAMED_COLORS);
         ArrayList<ColorValue> colorValues = new ArrayList<>();
         while (matcher.find()) {
             final String namedColor = matcher.group(0);
-            ColorValue colorValue = new NamedColorValue(namedColor, matcher.start(), matcher.end(), lineNumber);
+            ColorValue colorValue = new NamedColorValue(colorCodesProvider, namedColor, matcher.start(), matcher.end(), lineNumber);
             colorValues.add(colorValue);
         }
         return colorValues;
@@ -323,8 +324,8 @@ public final class ColorsUtils {
      * @param line a line
      * @return RGB codes
      */
-    public static List<ColorValue> getCssIntRGBs(String line, int lineNumber) {
-        return getCssColorValues(line, lineNumber, ColorType.CSS_INT_RGB);
+    public static List<ColorValue> getCssIntRGBs(@NonNull ColorCodesProvider colorCodesProvider, String line, int lineNumber) {
+        return getCssColorValues(colorCodesProvider, line, lineNumber, ColorType.CSS_INT_RGB);
     }
 
     /**
@@ -333,8 +334,8 @@ public final class ColorsUtils {
      * @param line a line
      * @return RGB color values
      */
-    public static List<ColorValue> getCssPercentRGBs(String line, int lineNumber) {
-        return getCssColorValues(line, lineNumber, ColorType.CSS_PERCENT_RGB);
+    public static List<ColorValue> getCssPercentRGBs(@NonNull ColorCodesProvider colorCodesProvider, String line, int lineNumber) {
+        return getCssColorValues(colorCodesProvider, line, lineNumber, ColorType.CSS_PERCENT_RGB);
     }
 
     /**
@@ -359,8 +360,8 @@ public final class ColorsUtils {
      * @param line a line
      * @return RGBA color values
      */
-    public static List<ColorValue> getCssIntRGBAs(String line, int lineNumber) {
-        return getCssColorValues(line, lineNumber, ColorType.CSS_INT_RGBA);
+    public static List<ColorValue> getCssIntRGBAs(@NonNull ColorCodesProvider colorCodesProvider, String line, int lineNumber) {
+        return getCssColorValues(colorCodesProvider, line, lineNumber, ColorType.CSS_INT_RGBA);
     }
 
     /**
@@ -369,8 +370,8 @@ public final class ColorsUtils {
      * @param line a line
      * @return RGBA color values
      */
-    public static List<ColorValue> getCssPercentRGBAs(String line, int lineNumber) {
-        return getCssColorValues(line, lineNumber, ColorType.CSS_PERCENT_RGBA);
+    public static List<ColorValue> getCssPercentRGBAs(@NonNull ColorCodesProvider colorCodesProvider, String line, int lineNumber) {
+        return getCssColorValues(colorCodesProvider, line, lineNumber, ColorType.CSS_PERCENT_RGBA);
     }
 
     /**
@@ -379,8 +380,8 @@ public final class ColorsUtils {
      * @param line a line
      * @return HSL ColorValues
      */
-    public static List<ColorValue> getCssHSLs(String line, int lineNumber) {
-        return getCssColorValues(line, lineNumber, ColorType.CSS_HSL);
+    public static List<ColorValue> getCssHSLs(@NonNull ColorCodesProvider colorCodesProvider, String line, int lineNumber) {
+        return getCssColorValues(colorCodesProvider, line, lineNumber, ColorType.CSS_HSL);
     }
 
     /**
@@ -389,8 +390,8 @@ public final class ColorsUtils {
      * @param line a line
      * @return HSLA ColorValues
      */
-    public static List<ColorValue> getCssHSLAs(String line, int lineNumber) {
-        return getCssColorValues(line, lineNumber, ColorType.CSS_HSLA);
+    public static List<ColorValue> getCssHSLAs(@NonNull ColorCodesProvider colorCodesProvider, String line, int lineNumber) {
+        return getCssColorValues(colorCodesProvider, line, lineNumber, ColorType.CSS_HSLA);
     }
 
     /**
@@ -401,13 +402,13 @@ public final class ColorsUtils {
      * @param type ColorType
      * @return ColorValues
      */
-    private static List<ColorValue> getCssColorValues(String line, int lineNumber, ColorType type) {
+    private static List<ColorValue> getCssColorValues(@NonNull ColorCodesProvider colorCodesProvider, String line, int lineNumber, ColorType type) {
         Matcher matcher = getColorMatcher(line, type);
         ArrayList<ColorValue> colorCodes = new ArrayList<>();
         String groupName = getCssColorGroupName(type);
         while (matcher.find()) {
             final String colorCode = matcher.group(groupName);
-            ColorValue colorValue = createCssColorValue(colorCode, matcher.start(), matcher.end(), lineNumber, type);
+            ColorValue colorValue = createCssColorValue(colorCodesProvider, colorCode, matcher.start(), matcher.end(), lineNumber, type);
             if (colorValue != null) {
                 colorCodes.add(colorValue);
             }
@@ -438,20 +439,20 @@ public final class ColorsUtils {
         }
     }
 
-    private static ColorValue createCssColorValue(String value, int startOffset, int endOffset, int lineNumber, ColorType type) {
+    private static ColorValue createCssColorValue(@NonNull ColorCodesProvider colorCodesProvider, String value, int startOffset, int endOffset, int lineNumber, ColorType type) {
         switch (type) {
             case CSS_INT_RGB:
-                return new CssIntRGBColorValue(value, startOffset, endOffset, lineNumber);
+                return new CssIntRGBColorValue(colorCodesProvider, value, startOffset, endOffset, lineNumber);
             case CSS_INT_RGBA:
-                return new CssIntRGBAColorValue(value, startOffset, endOffset, lineNumber);
+                return new CssIntRGBAColorValue(colorCodesProvider, value, startOffset, endOffset, lineNumber);
             case CSS_PERCENT_RGB:
-                return new CssPercentRGBColorValue(value, startOffset, endOffset, lineNumber);
+                return new CssPercentRGBColorValue(colorCodesProvider, value, startOffset, endOffset, lineNumber);
             case CSS_PERCENT_RGBA:
-                return new CssPercentRGBAColorValue(value, startOffset, endOffset, lineNumber);
+                return new CssPercentRGBAColorValue(colorCodesProvider, value, startOffset, endOffset, lineNumber);
             case CSS_HSL:
-                return new CssHSLColorValue(value, startOffset, endOffset, lineNumber);
+                return new CssHSLColorValue(colorCodesProvider, value, startOffset, endOffset, lineNumber);
             case CSS_HSLA:
-                return new CssHSLAColorValue(value, startOffset, endOffset, lineNumber);
+                return new CssHSLAColorValue(colorCodesProvider, value, startOffset, endOffset, lineNumber);
             default:
                 throw new AssertionError();
         }

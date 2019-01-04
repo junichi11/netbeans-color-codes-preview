@@ -15,7 +15,7 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.ui;
 
-import com.junichi11.netbeans.modules.color.codes.preview.colors.ColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.model.ColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils;
 import java.awt.Color;
 import java.awt.Font;
@@ -97,7 +97,7 @@ public class ColorCodesPanel extends JComponent {
                                 try {
                                     int removeStart = lineOffset + startOffset;
                                     document.remove(removeStart, endOffset - startOffset);
-                                    document.insertString(removeStart, ColorsUtils.toFormattedString(selectedColor, colorValue.getType()), null);
+                                    document.insertString(removeStart, colorValue.getColorCodesProvider().toFormattedString(selectedColor, colorValue), null);
                                 } catch (BadLocationException ex) {
                                     LOGGER.log(Level.WARNING, ex.getMessage());
                                 }

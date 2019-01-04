@@ -15,7 +15,8 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.utils;
 
-import com.junichi11.netbeans.modules.color.codes.preview.colors.ColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.model.ColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.model.impl.DefaultColorCodesProvider;
 import java.awt.Color;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -496,30 +497,31 @@ public class ColorsUtilsTest {
      */
     @Test
     public void testGetHexColorCodesColorValues() {
-        List<ColorValue> result = ColorsUtils.getHexColorCodes("#000000", 1);
+        DefaultColorCodesProvider provider = new DefaultColorCodesProvider();
+        List<ColorValue> result = ColorsUtils.getHexColorCodes(provider, "#000000", 1);
         Assert.assertEquals(1, result.size());
 
-        result = ColorsUtils.getHexColorCodes("#000", 1);
+        result = ColorsUtils.getHexColorCodes(provider, "#000", 1);
         Assert.assertEquals(1, result.size());
 
-        result = ColorsUtils.getHexColorCodes("hex#ffffffhex", 1);
+        result = ColorsUtils.getHexColorCodes(provider, "hex#ffffffhex", 1);
         Assert.assertEquals(1, result.size());
 
-        result = ColorsUtils.getHexColorCodes("hex#ffffff#000", 1);
+        result = ColorsUtils.getHexColorCodes(provider, "hex#ffffff#000", 1);
         Assert.assertEquals(2, result.size());
 
-        result = ColorsUtils.getHexColorCodes("hex #ffffff #000 #1", 1);
+        result = ColorsUtils.getHexColorCodes(provider, "hex #ffffff #000 #1", 1);
         Assert.assertEquals(2, result.size());
 
-        result = ColorsUtils.getHexColorCodes("#1", 1);
+        result = ColorsUtils.getHexColorCodes(provider, "#1", 1);
         Assert.assertEquals(0, result.size());
-        result = ColorsUtils.getHexColorCodes("#22", 1);
+        result = ColorsUtils.getHexColorCodes(provider, "#22", 1);
         Assert.assertEquals(0, result.size());
-        result = ColorsUtils.getHexColorCodes("#4444", 1);
+        result = ColorsUtils.getHexColorCodes(provider, "#4444", 1);
         Assert.assertEquals(0, result.size());
-        result = ColorsUtils.getHexColorCodes("#55555", 1);
+        result = ColorsUtils.getHexColorCodes(provider, "#55555", 1);
         Assert.assertEquals(0, result.size());
-        result = ColorsUtils.getHexColorCodes("#7777777", 1);
+        result = ColorsUtils.getHexColorCodes(provider, "#7777777", 1);
         Assert.assertEquals(0, result.size());
     }
 
@@ -549,19 +551,20 @@ public class ColorsUtilsTest {
      */
     @Test
     public void testGetCssIntRGBColorValues() {
-        List<ColorValue> result = ColorsUtils.getCssIntRGBs("rgb(0, 0, 0)", -1);
+        DefaultColorCodesProvider provider = new DefaultColorCodesProvider();
+        List<ColorValue> result = ColorsUtils.getCssIntRGBs(provider, "rgb(0, 0, 0)", -1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getCssIntRGBs("rgb(100 , 100 , 100)", 1);
+        result = ColorsUtils.getCssIntRGBs(provider, "rgb(100 , 100 , 100)", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getCssIntRGBs("rgb(255, 255, 255)", 1);
+        result = ColorsUtils.getCssIntRGBs(provider, "rgb(255, 255, 255)", 1);
         assertEquals(1, result.size());
 
-        result = ColorsUtils.getCssIntRGBs("rgb(255, 255, 255) rgb(0,0,0)", 1);
+        result = ColorsUtils.getCssIntRGBs(provider, "rgb(255, 255, 255) rgb(0,0,0)", 1);
         assertEquals(2, result.size());
 
-        result = ColorsUtils.getCssIntRGBs("test", 1);
+        result = ColorsUtils.getCssIntRGBs(provider, "test", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssIntRGBs("rgb(-1, 255, 255)", 1);
+        result = ColorsUtils.getCssIntRGBs(provider, "rgb(-1, 255, 255)", 1);
         assertEquals(0, result.size());
     }
 
@@ -570,23 +573,24 @@ public class ColorsUtilsTest {
      */
     @Test
     public void testGetCssPercentRGBColorValues() {
-        List<ColorValue> result = ColorsUtils.getCssPercentRGBs("rgb(0%, 0%, 0%)", -1);
+        DefaultColorCodesProvider provider = new DefaultColorCodesProvider();
+        List<ColorValue> result = ColorsUtils.getCssPercentRGBs(provider, "rgb(0%, 0%, 0%)", -1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getCssPercentRGBs("rgb(50% , 50% , 50%)", 1);
+        result = ColorsUtils.getCssPercentRGBs(provider, "rgb(50% , 50% , 50%)", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getCssPercentRGBs("rgb(100%, 100%, 100%)", 1);
+        result = ColorsUtils.getCssPercentRGBs(provider, "rgb(100%, 100%, 100%)", 1);
         assertEquals(1, result.size());
 
-        result = ColorsUtils.getCssPercentRGBs("rgb(100%, 100%, 100%) rgb(0%,0%,0%)", 1);
+        result = ColorsUtils.getCssPercentRGBs(provider, "rgb(100%, 100%, 100%) rgb(0%,0%,0%)", 1);
         assertEquals(2, result.size());
 
-        result = ColorsUtils.getCssPercentRGBs("test", 1);
+        result = ColorsUtils.getCssPercentRGBs(provider, "test", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssPercentRGBs("rgb(-1%, 100%, 100%)", 1);
+        result = ColorsUtils.getCssPercentRGBs(provider, "rgb(-1%, 100%, 100%)", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssPercentRGBs("rgb(100, 100, 100)", 1);
+        result = ColorsUtils.getCssPercentRGBs(provider, "rgb(100, 100, 100)", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssPercentRGBs("rgba(100%, 100%, 100%, 1)", 1);
+        result = ColorsUtils.getCssPercentRGBs(provider, "rgba(100%, 100%, 100%, 1)", 1);
         assertEquals(0, result.size());
     }
 
@@ -623,33 +627,34 @@ public class ColorsUtilsTest {
      */
     @Test
     public void testGetCssIntRGBAColorValues() {
-        List<ColorValue> result = ColorsUtils.getCssIntRGBAs("rgba(0, 0, 0, 0)", -1);
+        DefaultColorCodesProvider provider = new DefaultColorCodesProvider();
+        List<ColorValue> result = ColorsUtils.getCssIntRGBAs(provider, "rgba(0, 0, 0, 0)", -1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getCssIntRGBAs("rgba(100, 100, 100, 0.5)", 1);
+        result = ColorsUtils.getCssIntRGBAs(provider, "rgba(100, 100, 100, 0.5)", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getCssIntRGBAs("rgba(255, 255, 255, 1)", 1);
+        result = ColorsUtils.getCssIntRGBAs(provider, "rgba(255, 255, 255, 1)", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getCssIntRGBAs("rgba(255, 255, 255, 1)", 1);
+        result = ColorsUtils.getCssIntRGBAs(provider, "rgba(255, 255, 255, 1)", 1);
         assertEquals(1, result.size());
 
         // multiple values
-        result = ColorsUtils.getCssIntRGBAs("rgba(255, 255, 255, 0.1) rgba(0,0,0, 0.8)", 1);
+        result = ColorsUtils.getCssIntRGBAs(provider, "rgba(255, 255, 255, 0.1) rgba(0,0,0, 0.8)", 1);
         assertEquals(2, result.size());
-        result = ColorsUtils.getCssIntRGBAs("rgba(255, 255, 255, 1) test rgba(0,0,0, -1)", 1);
+        result = ColorsUtils.getCssIntRGBAs(provider, "rgba(255, 255, 255, 1) test rgba(0,0,0, -1)", 1);
         assertEquals(1, result.size());
 
         // no colors
-        result = ColorsUtils.getCssIntRGBAs("test", 1);
+        result = ColorsUtils.getCssIntRGBAs(provider, "test", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssIntRGBAs("rgba(-1, 255, 255, 1)", 1);
+        result = ColorsUtils.getCssIntRGBAs(provider, "rgba(-1, 255, 255, 1)", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssIntRGBAs("rgba(0, 0, 0, 1.5)", 1);
+        result = ColorsUtils.getCssIntRGBAs(provider, "rgba(0, 0, 0, 1.5)", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssIntRGBAs("rgba(0, 0, 0, -1)", 1);
+        result = ColorsUtils.getCssIntRGBAs(provider, "rgba(0, 0, 0, -1)", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssIntRGBAs("rgba(0, 0, 0, 0.0)", 1);
+        result = ColorsUtils.getCssIntRGBAs(provider, "rgba(0, 0, 0, 0.0)", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssIntRGBAs("rgba(0, 0, 0, 0.50)", 1);
+        result = ColorsUtils.getCssIntRGBAs(provider, "rgba(0, 0, 0, 0.50)", 1);
         assertEquals(0, result.size());
     }
 
@@ -658,35 +663,36 @@ public class ColorsUtilsTest {
      */
     @Test
     public void testGetCssPercentRGBAColorValues() {
-        List<ColorValue> result = ColorsUtils.getCssPercentRGBAs("rgba(0%, 0%, 0%, 0)", -1);
+        DefaultColorCodesProvider provider = new DefaultColorCodesProvider();
+        List<ColorValue> result = ColorsUtils.getCssPercentRGBAs(provider, "rgba(0%, 0%, 0%, 0)", -1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getCssPercentRGBAs("rgba(100%, 100%, 100%, 0.5)", 1);
+        result = ColorsUtils.getCssPercentRGBAs(provider, "rgba(100%, 100%, 100%, 0.5)", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getCssPercentRGBAs("rgba(100%, 100%, 100%, 1)", 1);
+        result = ColorsUtils.getCssPercentRGBAs(provider, "rgba(100%, 100%, 100%, 1)", 1);
         assertEquals(1, result.size());
 
         // multiple values
-        result = ColorsUtils.getCssPercentRGBAs("rgba(100%, 100%, 100%, 0.1) rgba(0%,0%,0%, 0.8)", 1);
+        result = ColorsUtils.getCssPercentRGBAs(provider, "rgba(100%, 100%, 100%, 0.1) rgba(0%,0%,0%, 0.8)", 1);
         assertEquals(2, result.size());
-        result = ColorsUtils.getCssPercentRGBAs("rgba(100%, 100%, 100%, 1) test rgba(0%,0%,0%, -1)", 1);
+        result = ColorsUtils.getCssPercentRGBAs(provider, "rgba(100%, 100%, 100%, 1) test rgba(0%,0%,0%, -1)", 1);
         assertEquals(1, result.size());
 
         // no colors
-        result = ColorsUtils.getCssPercentRGBAs("test", 1);
+        result = ColorsUtils.getCssPercentRGBAs(provider, "test", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssPercentRGBAs("rgba(-1%, 100%, 100%, 1)", 1);
+        result = ColorsUtils.getCssPercentRGBAs(provider, "rgba(-1%, 100%, 100%, 1)", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssPercentRGBAs("rgba(0%, 0%, 0%, 1.5)", 1);
+        result = ColorsUtils.getCssPercentRGBAs(provider, "rgba(0%, 0%, 0%, 1.5)", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssPercentRGBAs("rgba(0%, 0%, 0%, -1)", 1);
+        result = ColorsUtils.getCssPercentRGBAs(provider, "rgba(0%, 0%, 0%, -1)", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssPercentRGBAs("rgba(0%, 0%, 0%, 0.0)", 1);
+        result = ColorsUtils.getCssPercentRGBAs(provider, "rgba(0%, 0%, 0%, 0.0)", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssPercentRGBAs("rgba(0%, 0%, 0%, 0.50)", 1);
+        result = ColorsUtils.getCssPercentRGBAs(provider, "rgba(0%, 0%, 0%, 0.50)", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssPercentRGBAs("rgba(0, 0, 0, 0.50)", 1);
+        result = ColorsUtils.getCssPercentRGBAs(provider, "rgba(0, 0, 0, 0.50)", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssPercentRGBAs("rgb(0, 0, 0)", 1);
+        result = ColorsUtils.getCssPercentRGBAs(provider, "rgb(0, 0, 0)", 1);
         assertEquals(0, result.size());
     }
 
@@ -695,38 +701,39 @@ public class ColorsUtilsTest {
      */
     @Test
     public void testGetCssHSLColorValues() {
-        List<ColorValue> result = ColorsUtils.getCssHSLs("hsl(0, 0%, 0%)", -1);
+        DefaultColorCodesProvider provider = new DefaultColorCodesProvider();
+        List<ColorValue> result = ColorsUtils.getCssHSLs(provider, "hsl(0, 0%, 0%)", -1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getCssHSLs("hsl(180, 50%, 50%)", 1);
+        result = ColorsUtils.getCssHSLs(provider, "hsl(180, 50%, 50%)", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getCssHSLs("hsl(360, 100%, 100%)", 1);
+        result = ColorsUtils.getCssHSLs(provider, "hsl(360, 100%, 100%)", 1);
         assertEquals(1, result.size());
 
         // multiple values
-        result = ColorsUtils.getCssHSLs("hsl(0, 100%, 100%) hsl(0,0%,0%)", 1);
+        result = ColorsUtils.getCssHSLs(provider, "hsl(0, 100%, 100%) hsl(0,0%,0%)", 1);
         assertEquals(2, result.size());
-        result = ColorsUtils.getCssHSLs("hsl(-1, 100%, 100%) test hsl(0,0%,0%)", 1);
+        result = ColorsUtils.getCssHSLs(provider, "hsl(-1, 100%, 100%) test hsl(0,0%,0%)", 1);
         assertEquals(1, result.size());
 
         // no colors
-        result = ColorsUtils.getCssHSLs("test", 1);
+        result = ColorsUtils.getCssHSLs(provider, "test", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssHSLs("hsl(-1, 100%, 100%)", 1);
+        result = ColorsUtils.getCssHSLs(provider, "hsl(-1, 100%, 100%)", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssHSLs("hsl(361, 100%, 100%)", 1);
+        result = ColorsUtils.getCssHSLs(provider, "hsl(361, 100%, 100%)", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssHSLs("hsl(0, -1%, 0%)", 1);
+        result = ColorsUtils.getCssHSLs(provider, "hsl(0, -1%, 0%)", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssHSLs("hsl(0, 101%, 0%)", 1);
+        result = ColorsUtils.getCssHSLs(provider, "hsl(0, 101%, 0%)", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssHSLs("hsl(0, 0%, -1%)", 1);
+        result = ColorsUtils.getCssHSLs(provider, "hsl(0, 0%, -1%)", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssHSLs("hsl(0, 0%, 101%)", 1);
+        result = ColorsUtils.getCssHSLs(provider, "hsl(0, 0%, 101%)", 1);
         assertEquals(0, result.size());
 
-        result = ColorsUtils.getCssHSLs("hsl(0, 0%, 0%, 0)", 1);
+        result = ColorsUtils.getCssHSLs(provider, "hsl(0, 0%, 0%, 0)", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssHSLs("hsla(0, 0%, 0%, 0)", 1);
+        result = ColorsUtils.getCssHSLs(provider, "hsla(0, 0%, 0%, 0)", 1);
         assertEquals(0, result.size());
     }
 
@@ -735,42 +742,43 @@ public class ColorsUtilsTest {
      */
     @Test
     public void testGetCssHSLAColorValues() {
-        List<ColorValue> result = ColorsUtils.getCssHSLAs("hsla(0, 0%, 0%, 0)", -1);
+        DefaultColorCodesProvider provider = new DefaultColorCodesProvider();
+        List<ColorValue> result = ColorsUtils.getCssHSLAs(provider, "hsla(0, 0%, 0%, 0)", -1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getCssHSLAs("hsla(180, 50%, 50%, 0.5)", 1);
+        result = ColorsUtils.getCssHSLAs(provider, "hsla(180, 50%, 50%, 0.5)", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getCssHSLAs("hsla(360, 100%, 100%, 1)", 1);
+        result = ColorsUtils.getCssHSLAs(provider, "hsla(360, 100%, 100%, 1)", 1);
         assertEquals(1, result.size());
 
         // multiple values
-        result = ColorsUtils.getCssHSLAs("hsla(0, 100%, 100%, 1) hsla(0,0%,0%, 0.8)", 1);
+        result = ColorsUtils.getCssHSLAs(provider, "hsla(0, 100%, 100%, 1) hsla(0,0%,0%, 0.8)", 1);
         assertEquals(2, result.size());
-        result = ColorsUtils.getCssHSLAs("hsla(180, 100%, 100%, -1) test hsla(0,0%,0%, 0)", 1);
+        result = ColorsUtils.getCssHSLAs(provider, "hsla(180, 100%, 100%, -1) test hsla(0,0%,0%, 0)", 1);
         assertEquals(1, result.size());
 
         // no colors
-        result = ColorsUtils.getCssHSLAs("test", 1);
+        result = ColorsUtils.getCssHSLAs(provider, "test", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssHSLAs("hsla(-1, 100%, 100%, 0)", 1);
+        result = ColorsUtils.getCssHSLAs(provider, "hsla(-1, 100%, 100%, 0)", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssHSLAs("hsla(361, 100%, 100%, 0)", 1);
+        result = ColorsUtils.getCssHSLAs(provider, "hsla(361, 100%, 100%, 0)", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssHSLAs("hsla(0, -1%, 0%, 0)", 1);
+        result = ColorsUtils.getCssHSLAs(provider, "hsla(0, -1%, 0%, 0)", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssHSLAs("hsla(0, 101%, 0%, 0)", 1);
+        result = ColorsUtils.getCssHSLAs(provider, "hsla(0, 101%, 0%, 0)", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssHSLAs("hsla(0, 0%, -1%, 0)", 1);
+        result = ColorsUtils.getCssHSLAs(provider, "hsla(0, 0%, -1%, 0)", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssHSLAs("hsla(0, 0%, 101%, 0)", 1);
+        result = ColorsUtils.getCssHSLAs(provider, "hsla(0, 0%, 101%, 0)", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssHSLAs("hsla(0, 0%, 100%, -0.1)", 1);
+        result = ColorsUtils.getCssHSLAs(provider, "hsla(0, 0%, 100%, -0.1)", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssHSLAs("hsla(0, 0%, 100%, 1.1)", 1);
+        result = ColorsUtils.getCssHSLAs(provider, "hsla(0, 0%, 100%, 1.1)", 1);
         assertEquals(0, result.size());
 
-        result = ColorsUtils.getCssHSLAs("hsla(0, 0%, 0%)", 1);
+        result = ColorsUtils.getCssHSLAs(provider, "hsla(0, 0%, 0%)", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getCssHSLAs("hsl(0, 0%, 0%)", 1);
+        result = ColorsUtils.getCssHSLAs(provider, "hsl(0, 0%, 0%)", 1);
         assertEquals(0, result.size());
     }
 
@@ -779,47 +787,48 @@ public class ColorsUtilsTest {
      */
     @Test
     public void testGetNamedColorValues() {
-        List<ColorValue> result = ColorsUtils.getNamedColors(" black ", -1);
+        DefaultColorCodesProvider provider = new DefaultColorCodesProvider();
+        List<ColorValue> result = ColorsUtils.getNamedColors(provider, " black ", -1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getNamedColors(" BLACK ", 1);
+        result = ColorsUtils.getNamedColors(provider, " BLACK ", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getNamedColors(" yellow ", 1);
+        result = ColorsUtils.getNamedColors(provider, " yellow ", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getNamedColors(" green ", 1);
+        result = ColorsUtils.getNamedColors(provider, " green ", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getNamedColors(" yellowgreen ", 1);
+        result = ColorsUtils.getNamedColors(provider, " yellowgreen ", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getNamedColors(" greenyellow ", 1);
+        result = ColorsUtils.getNamedColors(provider, " greenyellow ", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getNamedColors(" orangered ", 1);
+        result = ColorsUtils.getNamedColors(provider, " orangered ", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getNamedColors(" red ", 1);
+        result = ColorsUtils.getNamedColors(provider, " red ", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getNamedColors(" orange ", 1);
+        result = ColorsUtils.getNamedColors(provider, " orange ", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getNamedColors(" mediumslateblue ", 1);
+        result = ColorsUtils.getNamedColors(provider, " mediumslateblue ", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getNamedColors(" blue ", 1);
+        result = ColorsUtils.getNamedColors(provider, " blue ", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getNamedColors(" mediumblue ", 1);
+        result = ColorsUtils.getNamedColors(provider, " mediumblue ", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getNamedColors(" aquamarine ", 1);
+        result = ColorsUtils.getNamedColors(provider, " aquamarine ", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getNamedColors(" aqua ", 1);
+        result = ColorsUtils.getNamedColors(provider, " aqua ", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getNamedColors(" aqua\"", 1);
+        result = ColorsUtils.getNamedColors(provider, " aqua\"", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getNamedColors(":red;", 1);
+        result = ColorsUtils.getNamedColors(provider, ":red;", 1);
         assertEquals(1, result.size());
-        result = ColorsUtils.getNamedColors(": red;", 1);
+        result = ColorsUtils.getNamedColors(provider, ": red;", 1);
         assertEquals(1, result.size());
 
-        result = ColorsUtils.getNamedColors(" green, yellow ", 1);
+        result = ColorsUtils.getNamedColors(provider, " green, yellow ", 1);
         assertEquals(2, result.size());
 
-        result = ColorsUtils.getNamedColors("invalidName", 1);
+        result = ColorsUtils.getNamedColors(provider, "invalidName", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getNamedColors("white-space", 1);
+        result = ColorsUtils.getNamedColors(provider, "white-space", 1);
         assertEquals(0, result.size());
     }
 }
