@@ -40,12 +40,17 @@ public class DefaultColorCodesProvider implements ColorCodesProvider {
     private static final Pattern CSS_VARIABLE_PATTERN = Pattern.compile("(?<var>[\\$@][^ ]+)\\s*:\\s*(?<value>).+\\s*;"); // NOI18N
 
     @Override
-    public boolean isMimeTypeSupported(String mimeType) {
+    public boolean isMimeTypeSupported(Document document, String mimeType) {
         return mimeType.matches(ColorCodesPreviewOptions.getInstance().getMimeTypeRegex());
     }
 
     @Override
     public boolean isProviderEnabled() {
+        return true;
+    }
+
+    @Override
+    public boolean isColorEditable(ColorValue colorValue) {
         return true;
     }
 
@@ -65,7 +70,7 @@ public class DefaultColorCodesProvider implements ColorCodesProvider {
     }
 
     @Override
-    public boolean isResolveVariablesSupported(String mimeType) {
+    public boolean isResolveVariablesSupported(Document document, String mimeType) {
         return resolveCssVariables(mimeType);
     }
 

@@ -163,7 +163,7 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
             int clipEndY = clip.y + clip.height;
             boolean resolveVariables = false;
             for (ColorCodesProvider provider : providers) {
-                if (provider.isProviderEnabled() && provider.isResolveVariablesSupported(mimeType)) {
+                if (provider.isProviderEnabled() && provider.isResolveVariablesSupported(document, mimeType)) {
                     resolveVariables = true;
                 }
             }
@@ -194,7 +194,7 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
                     List<ColorValue> colorValues = new ArrayList<>();
 
                     for (ColorCodesProvider provider : providers) {
-                        if (provider.isProviderEnabled() && provider.isMimeTypeSupported(mimeType)) {
+                        if (provider.isProviderEnabled() && provider.isMimeTypeSupported(document, mimeType)) {
                             provider.addAllColorValues(document, mimeType, line, -1, colorValues);
                         }
                     }
@@ -202,7 +202,7 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
 
                     // for sass and less variables
                     for (ColorCodesProvider provider : providers) {
-                        if (provider.isProviderEnabled() && provider.isResolveVariablesSupported(mimeType)) {
+                        if (provider.isProviderEnabled() && provider.isResolveVariablesSupported(document, mimeType)) {
                             provider.checkVariables(document, mimeType, line, cssVariables, colorValues);
                         }
                     }
@@ -325,7 +325,7 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
         if (mimeType != null) {
             Collection<? extends ColorCodesProvider> providers = Lookup.getDefault().lookupAll(ColorCodesProvider.class);
             for (ColorCodesProvider provider : providers) {
-                if (provider.isProviderEnabled() && provider.isMimeTypeSupported(mimeType)) {
+                if (provider.isProviderEnabled() && provider.isMimeTypeSupported(document, mimeType)) {
                     return true;
                 }
             }
@@ -367,7 +367,7 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
         String mimeType = NbEditorUtilities.getMimeType(textComponent);
         List<ColorValue> colorValues = new ArrayList<>();
         for (ColorCodesProvider provider : providers) {
-            if (provider.isProviderEnabled() && provider.isMimeTypeSupported(mimeType)) {
+            if (provider.isProviderEnabled() && provider.isMimeTypeSupported(document, mimeType)) {
                 provider.addAllColorValues(document, mimeType, lineText, line, colorValues);
             }
         }

@@ -30,10 +30,21 @@ public interface ColorCodesProvider {
     /**
      * is Mime Type supported by this provider
      *
+     * @param document current document, e.g.
+     * CompletionUtil.getPrimaryFile(Document)
      * @param mimeType Mime Type
      * @return true if supported
      */
-    public boolean isMimeTypeSupported(String mimeType);
+    public boolean isMimeTypeSupported(Document document, String mimeType);
+
+    /**
+     * Disable JColorChooser dialog on user click. For ColorValue created for
+     * variable from another file
+     *
+     * @param colorValue
+     * @return
+     */
+    public boolean isColorEditable(ColorValue colorValue);
 
     /**
      * is this provider enabled
@@ -45,10 +56,12 @@ public interface ColorCodesProvider {
     /**
      * can provider resolve variables for the Mime Type
      *
+     * @param document current document, e.g.
+     * CompletionUtil.getPrimaryFile(Document)
      * @param mimeType Mime Type
      * @return true if supported
      */
-    public boolean isResolveVariablesSupported(String mimeType);
+    public boolean isResolveVariablesSupported(Document document, String mimeType);
 
     /**
      * parse variables

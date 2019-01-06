@@ -22,7 +22,6 @@ import java.util.regex.Pattern;
  * @author junichi11
  */
 public enum ColorType {
-    CUSTOM("CUSTOM"),
     HEX("#(?<codenumber>[0-9a-fA-F]{6,}|[0-9a-fA-F]{3,})"), // NOI18N
     CSS_INT_RGB(String.format(ColorType.CSS_RGB_FORMAT, ColorType.INT_RGB_VALUE_FORMAT, ColorType.INT_RGB_VALUE_FORMAT, ColorType.INT_RGB_VALUE_FORMAT)),
     CSS_PERCENT_RGB(String.format(ColorType.CSS_RGB_FORMAT, ColorType.PERCENT_VALUE_FORMAT, ColorType.PERCENT_VALUE_FORMAT, ColorType.PERCENT_VALUE_FORMAT)),

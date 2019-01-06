@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
 OpenIDE-Module-Localizing-Bundle: com/junichi11/netbeans/modules/color/codes/preview/Bundle.properties
-
+OpenIDE-Module-Recommends: com.junichi11.netbeans.modules.color.codes.preview.colors.model.ColorCodesProvider

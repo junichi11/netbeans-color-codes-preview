@@ -40,7 +40,7 @@ public class JavaColorCodesProvider implements ColorCodesProvider {
     private static final Logger LOGGER = Logger.getLogger(JavaColorCodesProvider.class.getName());
 
     @Override
-    public boolean isMimeTypeSupported(String mimeType) {
+    public boolean isMimeTypeSupported(Document document, String mimeType) {
         return "text/x-java".equals(mimeType);
     }
 
@@ -50,7 +50,12 @@ public class JavaColorCodesProvider implements ColorCodesProvider {
     }
 
     @Override
-    public boolean isResolveVariablesSupported(String mimeType) {
+    public boolean isColorEditable(ColorValue colorValue) {
+        return false;
+    }
+
+    @Override
+    public boolean isResolveVariablesSupported(Document document, String mimeType) {
         return false;
     }
 
