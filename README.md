@@ -57,6 +57,10 @@ This option is `false` by default. If you would like to show named colors, pleas
 - If you use the GTK Look and Feel, you cannot change an alpha value in the color chooser.
 - Hsl or hsla color values may not be changed correctly when you use the color chooser. (There may be 1% errors.)
 
+## Donation
+
+<a href="https://www.patreon.com/junichi11"><img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" height="50"></a>
+
 ## License
 
 [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0)
