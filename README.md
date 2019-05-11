@@ -18,6 +18,7 @@ Check/Uncheck `View > Show Colors`
 - Css rgb/rgba values (e.g. rgb(0, 0, 0), rgb(50%, 0%, 100%), rgba(255,255,255, 0.8))
 - Css hsl/hsla values (e.g. hsl(0, 100%, 50%), hsla(120, 100%, 50%, 0.5))
 - Named colors (e.g. red, blue)
+- Java Color class colors (e.g. Color.black, new Color(100, 100, 100))
 
 ## Multiple colors
 
@@ -35,19 +36,21 @@ Check/Uncheck `View > Show Colors`
 
 Tools > Options > Miscellaneous > Color Codes Preview
 
-### Regex for enabled mime-types
+### Hex and CSS colors
+
+#### Regex for enabled mime-types
 
 Default value is `^text/(x-)?(css|less|sass|scss)$`.
 If you would like to disable/enable some mime-types, please change the default regex.
 This pattern is used when the plugin checks a mime-type.
 
-### Resolve Sass and Less Variables
+#### Resolve Sass and Less Variables
 
 This option is `false` by default. If you would like to resolve Sass and Less variables, please check it.
 
 **NOTE:** The simplest cases only e.g. $green: #0f0;
 
-### Named Colors
+#### Named Colors
 
 This option is `false` by default. If you would like to show named colors, please check it.
 
