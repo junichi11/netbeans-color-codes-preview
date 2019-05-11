@@ -29,6 +29,7 @@ public final class ColorCodesPreviewOptions {
     public static final String MIME_TYPE_REGEX = "color.codes.preview.mimetype.regex"; // NOI18N
     public static final String NAMED_COLORS = "color.codes.preview.color.types.named"; // NOI18N
     private static final String RESOLVE_CSS_VARIABLES = "color.codes.preview.resolve.css.variables"; // NOI18N
+    private static final String ENABLED = "color.codes.preview.enabled.%s"; // NOI18N
 
     private static final ColorCodesPreviewOptions INSTANCE = new ColorCodesPreviewOptions();
 
@@ -61,6 +62,14 @@ public final class ColorCodesPreviewOptions {
 
     public void setResolveCssVariables(boolean resolve) {
         getPreferences().putBoolean(RESOLVE_CSS_VARIABLES, resolve);
+    }
+
+    public boolean isEnabled(String providerId) {
+        return getPreferences().getBoolean(String.format(ENABLED, providerId), true);
+    }
+
+    public void setEnabled(String providerId, boolean enabled) {
+        getPreferences().putBoolean(String.format(ENABLED, providerId), enabled);
     }
 
     public void addPreferenceChangeListener(PreferenceChangeListener listener) {

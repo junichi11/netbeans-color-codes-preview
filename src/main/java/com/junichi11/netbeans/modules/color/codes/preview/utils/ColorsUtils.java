@@ -15,15 +15,15 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.utils;
 
-import com.junichi11.netbeans.modules.color.codes.preview.colors.CssIntRGBColorValue;
-import com.junichi11.netbeans.modules.color.codes.preview.colors.CssPercentRGBColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.CssHSLAColorValue;
-import com.junichi11.netbeans.modules.color.codes.preview.colors.ColorValue;
-import com.junichi11.netbeans.modules.color.codes.preview.colors.CssIntRGBAColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.CssHSLColorValue;
-import com.junichi11.netbeans.modules.color.codes.preview.colors.HexColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.CssIntRGBAColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.CssIntRGBColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.CssPercentRGBAColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.CssPercentRGBColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.HexColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.NamedColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.ColorValue;
 import java.awt.Color;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -34,7 +34,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.netbeans.api.annotations.common.CheckForNull;
 
 /**
@@ -241,7 +240,7 @@ public final class ColorsUtils {
      * @return hex color codes
      */
     public static List<String> getHexColorCodes(String line) {
-        Matcher matcher = getColorMatcher(line, ColorType.HEX);
+        Matcher matcher = getColorMatcher(line, HexCssColorType.HEX);
         ArrayList<String> colorCodes = new ArrayList<>();
         while (matcher.find()) {
             final String colorCode = matcher.group(GROUP_CODENUMBER);
@@ -265,7 +264,7 @@ public final class ColorsUtils {
      * @return hex color codes
      */
     public static List<ColorValue> getHexColorCodes(String line, int lineNumber) {
-        Matcher matcher = getColorMatcher(line, ColorType.HEX);
+        Matcher matcher = getColorMatcher(line, HexCssColorType.HEX);
         ArrayList<ColorValue> colorValues = new ArrayList<>();
         while (matcher.find()) {
             final String colorCode = matcher.group(GROUP_CODENUMBER);
@@ -291,7 +290,7 @@ public final class ColorsUtils {
      * @return named colors
      */
     public static List<ColorValue> getNamedColors(String line, int lineNumber) {
-        Matcher matcher = getColorMatcher(line, ColorType.NAMED_COLORS);
+        Matcher matcher = getColorMatcher(line, HexCssColorType.NAMED_COLORS);
         ArrayList<ColorValue> colorValues = new ArrayList<>();
         while (matcher.find()) {
             final String namedColor = matcher.group(0);
@@ -308,7 +307,7 @@ public final class ColorsUtils {
      * @return RGB codes
      */
     public static List<String> getCssIntRGBs(String line) {
-        Matcher matcher = getColorMatcher(line, ColorType.CSS_INT_RGB);
+        Matcher matcher = getColorMatcher(line, HexCssColorType.CSS_INT_RGB);
         ArrayList<String> colorCodes = new ArrayList<>();
         while (matcher.find()) {
             final String colorCode = matcher.group(GROUP_CSS_RGB);
@@ -324,7 +323,7 @@ public final class ColorsUtils {
      * @return RGB codes
      */
     public static List<ColorValue> getCssIntRGBs(String line, int lineNumber) {
-        return getCssColorValues(line, lineNumber, ColorType.CSS_INT_RGB);
+        return getCssColorValues(line, lineNumber, HexCssColorType.CSS_INT_RGB);
     }
 
     /**
@@ -334,7 +333,7 @@ public final class ColorsUtils {
      * @return RGB color values
      */
     public static List<ColorValue> getCssPercentRGBs(String line, int lineNumber) {
-        return getCssColorValues(line, lineNumber, ColorType.CSS_PERCENT_RGB);
+        return getCssColorValues(line, lineNumber, HexCssColorType.CSS_PERCENT_RGB);
     }
 
     /**
@@ -344,7 +343,7 @@ public final class ColorsUtils {
      * @return RGBA color values
      */
     public static List<String> getCssIntRGBAs(String line) {
-        Matcher matcher = getColorMatcher(line, ColorType.CSS_INT_RGBA);
+        Matcher matcher = getColorMatcher(line, HexCssColorType.CSS_INT_RGBA);
         ArrayList<String> colorCodes = new ArrayList<>();
         while (matcher.find()) {
             final String colorCode = matcher.group(GROUP_CSS_RGBA);
@@ -360,7 +359,7 @@ public final class ColorsUtils {
      * @return RGBA color values
      */
     public static List<ColorValue> getCssIntRGBAs(String line, int lineNumber) {
-        return getCssColorValues(line, lineNumber, ColorType.CSS_INT_RGBA);
+        return getCssColorValues(line, lineNumber, HexCssColorType.CSS_INT_RGBA);
     }
 
     /**
@@ -370,7 +369,7 @@ public final class ColorsUtils {
      * @return RGBA color values
      */
     public static List<ColorValue> getCssPercentRGBAs(String line, int lineNumber) {
-        return getCssColorValues(line, lineNumber, ColorType.CSS_PERCENT_RGBA);
+        return getCssColorValues(line, lineNumber, HexCssColorType.CSS_PERCENT_RGBA);
     }
 
     /**
@@ -380,7 +379,7 @@ public final class ColorsUtils {
      * @return HSL ColorValues
      */
     public static List<ColorValue> getCssHSLs(String line, int lineNumber) {
-        return getCssColorValues(line, lineNumber, ColorType.CSS_HSL);
+        return getCssColorValues(line, lineNumber, HexCssColorType.CSS_HSL);
     }
 
     /**
@@ -390,7 +389,7 @@ public final class ColorsUtils {
      * @return HSLA ColorValues
      */
     public static List<ColorValue> getCssHSLAs(String line, int lineNumber) {
-        return getCssColorValues(line, lineNumber, ColorType.CSS_HSLA);
+        return getCssColorValues(line, lineNumber, HexCssColorType.CSS_HSLA);
     }
 
     /**
@@ -398,10 +397,10 @@ public final class ColorsUtils {
      *
      * @param line line text
      * @param lineNumber line number
-     * @param type ColorType
+     * @param type HexCssColorType
      * @return ColorValues
      */
-    private static List<ColorValue> getCssColorValues(String line, int lineNumber, ColorType type) {
+    private static List<ColorValue> getCssColorValues(String line, int lineNumber, HexCssColorType type) {
         Matcher matcher = getColorMatcher(line, type);
         ArrayList<ColorValue> colorCodes = new ArrayList<>();
         String groupName = getCssColorGroupName(type);
@@ -415,11 +414,11 @@ public final class ColorsUtils {
         return colorCodes;
     }
 
-    private static Matcher getColorMatcher(String line, ColorType type) {
+    private static Matcher getColorMatcher(String line, HexCssColorType type) {
         return type.getPattern().matcher(line);
     }
 
-    private static String getCssColorGroupName(ColorType type) {
+    private static String getCssColorGroupName(HexCssColorType type) {
         switch (type) {
             case CSS_INT_RGB:
                 return GROUP_CSS_RGB;
@@ -438,7 +437,7 @@ public final class ColorsUtils {
         }
     }
 
-    private static ColorValue createCssColorValue(String value, int startOffset, int endOffset, int lineNumber, ColorType type) {
+    private static ColorValue createCssColorValue(String value, int startOffset, int endOffset, int lineNumber, HexCssColorType type) {
         switch (type) {
             case CSS_INT_RGB:
                 return new CssIntRGBColorValue(value, startOffset, endOffset, lineNumber);
@@ -467,7 +466,7 @@ public final class ColorsUtils {
      */
     @CheckForNull
     public static Color decode(String code) {
-        for (ColorType value : ColorType.values()) {
+        for (HexCssColorType value : HexCssColorType.values()) {
             Color color = decode(code, value);
             if (color != null) {
                 return color;
@@ -485,7 +484,7 @@ public final class ColorsUtils {
      * @return
      */
     @CheckForNull
-    public static Color decode(String code, ColorType type) {
+    public static Color decode(String code, HexCssColorType type) {
         if (code == null) {
             return null;
         }
@@ -514,7 +513,7 @@ public final class ColorsUtils {
 
     @CheckForNull
     private static Color decodeHexColorCode(String code) {
-        Matcher matcher = getColorMatcher(code, ColorType.HEX);
+        Matcher matcher = getColorMatcher(code, HexCssColorType.HEX);
         if (matcher.matches()) {
             int length = code.length();
             if (length == 4) {
@@ -529,7 +528,7 @@ public final class ColorsUtils {
 
     @CheckForNull
     private static Color decodeNamedColor(String code) {
-        Matcher matcher = getColorMatcher(code, ColorType.NAMED_COLORS);
+        Matcher matcher = getColorMatcher(code, HexCssColorType.NAMED_COLORS);
         if (matcher.matches()) {
             String hexColorCode = NAMED_COLOR_TABLE.get(matcher.group(1).toLowerCase());
             return decodeHexColorCode(hexColorCode);
@@ -539,7 +538,7 @@ public final class ColorsUtils {
 
     @CheckForNull
     private static Color decodeCssIntRGB(String code) {
-        Matcher matcher = getColorMatcher(code, ColorType.CSS_INT_RGB);
+        Matcher matcher = getColorMatcher(code, HexCssColorType.CSS_INT_RGB);
         if (matcher.matches()) {
             return new Color(Integer.parseInt(matcher.group(GROUP_RED)), Integer.parseInt(matcher.group(GROUP_GREEN)), Integer.parseInt(matcher.group(GROUP_BLUE)));
         }
@@ -548,7 +547,7 @@ public final class ColorsUtils {
 
     @CheckForNull
     private static Color decodeCssPercentRGB(String code) {
-        Matcher matcher = getColorMatcher(code, ColorType.CSS_PERCENT_RGB);
+        Matcher matcher = getColorMatcher(code, HexCssColorType.CSS_PERCENT_RGB);
         if (matcher.matches()) {
             String red = matcher.group(GROUP_RED).replace("%", ""); // NOI18N
             String green = matcher.group(GROUP_GREEN).replace("%", ""); // NOI18N
@@ -560,7 +559,7 @@ public final class ColorsUtils {
 
     @CheckForNull
     private static Color decodeCssIntRGBA(String code) {
-        Matcher matcher = getColorMatcher(code, ColorType.CSS_INT_RGBA);
+        Matcher matcher = getColorMatcher(code, HexCssColorType.CSS_INT_RGBA);
         if (matcher.matches()) {
             Float alpha = Float.valueOf(matcher.group(GROUP_ALPHA));
             int intAlpha = (int) (255 * alpha);
@@ -571,7 +570,7 @@ public final class ColorsUtils {
 
     @CheckForNull
     private static Color decodeCssPercentRGBA(String code) {
-        Matcher matcher = getColorMatcher(code, ColorType.CSS_PERCENT_RGBA);
+        Matcher matcher = getColorMatcher(code, HexCssColorType.CSS_PERCENT_RGBA);
         if (matcher.matches()) {
             Float alpha = Float.valueOf(matcher.group(GROUP_ALPHA));
             String red = matcher.group(GROUP_RED).replace("%", ""); // NOI18N
@@ -584,7 +583,7 @@ public final class ColorsUtils {
 
     @CheckForNull
     private static Color decodeCssHSL(String code) {
-        Matcher matcher = getColorMatcher(code, ColorType.CSS_HSL);
+        Matcher matcher = getColorMatcher(code, HexCssColorType.CSS_HSL);
         if (matcher.matches()) {
             String hue = matcher.group(GROUP_HUE);
             String saturation = matcher.group(GROUP_SATURATION).replace("%", ""); // NOI18N
@@ -597,7 +596,7 @@ public final class ColorsUtils {
 
     @CheckForNull
     private static Color decodeCssHSLA(String code) {
-        Matcher matcher = getColorMatcher(code, ColorType.CSS_HSLA);
+        Matcher matcher = getColorMatcher(code, HexCssColorType.CSS_HSLA);
         if (matcher.matches()) {
             String hue = matcher.group(GROUP_HUE);
             String saturation = matcher.group(GROUP_SATURATION).replace("%", ""); // NOI18N
@@ -869,10 +868,10 @@ public final class ColorsUtils {
      * color code is returned as default.
      *
      * @param color a Color
-     * @param type ColorType
+     * @param type HexCssColorType
      * @return formatted string
      */
-    public static String toFormattedString(Color color, ColorType type) {
+    public static String toFormattedString(Color color, HexCssColorType type) {
         switch (type) {
             case HEX:
                 return hexValueString(color);
