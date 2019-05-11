@@ -42,6 +42,11 @@ import org.netbeans.api.annotations.common.CheckForNull;
  */
 public final class ColorsUtils {
 
+    private static final int SHORT_HEX_COLOR_CODE_LENGTH = 3;
+    private static final int SHORT_HEX_COLOR_CODE_FULL_LENGTH = 4;
+    private static final int HEX_COLOR_CODE_LENGTH = 6;
+    private static final int HEX_COLOR_CODE_FULL_LENGTH = 7;
+
     private static final String HEX_VALUE_FORMAT = "#%02x%02x%02x"; // NOI18N
     private static final String RGB_VALUE_FORMAT = "rgb(%s, %s, %s)"; // NOI18N
     private static final String RGBA_VALUE_FORMAT = "rgba(%s, %s, %s, %s)"; // NOI18N
@@ -246,11 +251,11 @@ public final class ColorsUtils {
             final String colorCode = matcher.group(GROUP_CODENUMBER);
             int length = colorCode.length();
             String hexCode = colorCode;
-            if (length == 3) {
+            if (length == SHORT_HEX_COLOR_CODE_LENGTH) {
                 hexCode = convertToRRGGBB(colorCode);
             }
 
-            if (hexCode.length() == 6) {
+            if (hexCode.length() == HEX_COLOR_CODE_LENGTH) {
                 colorCodes.add(String.format("#%s", hexCode)); // NOI18N
             }
         }
@@ -270,11 +275,11 @@ public final class ColorsUtils {
             final String colorCode = matcher.group(GROUP_CODENUMBER);
             int length = colorCode.length();
             String hexCode = colorCode;
-            if (length == 3) {
+            if (length == SHORT_HEX_COLOR_CODE_LENGTH) {
                 hexCode = convertToRRGGBB(colorCode);
             }
 
-            if (hexCode.length() == 6) {
+            if (hexCode.length() == HEX_COLOR_CODE_LENGTH) {
                 ColorValue colorValue = new HexColorValue(String.format("#%s", hexCode), matcher.start(), matcher.end(), lineNumber); // NOI18N
                 colorValues.add(colorValue);
             }
@@ -516,10 +521,10 @@ public final class ColorsUtils {
         Matcher matcher = getColorMatcher(code, HexCssColorType.HEX);
         if (matcher.matches()) {
             int length = code.length();
-            if (length == 4) {
+            if (length == SHORT_HEX_COLOR_CODE_FULL_LENGTH) {
                 return Color.decode(convertToRRGGBB(code));
             }
-            if (length == 7) {
+            if (length == HEX_COLOR_CODE_FULL_LENGTH) {
                 return Color.decode(code);
             }
         }
