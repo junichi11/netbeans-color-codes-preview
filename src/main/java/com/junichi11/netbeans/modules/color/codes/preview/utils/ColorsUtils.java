@@ -23,7 +23,7 @@ import com.junichi11.netbeans.modules.color.codes.preview.colors.CssPercentRGBAC
 import com.junichi11.netbeans.modules.color.codes.preview.colors.CssPercentRGBColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.HexColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.NamedColorValue;
-import com.junichi11.netbeans.modules.color.codes.preview.colors.ColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.ColorValue;
 import java.awt.Color;
 import java.math.BigDecimal;
 import java.text.NumberFormat;

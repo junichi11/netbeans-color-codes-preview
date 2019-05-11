@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.junichi11.netbeans.modules.color.codes.preview.colors;
+package com.junichi11.netbeans.modules.color.codes.preview.colors.spi;
 
 import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.ColorCodeFormatter;
 import java.awt.Color;

@@ -15,7 +15,6 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.colors.spi;
 
-import com.junichi11.netbeans.modules.color.codes.preview.colors.ColorValue;
 import java.util.List;
 import java.util.Map;
 import javax.swing.text.Document;
