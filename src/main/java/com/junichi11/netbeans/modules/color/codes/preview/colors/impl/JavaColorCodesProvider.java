@@ -23,7 +23,6 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.text.Document;
 import org.netbeans.modules.editor.NbEditorUtilities;
@@ -159,33 +158,42 @@ public class JavaColorCodesProvider extends AbstractColorCodesProvider {
     private void collectRGBColors(String line, List<ColorValue> colorValues, int lineNumber) {
         int index = 0;
         while ((index = line.indexOf(NEW_COLOR_PREFIX, index + 1)) >= 0) {
-            try {
-                int start = index;
-                index += NEW_COLOR_PREFIX.length();
-                int end = line.indexOf(')', index);
-                if (end == -1) {
-                    // e.g. "new Color(";
-                    break;
-                }
-                String parameters = line.substring(index, end);
-                int params[] = new int[MAX_PRAMETER_SIZE];
-                int count = 0;
-                for (String parameter : parameters.split(",")) { // NOI18N
-                    try {
-                        params[count++] = Integer.parseInt(parameter.trim());
-                        if (count >= MAX_PRAMETER_SIZE) {
-                            break;
-                        }
-                    } catch (NumberFormatException ex) {
+            int start = index;
+            index += NEW_COLOR_PREFIX.length();
+            int closingParenthesisOffset = line.indexOf(')', index);
+            if (closingParenthesisOffset == -1) {
+                // e.g. "new Color(";
+                break;
+            }
+            String parameters = line.substring(index, closingParenthesisOffset);
+            List<Integer> params = new ArrayList<>(MAX_PRAMETER_SIZE);
+            for (String parameter : parameters.split(",")) { // NOI18N
+                try {
+                    params.add(Integer.parseInt(parameter.trim()));
+                    if (params.size() > MAX_PRAMETER_SIZE) {
                         break;
                     }
+                } catch (NumberFormatException ex) {
+                    break;
                 }
-                if (count == RGB_COLOR_PARMETER_SIZE) {
-                    colorValues.add(new JavaIntRGBColorValue(line.substring(start, end + 1), start, end + 1, lineNumber, new Color(params[0], params[1], params[2])));
-                }
-            } catch (Exception e) {
-                LOGGER.log(Level.WARNING, "Java color parser exception.", e); // NOI18N
+            }
+            if (isValidColorParameters(params)) {
+                Color color = new Color(params.get(0), params.get(1), params.get(2));
+                int end = closingParenthesisOffset + ")".length(); // NOI18N
+                colorValues.add(new JavaIntRGBColorValue(line.substring(start, end), start, end, lineNumber, color));
             }
         }
+    }
+
+    private boolean isValidColorParameters(List<Integer> params) {
+        if (params.size() != RGB_COLOR_PARMETER_SIZE) {
+            return false;
+        }
+        for (Integer param : params) {
+            if (param < 0 || 255 < param) {
+                return false;
+            }
+        }
+        return true;
     }
 }

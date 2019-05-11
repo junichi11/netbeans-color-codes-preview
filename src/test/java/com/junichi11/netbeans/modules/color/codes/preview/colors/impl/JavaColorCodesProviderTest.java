@@ -77,6 +77,23 @@ public class JavaColorCodesProviderTest {
         assertEquals(35, result.get(0).getEndOffset());
         assertEquals(false, result.get(0).isEditable());
 
+        try {
+            result = provider.getColorValues(null, "Color color = new Color(256, 0, 0);", 0, Collections.emptyMap());
+            assertEquals(0, result.size());
+            result = provider.getColorValues(null, "Color color = new Color(-1, 0, 0);", 0, Collections.emptyMap());
+            assertEquals(0, result.size());
+            result = provider.getColorValues(null, "Color color = new Color(0, 256, 0);", 0, Collections.emptyMap());
+            assertEquals(0, result.size());
+            result = provider.getColorValues(null, "Color color = new Color(0, -256, 0);", 0, Collections.emptyMap());
+            assertEquals(0, result.size());
+            result = provider.getColorValues(null, "Color color = new Color(0, 0, 256);", 0, Collections.emptyMap());
+            assertEquals(0, result.size());
+            result = provider.getColorValues(null, "Color color = new Color(0, 0, -1);", 0, Collections.emptyMap());
+            assertEquals(0, result.size());
+        } catch (Exception ex) {
+            fail(ex.getMessage());
+        }
+
         // unsupported patterns
         result = provider.getColorValues(null, "new Color(0, true);", 0, Collections.emptyMap());
         assertEquals(0, result.size());
