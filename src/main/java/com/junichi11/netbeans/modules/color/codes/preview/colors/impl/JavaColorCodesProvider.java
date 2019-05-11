@@ -95,7 +95,7 @@ public class JavaColorCodesProvider extends AbstractColorCodesProvider {
     private static final String NEW_COLOR_PREFIX = "new Color("; // NOI18N
 
     private static final int MAX_PRAMETER_SIZE = 5;
-    private static final int RGB_COLOR_PARM_SIZE = 3;
+    private static final int RGB_COLOR_PARMETER_SIZE = 3;
     private static final Logger LOGGER = Logger.getLogger(JavaColorCodesProvider.class.getName());
 
     @Override
@@ -170,7 +170,7 @@ public class JavaColorCodesProvider extends AbstractColorCodesProvider {
                 String parameters = line.substring(index, end);
                 int params[] = new int[MAX_PRAMETER_SIZE];
                 int count = 0;
-                for (String parameter : parameters.split(",")) {
+                for (String parameter : parameters.split(",")) { // NOI18N
                     try {
                         params[count++] = Integer.parseInt(parameter.trim());
                         if (count >= MAX_PRAMETER_SIZE) {
@@ -180,7 +180,7 @@ public class JavaColorCodesProvider extends AbstractColorCodesProvider {
                         break;
                     }
                 }
-                if (count == RGB_COLOR_PARM_SIZE) {
+                if (count == RGB_COLOR_PARMETER_SIZE) {
                     colorValues.add(new JavaIntRGBColorValue(line.substring(start, end + 1), start, end + 1, lineNumber, new Color(params[0], params[1], params[2])));
                 }
             } catch (Exception e) {
