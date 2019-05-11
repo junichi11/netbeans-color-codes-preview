@@ -13,25 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.junichi11.netbeans.modules.color.codes.preview.colors;
+package com.junichi11.netbeans.modules.color.codes.preview.colors.spi;
 
+import com.junichi11.netbeans.modules.color.codes.preview.colors.ColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils;
-import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorType;
 import java.awt.Color;
 import org.netbeans.api.annotations.common.NonNull;
 
 /**
+ * Abstract ColorValue implementation.
  *
+ * @see ColorValue
  * @author junichi11
  */
-public class ColorValueImpl implements ColorValue {
+public abstract class AbstractColorValue implements ColorValue {
 
     private final int line;
     private final int startOffset;
     private final int endOffset;
     private final String value;
 
-    public ColorValueImpl(@NonNull String value, int startOffset, int endOffset, int line) {
+    public AbstractColorValue(@NonNull String value, int startOffset, int endOffset, int line) {
         this.value = value;
         this.startOffset = startOffset;
         this.endOffset = endOffset;
@@ -61,11 +63,6 @@ public class ColorValueImpl implements ColorValue {
     @Override
     public Color getColor() {
         return ColorsUtils.decode(value);
-    }
-
-    @Override
-    public ColorType getType() {
-        return ColorType.HEX;
     }
 
 }

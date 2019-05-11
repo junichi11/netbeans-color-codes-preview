@@ -15,25 +15,70 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.colors;
 
-import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorType;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.ColorCodeFormatter;
 import java.awt.Color;
 
 /**
+ * Color value record
  *
  * @author junichi11
+ * @since 0.10.0
  */
 public interface ColorValue {
 
+    /**
+     * Get the color.
+     *
+     * @since 0.10.0
+     * @return the color
+     */
     Color getColor();
 
-    int getEndOffset();
-
-    int getLine();
-
+    /**
+     * Get the start offset of the color.
+     *
+     * @since 0.10.0
+     * @return the start offset
+     */
     int getStartOffset();
 
-    ColorType getType();
+    /**
+     * Get the end offset of the color.
+     *
+     * @since 0.10.0
+     * @return the end offset
+     */
+    int getEndOffset();
 
+    /**
+     * Get the line number.
+     *
+     * @since 0.10.0
+     * @return the line number
+     */
+    int getLine();
+
+    /**
+     * Get color value.
+     *
+     * @since 0.10.0
+     * @return the color value
+     */
     String getValue();
 
+    /**
+     * Check whether the color is editable.
+     *
+     * @since 0.10.0
+     * @return {@code true} if it is editable, otherwise {@code false}
+     */
+    boolean isEditable();
+
+    /**
+     * Get formatter.
+     *
+     * @since 0.10.0
+     * @return the formatter
+     */
+    ColorCodeFormatter getFormatter();
 }

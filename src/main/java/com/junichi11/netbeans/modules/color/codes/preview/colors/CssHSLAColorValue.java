@@ -15,11 +15,11 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.colors;
 
-import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorType;
+import com.junichi11.netbeans.modules.color.codes.preview.utils.HexCssColorType;
 import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils;
 import java.awt.Color;
 
-public class CssHSLAColorValue extends ColorValueImpl {
+public class CssHSLAColorValue extends HexCssColorValue {
 
     public CssHSLAColorValue(String value, int startOffset, int endOffset, int line) {
         super(value, startOffset, endOffset, line);
@@ -27,12 +27,12 @@ public class CssHSLAColorValue extends ColorValueImpl {
 
     @Override
     public Color getColor() {
-        return ColorsUtils.decode(getValue(), ColorType.CSS_HSLA);
+        return ColorsUtils.decode(getValue(), HexCssColorType.CSS_HSLA);
     }
 
     @Override
-    public ColorType getType() {
-        return ColorType.CSS_HSLA;
+    public HexCssColorType getType() {
+        return HexCssColorType.CSS_HSLA;
     }
 
 }

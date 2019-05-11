@@ -67,6 +67,9 @@ public class ColorCodesPanel extends JComponent {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     // show dialog
+                    if (!colorValue.isEditable()) {
+                        return;
+                    }
                     final Color selectedColor = JColorChooser.showDialog(
                             ColorCodesPanel.this,
                             Bundle.ColorCodesPanel_colorChooser_title(),
@@ -97,7 +100,7 @@ public class ColorCodesPanel extends JComponent {
                                 try {
                                     int removeStart = lineOffset + startOffset;
                                     document.remove(removeStart, endOffset - startOffset);
-                                    document.insertString(removeStart, ColorsUtils.toFormattedString(selectedColor, colorValue.getType()), null);
+                                    document.insertString(removeStart, colorValue.getFormatter().format(selectedColor), null);
                                 } catch (BadLocationException ex) {
                                     LOGGER.log(Level.WARNING, ex.getMessage());
                                 }

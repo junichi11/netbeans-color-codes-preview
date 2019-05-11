@@ -15,11 +15,11 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.colors;
 
-import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorType;
+import com.junichi11.netbeans.modules.color.codes.preview.utils.HexCssColorType;
 import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils;
 import java.awt.Color;
 
-public class NamedColorValue extends ColorValueImpl {
+public class NamedColorValue extends HexCssColorValue {
 
     public NamedColorValue(String value, int startOffset, int endOffset, int line) {
         super(value, startOffset, endOffset, line);
@@ -27,12 +27,12 @@ public class NamedColorValue extends ColorValueImpl {
 
     @Override
     public Color getColor() {
-        return ColorsUtils.decode(getValue(), ColorType.NAMED_COLORS);
+        return ColorsUtils.decode(getValue(), HexCssColorType.NAMED_COLORS);
     }
 
     @Override
-    public ColorType getType() {
-        return ColorType.NAMED_COLORS;
+    public HexCssColorType getType() {
+        return HexCssColorType.NAMED_COLORS;
     }
 
 }
