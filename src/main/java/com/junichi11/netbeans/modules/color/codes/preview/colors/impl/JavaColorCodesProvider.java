@@ -148,10 +148,11 @@ public class JavaColorCodesProvider extends AbstractColorCodesProvider {
 
     private void collectStandardColor(List<ColorValue> colorValues, StandardColor stdColor, String line, int index, int lineNumber) {
         int start = index;
-        index = index + 6;
+        index = index + COLOR_PREFIX.length();
         String sub = line.substring(index);
         if (sub.startsWith(stdColor.getColorName())) {
-            colorValues.add(new JavaIntRGBColorValue(COLOR_PREFIX + stdColor.getColorName(), start, start + 6 + stdColor.getColorName().length(), lineNumber, stdColor.getColor()));
+            int end = start + COLOR_PREFIX.length() + stdColor.getColorName().length();
+            colorValues.add(new JavaIntRGBColorValue(COLOR_PREFIX + stdColor.getColorName(), start, end, lineNumber, stdColor.getColor()));
         }
     }
 
