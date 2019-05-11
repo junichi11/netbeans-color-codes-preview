@@ -15,7 +15,6 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.colors.spi;
 
-import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.ColorCodeFormatter;
 import java.awt.Color;
 
 /**
