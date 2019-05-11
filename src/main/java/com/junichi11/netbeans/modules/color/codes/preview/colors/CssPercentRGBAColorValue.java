@@ -15,11 +15,11 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.colors;
 
-import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorType;
+import com.junichi11.netbeans.modules.color.codes.preview.utils.HexCssColorType;
 import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils;
 import java.awt.Color;
 
-public class CssPercentRGBAColorValue extends ColorValueImpl {
+public class CssPercentRGBAColorValue extends HexCssColorValue {
 
     public CssPercentRGBAColorValue(String value, int startOffset, int endOffset, int line) {
         super(value, startOffset, endOffset, line);
@@ -27,12 +27,12 @@ public class CssPercentRGBAColorValue extends ColorValueImpl {
 
     @Override
     public Color getColor() {
-        return ColorsUtils.decode(getValue(), ColorType.CSS_PERCENT_RGBA);
+        return ColorsUtils.decode(getValue(), HexCssColorType.CSS_PERCENT_RGBA);
     }
 
     @Override
-    public ColorType getType() {
-        return ColorType.CSS_PERCENT_RGBA;
+    public HexCssColorType getType() {
+        return HexCssColorType.CSS_PERCENT_RGBA;
     }
 
 }

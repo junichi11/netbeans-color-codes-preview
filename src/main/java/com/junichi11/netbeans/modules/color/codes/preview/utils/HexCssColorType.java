@@ -21,15 +21,15 @@ import java.util.regex.Pattern;
  *
  * @author junichi11
  */
-public enum ColorType {
+public enum HexCssColorType {
     HEX("#(?<codenumber>[0-9a-fA-F]{6,}|[0-9a-fA-F]{3,})"), // NOI18N
-    CSS_INT_RGB(String.format(ColorType.CSS_RGB_FORMAT, ColorType.INT_RGB_VALUE_FORMAT, ColorType.INT_RGB_VALUE_FORMAT, ColorType.INT_RGB_VALUE_FORMAT)),
-    CSS_PERCENT_RGB(String.format(ColorType.CSS_RGB_FORMAT, ColorType.PERCENT_VALUE_FORMAT, ColorType.PERCENT_VALUE_FORMAT, ColorType.PERCENT_VALUE_FORMAT)),
-    CSS_INT_RGBA(String.format(ColorType.CSS_RGBA_FORMAT, ColorType.INT_RGB_VALUE_FORMAT, ColorType.INT_RGB_VALUE_FORMAT, ColorType.INT_RGB_VALUE_FORMAT, ColorType.ALPHA_VALUE_FORMAT)),
-    CSS_PERCENT_RGBA(String.format(ColorType.CSS_RGBA_FORMAT, ColorType.PERCENT_VALUE_FORMAT, ColorType.PERCENT_VALUE_FORMAT, ColorType.PERCENT_VALUE_FORMAT, ColorType.ALPHA_VALUE_FORMAT)),
-    CSS_HSL(String.format(ColorType.CSS_HSL_FORMAT, ColorType.HUE_VALUE_FORMAT, ColorType.PERCENT_VALUE_FORMAT, ColorType.PERCENT_VALUE_FORMAT)),
-    CSS_HSLA(String.format(ColorType.CSS_HSLA_FORMAT, ColorType.HUE_VALUE_FORMAT, ColorType.PERCENT_VALUE_FORMAT, ColorType.PERCENT_VALUE_FORMAT, ColorType.ALPHA_VALUE_FORMAT)),
-    NAMED_COLORS(ColorType.NAMED_COLORS_REGEX);
+    CSS_INT_RGB(String.format(HexCssColorType.CSS_RGB_FORMAT, HexCssColorType.INT_RGB_VALUE_FORMAT, HexCssColorType.INT_RGB_VALUE_FORMAT, HexCssColorType.INT_RGB_VALUE_FORMAT)),
+    CSS_PERCENT_RGB(String.format(HexCssColorType.CSS_RGB_FORMAT, HexCssColorType.PERCENT_VALUE_FORMAT, HexCssColorType.PERCENT_VALUE_FORMAT, HexCssColorType.PERCENT_VALUE_FORMAT)),
+    CSS_INT_RGBA(String.format(HexCssColorType.CSS_RGBA_FORMAT, HexCssColorType.INT_RGB_VALUE_FORMAT, HexCssColorType.INT_RGB_VALUE_FORMAT, HexCssColorType.INT_RGB_VALUE_FORMAT, HexCssColorType.ALPHA_VALUE_FORMAT)),
+    CSS_PERCENT_RGBA(String.format(HexCssColorType.CSS_RGBA_FORMAT, HexCssColorType.PERCENT_VALUE_FORMAT, HexCssColorType.PERCENT_VALUE_FORMAT, HexCssColorType.PERCENT_VALUE_FORMAT, HexCssColorType.ALPHA_VALUE_FORMAT)),
+    CSS_HSL(String.format(HexCssColorType.CSS_HSL_FORMAT, HexCssColorType.HUE_VALUE_FORMAT, HexCssColorType.PERCENT_VALUE_FORMAT, HexCssColorType.PERCENT_VALUE_FORMAT)),
+    CSS_HSLA(String.format(HexCssColorType.CSS_HSLA_FORMAT, HexCssColorType.HUE_VALUE_FORMAT, HexCssColorType.PERCENT_VALUE_FORMAT, HexCssColorType.PERCENT_VALUE_FORMAT, HexCssColorType.ALPHA_VALUE_FORMAT)),
+    NAMED_COLORS(HexCssColorType.NAMED_COLORS_REGEX);
     static final String PERCENT_VALUE_FORMAT = "(100|[1-9]?[0-9])%"; // NOI18N
     // To prevent unexpected matches, check suffix and prefix
     static final String NAMED_COLORS_REGEX = "[ :,\"](" // NOI18N
@@ -53,7 +53,7 @@ public enum ColorType {
     static final String CSS_HSL_FORMAT = "(?<csshsl>hsl\\((?<codenumber>(?<h>%s) *, *(?<s>%s) *, *(?<l>%s))\\))"; // NOI18N
     private final Pattern pattern;
 
-    private ColorType(String regex) {
+    private HexCssColorType(String regex) {
         this.pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
     }
 

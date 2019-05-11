@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 junichi11.
+ * Copyright 2019 junichi11.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,27 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.junichi11.netbeans.modules.color.codes.preview.colors;
+package com.junichi11.netbeans.modules.color.codes.preview.colors.impl;
 
-import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorType;
-import java.awt.Color;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.ColorCodesProvider;
+import javax.swing.text.Document;
 
 /**
  *
  * @author junichi11
  */
-public interface ColorValue {
+public abstract class AbstractColorCodesProvider implements ColorCodesProvider {
 
-    Color getColor();
-
-    int getEndOffset();
-
-    int getLine();
-
-    int getStartOffset();
-
-    ColorType getType();
-
-    String getValue();
-
+    @Override
+    public int getStartIndex(Document document, int currentIndex) {
+        return currentIndex;
+    }
 }

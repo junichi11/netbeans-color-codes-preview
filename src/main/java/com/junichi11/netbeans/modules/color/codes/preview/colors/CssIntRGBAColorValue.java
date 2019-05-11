@@ -15,11 +15,11 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.colors;
 
-import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorType;
+import com.junichi11.netbeans.modules.color.codes.preview.utils.HexCssColorType;
 import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils;
 import java.awt.Color;
 
-public class CssIntRGBAColorValue extends ColorValueImpl {
+public class CssIntRGBAColorValue extends HexCssColorValue {
 
     public CssIntRGBAColorValue(String value, int startOffset, int endOffset, int line) {
         super(value, startOffset, endOffset, line);
@@ -27,12 +27,12 @@ public class CssIntRGBAColorValue extends ColorValueImpl {
 
     @Override
     public Color getColor() {
-        return ColorsUtils.decode(getValue(), ColorType.CSS_INT_RGBA);
+        return ColorsUtils.decode(getValue(), HexCssColorType.CSS_INT_RGBA);
     }
 
     @Override
-    public final ColorType getType() {
-        return ColorType.CSS_INT_RGBA;
+    public final HexCssColorType getType() {
+        return HexCssColorType.CSS_INT_RGBA;
     }
 
 }
