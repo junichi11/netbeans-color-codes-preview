@@ -77,7 +77,6 @@ public class JavaIntRGBColorValue extends AbstractColorValue {
 
         @CheckForNull
         private static String getStandardJavaColor(Color selectedColor) {
-            StandardColor.values();
             for (StandardColor value : StandardColor.values()) {
                 if (value.getColor().equals(selectedColor)) {
                     return value.asMethod();

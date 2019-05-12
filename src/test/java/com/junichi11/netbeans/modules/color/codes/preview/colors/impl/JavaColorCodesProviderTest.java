@@ -95,17 +95,17 @@ public class JavaColorCodesProviderTest {
         }
 
         // unsupported patterns
-        result = provider.getColorValues(null, "new Color(0, true);", 0, Collections.emptyMap());
+        result = provider.getColorValues(null, "Color color = new Color(0, true);", 0, Collections.emptyMap());
         assertEquals(0, result.size());
-        result = provider.getColorValues(null, "new Color(ColorSpace.getInstance(ColorSpace.CS_GRAY), components, 0);", 0, Collections.emptyMap());
+        result = provider.getColorValues(null, "Color color = new Color(ColorSpace.getInstance(ColorSpace.CS_GRAY), components, 0);", 0, Collections.emptyMap());
         assertEquals(0, result.size());
-        result = provider.getColorValues(null, "new Color(1.0f, 1.0f, 1.0f);", 0, Collections.emptyMap());
+        result = provider.getColorValues(null, "Color color = new Color(1.0f, 1.0f, 1.0f);", 0, Collections.emptyMap());
         assertEquals(0, result.size());
-        result = provider.getColorValues(null, "new Color(0.0f, 0.1f, 0.5f, 0.0f);", 0, Collections.emptyMap());
+        result = provider.getColorValues(null, "Color color = new Color(0.0f, 0.1f, 0.5f, 0.0f);", 0, Collections.emptyMap());
         assertEquals(0, result.size());
-        result = provider.getColorValues(null, "new Color(0, 0, 0, 0);", 0, Collections.emptyMap());
+        result = provider.getColorValues(null, "Color color = new Color(0, 0, 0, 0);", 0, Collections.emptyMap());
         assertEquals(0, result.size());
-        result = provider.getColorValues(null, "new Color(0);", 0, Collections.emptyMap());
+        result = provider.getColorValues(null, "Color color = new Color(0);", 0, Collections.emptyMap());
         assertEquals(0, result.size());
         result = provider.getColorValues(null, "\"new Color(\";", 0, Collections.emptyMap());
         assertEquals(0, result.size());
