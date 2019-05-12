@@ -59,9 +59,4 @@ public abstract class AbstractColorValue implements ColorValue {
         return value;
     }
 
-    @Override
-    public Color getColor() {
-        return ColorsUtils.decode(value);
-    }
-
 }
