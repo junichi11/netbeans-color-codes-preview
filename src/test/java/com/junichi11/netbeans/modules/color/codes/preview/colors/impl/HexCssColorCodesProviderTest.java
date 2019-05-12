@@ -16,6 +16,7 @@
 package com.junichi11.netbeans.modules.color.codes.preview.colors.impl;
 
 import com.junichi11.netbeans.modules.color.codes.preview.colors.HexColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.api.OffsetRange;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.ColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.options.ColorCodesPreviewOptions;
 import java.awt.Color;
@@ -184,7 +185,7 @@ public class HexCssColorCodesProviderTest {
         HexCssColorCodesProvider provider = new HexCssColorCodesProvider();
         ColorCodesPreviewOptions.getInstance().setNamedColors(false);
         HashMap<String, List<ColorValue>> variablesMap = new HashMap<>();
-        variablesMap.put("$black", Arrays.asList(new HexColorValue("#000000", 5, 12, 0)));
+        variablesMap.put("$black", Arrays.asList(new HexColorValue("#000000", new OffsetRange(5, 12), 0)));
         List<ColorValue> result = provider.getColorValues(document, "color: $black;", 0, variablesMap);
         assertEquals(1, result.size());
         assertEquals(Color.black, result.get(0).getColor());

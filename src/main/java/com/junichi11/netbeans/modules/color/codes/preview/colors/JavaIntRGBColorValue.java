@@ -15,6 +15,7 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.colors;
 
+import com.junichi11.netbeans.modules.color.codes.preview.colors.api.OffsetRange;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.impl.JavaColorCodesProvider.StandardColor;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.AbstractColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.ColorCodeFormatter;
@@ -32,8 +33,8 @@ public class JavaIntRGBColorValue extends AbstractColorValue {
     private final int g;
     private final int b;
 
-    public JavaIntRGBColorValue(String value, int startOffset, int endOffset, int line, Color color) {
-        super(value, startOffset, endOffset, line);
+    public JavaIntRGBColorValue(String value, OffsetRange offsetRange, int line, Color color) {
+        super(value, offsetRange, line);
         this.r = color.getRed();
         this.g = color.getGreen();
         this.b = color.getBlue();

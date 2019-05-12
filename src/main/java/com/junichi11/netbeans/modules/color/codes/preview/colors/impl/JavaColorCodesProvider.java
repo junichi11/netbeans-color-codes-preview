@@ -16,6 +16,7 @@
 package com.junichi11.netbeans.modules.color.codes.preview.colors.impl;
 
 import com.junichi11.netbeans.modules.color.codes.preview.colors.JavaIntRGBColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.api.OffsetRange;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.ColorCodesProvider;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.ColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.options.ColorCodesPreviewOptions;
@@ -151,7 +152,7 @@ public class JavaColorCodesProvider extends AbstractColorCodesProvider {
         String sub = line.substring(index);
         if (sub.startsWith(stdColor.getColorName())) {
             int end = start + COLOR_PREFIX.length() + stdColor.getColorName().length();
-            colorValues.add(new JavaIntRGBColorValue(COLOR_PREFIX + stdColor.getColorName(), start, end, lineNumber, stdColor.getColor()));
+            colorValues.add(new JavaIntRGBColorValue(COLOR_PREFIX + stdColor.getColorName(), new OffsetRange(start, end), lineNumber, stdColor.getColor()));
         }
     }
 
@@ -180,7 +181,7 @@ public class JavaColorCodesProvider extends AbstractColorCodesProvider {
             if (isValidColorParameters(params)) {
                 Color color = new Color(params.get(0), params.get(1), params.get(2));
                 int end = closingParenthesisOffset + ")".length(); // NOI18N
-                colorValues.add(new JavaIntRGBColorValue(line.substring(start, end), start, end, lineNumber, color));
+                colorValues.add(new JavaIntRGBColorValue(line.substring(start, end), new OffsetRange(start, end), lineNumber, color));
             }
         }
     }

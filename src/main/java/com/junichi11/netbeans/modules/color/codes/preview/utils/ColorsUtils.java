@@ -23,6 +23,7 @@ import com.junichi11.netbeans.modules.color.codes.preview.colors.CssPercentRGBAC
 import com.junichi11.netbeans.modules.color.codes.preview.colors.CssPercentRGBColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.HexColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.NamedColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.api.OffsetRange;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.ColorValue;
 import java.awt.Color;
 import java.math.BigDecimal;
@@ -280,7 +281,7 @@ public final class ColorsUtils {
             }
 
             if (hexCode.length() == HEX_COLOR_CODE_LENGTH) {
-                ColorValue colorValue = new HexColorValue(String.format("#%s", hexCode), matcher.start(), matcher.end(), lineNumber); // NOI18N
+                ColorValue colorValue = new HexColorValue(String.format("#%s", hexCode), new OffsetRange(matcher.start(), matcher.end()), lineNumber); // NOI18N
                 colorValues.add(colorValue);
             }
 
@@ -299,7 +300,7 @@ public final class ColorsUtils {
         ArrayList<ColorValue> colorValues = new ArrayList<>();
         while (matcher.find()) {
             final String namedColor = matcher.group(0);
-            ColorValue colorValue = new NamedColorValue(namedColor, matcher.start(), matcher.end(), lineNumber);
+            ColorValue colorValue = new NamedColorValue(namedColor, new OffsetRange(matcher.start(), matcher.end()), lineNumber);
             colorValues.add(colorValue);
         }
         return colorValues;
@@ -411,7 +412,7 @@ public final class ColorsUtils {
         String groupName = getCssColorGroupName(type);
         while (matcher.find()) {
             final String colorCode = matcher.group(groupName);
-            ColorValue colorValue = createCssColorValue(colorCode, matcher.start(), matcher.end(), lineNumber, type);
+            ColorValue colorValue = createCssColorValue(colorCode, new OffsetRange(matcher.start(), matcher.end()), lineNumber, type);
             if (colorValue != null) {
                 colorCodes.add(colorValue);
             }
@@ -442,20 +443,20 @@ public final class ColorsUtils {
         }
     }
 
-    private static ColorValue createCssColorValue(String value, int startOffset, int endOffset, int lineNumber, HexCssColorType type) {
+    private static ColorValue createCssColorValue(String value, OffsetRange offsetRange, int lineNumber, HexCssColorType type) {
         switch (type) {
             case CSS_INT_RGB:
-                return new CssIntRGBColorValue(value, startOffset, endOffset, lineNumber);
+                return new CssIntRGBColorValue(value, offsetRange, lineNumber);
             case CSS_INT_RGBA:
-                return new CssIntRGBAColorValue(value, startOffset, endOffset, lineNumber);
+                return new CssIntRGBAColorValue(value, offsetRange, lineNumber);
             case CSS_PERCENT_RGB:
-                return new CssPercentRGBColorValue(value, startOffset, endOffset, lineNumber);
+                return new CssPercentRGBColorValue(value, offsetRange, lineNumber);
             case CSS_PERCENT_RGBA:
-                return new CssPercentRGBAColorValue(value, startOffset, endOffset, lineNumber);
+                return new CssPercentRGBAColorValue(value, offsetRange, lineNumber);
             case CSS_HSL:
-                return new CssHSLColorValue(value, startOffset, endOffset, lineNumber);
+                return new CssHSLColorValue(value, offsetRange, lineNumber);
             case CSS_HSLA:
-                return new CssHSLAColorValue(value, startOffset, endOffset, lineNumber);
+                return new CssHSLAColorValue(value, offsetRange, lineNumber);
             default:
                 throw new AssertionError();
         }

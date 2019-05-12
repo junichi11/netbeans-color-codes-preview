@@ -15,6 +15,7 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.colors.spi;
 
+import com.junichi11.netbeans.modules.color.codes.preview.colors.api.OffsetRange;
 import org.netbeans.api.annotations.common.NonNull;
 
 /**
@@ -30,10 +31,18 @@ public abstract class AbstractColorValue implements ColorValue {
     private final int endOffset;
     private final String value;
 
-    public AbstractColorValue(@NonNull String value, int startOffset, int endOffset, int line) {
+    /**
+     * Constructor.
+     *
+     * @since 0.11.1
+     * @param value the color value
+     * @param offsetRange the offset range
+     * @param line the line number
+     */
+    public AbstractColorValue(@NonNull String value, OffsetRange offsetRange, int line) {
         this.value = value;
-        this.startOffset = startOffset;
-        this.endOffset = endOffset;
+        this.startOffset = offsetRange.getStartOffset();
+        this.endOffset = offsetRange.getEndOffset();
         this.line = line;
     }
 
