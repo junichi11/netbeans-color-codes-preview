@@ -29,6 +29,6 @@ class ColorsSideBarPanel extends JPanel {
 
     public ColorsSideBarPanel(JTextComponent editor) {
         super(new BorderLayout());
-        add(new DrawingPanel(editor), BorderLayout.CENTER);
+        add(DrawingPanel.create(editor), BorderLayout.CENTER);
     }
 }

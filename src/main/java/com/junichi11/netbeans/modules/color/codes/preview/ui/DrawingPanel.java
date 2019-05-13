@@ -93,7 +93,14 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
     // check sass and less variables e.g. $green: #0f0;, @green: #0f0;
     private static final long serialVersionUID = 8161755434377410789L;
 
-    public DrawingPanel(JTextComponent editor) {
+    public static DrawingPanel create(JTextComponent editor) {
+        DrawingPanel panel = new DrawingPanel(editor);
+        // avoid leaking this in constructor
+        panel.addPreferenceChangeListener();
+        return panel;
+    }
+
+    private DrawingPanel(JTextComponent editor) {
         super(new BorderLayout());
         this.textComponent = editor;
         this.document = (BaseDocument) editor.getDocument();
@@ -101,15 +108,18 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
         updateColors();
 
         prefs = MimeLookup.getLookup(MimePath.EMPTY).lookup(Preferences.class);
-        prefs.addPreferenceChangeListener(WeakListeners.create(PreferenceChangeListener.class, this, prefs));
-        ColorCodesPreviewOptions options = ColorCodesPreviewOptions.getInstance();
-        options.addPreferenceChangeListener(WeakListeners.create(PreferenceChangeListener.class, this, prefs));
         // lookup listener
         Lookup.Result<FontColorSettings> lookupResult = MimeLookup.getLookup(MimePath.get(NbEditorUtilities.getMimeType(textComponent))).lookupResult(FontColorSettings.class);
         lookupListener = (LookupEvent le) -> updateColors();
         lookupResult.addLookupListener(WeakListeners.create(LookupListener.class, lookupListener, lookupResult));
         preferenceChange(null);
         enableEvents(AWTEvent.MOUSE_EVENT_MASK);
+    }
+
+    private void addPreferenceChangeListener() {
+        prefs.addPreferenceChangeListener(WeakListeners.create(PreferenceChangeListener.class, this, prefs));
+        ColorCodesPreviewOptions options = ColorCodesPreviewOptions.getInstance();
+        options.addPreferenceChangeListener(this);
     }
 
     @Override

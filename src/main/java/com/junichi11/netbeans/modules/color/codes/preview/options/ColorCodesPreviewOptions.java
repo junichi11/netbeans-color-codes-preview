@@ -18,6 +18,7 @@ package com.junichi11.netbeans.modules.color.codes.preview.options;
 import java.util.prefs.PreferenceChangeListener;
 import java.util.prefs.Preferences;
 import org.openide.util.NbPreferences;
+import org.openide.util.WeakListeners;
 
 /**
  *
@@ -74,7 +75,8 @@ public final class ColorCodesPreviewOptions {
     }
 
     public void addPreferenceChangeListener(PreferenceChangeListener listener) {
-        getPreferences().addPreferenceChangeListener(listener);
+        Preferences preferences = getPreferences();
+        preferences.addPreferenceChangeListener(WeakListeners.create(PreferenceChangeListener.class, listener, preferences));
     }
 
     public void removePreferenceChangeListener(PreferenceChangeListener listener) {
