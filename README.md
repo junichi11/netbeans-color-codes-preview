@@ -58,7 +58,7 @@ This option is `false` by default. If you would like to show named colors, pleas
 
 #### NOTE
 
-If you would like to show colors of `Color.decode(<hex>)` e.g. `Color.decode(#000000)`, Please add `java` to "Regex for enabled mime-types" of Hex and CSS e.g. (`^text/(x-)?(css|less|sass|scss|java)$`)
+If you would like to show colors of `Color.decode(<hex>)` e.g. `Color.decode("#000000")`, Please add `java` to "Regex for enabled mime-types" of Hex and CSS e.g. (`^text/(x-)?(css|less|sass|scss|java)$`)
 
 ## NOTE
 
