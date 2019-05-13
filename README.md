@@ -48,11 +48,17 @@ This pattern is used when the plugin checks a mime-type.
 
 This option is `false` by default. If you would like to resolve Sass and Less variables, please check it.
 
-**NOTE:** The simplest cases only e.g. $green: #0f0;
+**NOTE:** The simplest cases only e.g. `$green: #0f0;`
 
 #### Named Colors
 
 This option is `false` by default. If you would like to show named colors, please check it.
+
+### Java Color class colors
+
+#### NOTE
+
+If you would like to show colors of `Color.decode(<hex>)` e.g. `Color.decode(#000000)`, Please add `java` to "Regex for enabled mime-types" of Hex and CSS e.g. (`^text/(x-)?(css|less|sass|scss|java)$`)
 
 ## NOTE
 
