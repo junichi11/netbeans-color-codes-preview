@@ -330,7 +330,8 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
     public void preferenceChange(PreferenceChangeEvent evt) {
         if (evt == null
                 || ColorsSideBarFactory.KEY_COLORS.equals(evt.getKey())
-                || ColorCodesPreviewOptions.MIME_TYPE_REGEX.equals(evt.getKey())) {
+                || ColorCodesPreviewOptions.MIME_TYPE_REGEX.equals(evt.getKey())
+                || evt.getKey().startsWith(ColorCodesPreviewOptions.ENABLED_PREFIX)) {
             enabled = prefs.getBoolean(ColorsSideBarFactory.KEY_COLORS, ColorsSideBarFactory.DEFAULT_COLORS)
                     && isProviderEnabled();
             setVisible(enabled);
