@@ -7,7 +7,7 @@
     <packaging>nbm</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <netbeans.api.version>RELEASE81</netbeans.api.version>
+        <netbeans.api.version>RELEASE110</netbeans.api.version>
     </properties>
     <build>
         <plugins>
