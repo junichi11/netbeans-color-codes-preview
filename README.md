@@ -6,7 +6,7 @@ This plugin shows a color codes preview in an editor's sidebar.
 
 ## Disable/Enable
 
-Check/Uncheck `View > Show Colors`
+Uncheck/Check `View > Show Colors`
 
 ## Downloads
 
