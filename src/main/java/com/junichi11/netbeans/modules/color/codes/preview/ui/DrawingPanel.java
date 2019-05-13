@@ -53,6 +53,7 @@ import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.Position;
 import javax.swing.text.View;
+import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.editor.document.LineDocumentUtils;
 import org.netbeans.api.editor.fold.FoldHierarchy;
 import org.netbeans.api.editor.fold.FoldHierarchyEvent;
@@ -147,6 +148,9 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
 
         JTextComponent component = textComponent;
         TextUI textUI = component.getUI();
+        if (textUI == null) {
+            return;
+        }
         EditorUI editorUI = Utilities.getEditorUI(component);
         if (editorUI == null) {
             return;
@@ -162,7 +166,7 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
         }
     }
 
-    private void drawColorRect(JTextComponent component, TextUI textUI, Rectangle clip, View rootView, Graphics2D g2d) throws BadLocationException {
+    private void drawColorRect(JTextComponent component, @NonNull TextUI textUI, Rectangle clip, View rootView, Graphics2D g2d) throws BadLocationException {
         int startPos = getPosFromY(component, textUI, clip.y);
         int startViewIndex = rootView.getViewIndex(startPos, Position.Bias.Forward);
         int rootViewCount = rootView.getViewCount();
@@ -277,7 +281,7 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
     }
 
     /* from versioning.ui DiffSidebar */
-    private int getPosFromY(JTextComponent component, TextUI textUI, int y) throws BadLocationException {
+    private int getPosFromY(JTextComponent component, @NonNull TextUI textUI, int y) throws BadLocationException {
         if (textUI instanceof BaseTextUI) {
             return ((BaseTextUI) textUI).getPosFromY(y);
         } else {
