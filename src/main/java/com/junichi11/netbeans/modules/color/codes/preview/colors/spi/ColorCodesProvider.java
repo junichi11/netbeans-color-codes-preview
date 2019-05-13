@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 arsi.
+ * Copyright 2019 junichi11.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import javax.swing.text.Document;
 /**
  * @ServiceProvider add Language implementation to netbeans-color-codes-preview
  * plugin
- * @author arsi
+ * @author junichi11, arsi
  * @since 0.10.0
  */
 public interface ColorCodesProvider {
