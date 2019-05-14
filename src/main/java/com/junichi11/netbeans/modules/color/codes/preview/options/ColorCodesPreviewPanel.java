@@ -15,19 +15,24 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.options;
 
+import com.junichi11.netbeans.modules.color.codes.preview.colors.impl.ui.options.ProvidersCellRenderer;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.ColorCodesPreviewOptionsPanel;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.ColorCodesProvider;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.Box;
 import javax.swing.JCheckBox;
 import org.openide.util.Lookup;
 
 final class ColorCodesPreviewPanel extends javax.swing.JPanel {
 
-    private static final long serialVersionUID = 4484917962418103588L;
+    private static final long serialVersionUID = 844920036564457720L;
 
     private final ColorCodesPreviewOptionsPanelController controller;
     private final Map<String, JCheckBox> enabledCheckBoxes = new HashMap<>();
+    private final Map<ColorCodesProvider, ColorCodesPreviewOptionsPanel> providerOptionsPanels = new HashMap<>();
+    private ColorCodesPreviewOptionsPanel currentSelectedPanel = ColorCodesPreviewOptionsPanel.EMPTY_PANEL;
 
     ColorCodesPreviewPanel(ColorCodesPreviewOptionsPanelController controller) {
         this.controller = controller;
@@ -37,40 +42,24 @@ final class ColorCodesPreviewPanel extends javax.swing.JPanel {
     }
 
     private void init() {
+        providersComboBox.setRenderer(new ProvidersCellRenderer(providersComboBox.getRenderer()));
         for (ColorCodesProvider provider : getProviders()) {
+            ColorCodesPreviewOptionsPanel panel = provider.getOptionsPanel();
+            providerOptionsPanels.put(provider, panel == null ? ColorCodesPreviewOptionsPanel.EMPTY_PANEL : panel);
+            providersComboBox.addItem(provider);
+
+            // enabled checkboxes
             JCheckBox checkBox = new JCheckBox(provider.getDisplayName());
             checkBox.setToolTipText(provider.getDescription());
             enabledCheckBoxes.put(provider.getId(), checkBox);
             enabledPanel.add(checkBox);
+            enabledPanel.add(Box.createHorizontalStrut(10));
         }
+        setProviderPanel();
     }
 
     private Collection<? extends ColorCodesProvider> getProviders() {
         return Lookup.getDefault().lookupAll(ColorCodesProvider.class);
-    }
-
-    public String getMimeTypeRegex() {
-        return mimeTypeRegexTextField.getText().trim();
-    }
-
-    private void setMimeTypeRegex(String regex) {
-        mimeTypeRegexTextField.setText(regex);
-    }
-
-    public boolean useNamedColors() {
-        return namedColorsCheckBox.isSelected();
-    }
-
-    private void setNamedColors(boolean use) {
-        namedColorsCheckBox.setSelected(use);
-    }
-
-    public boolean resolveCssVariables() {
-        return resolveCssVariablesCheckBox.isSelected();
-    }
-
-    private void setResolveCssVariables(boolean resolve) {
-        resolveCssVariablesCheckBox.setSelected(resolve);
     }
 
     /**
@@ -81,104 +70,68 @@ final class ColorCodesPreviewPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        fileTypesLabel = new javax.swing.JLabel();
-        mimeTypeRegexTextField = new javax.swing.JTextField();
-        colorTypesLabel = new javax.swing.JLabel();
-        namedColorsCheckBox = new javax.swing.JCheckBox();
-        resolveCssVariablesCheckBox = new javax.swing.JCheckBox();
-        hexCssLabel = new javax.swing.JLabel();
-        hexCssSeparator = new javax.swing.JSeparator();
         enabledPanel = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-
-        org.openide.awt.Mnemonics.setLocalizedText(fileTypesLabel, org.openide.util.NbBundle.getMessage(ColorCodesPreviewPanel.class, "ColorCodesPreviewPanel.fileTypesLabel.text")); // NOI18N
-
-        mimeTypeRegexTextField.setText(org.openide.util.NbBundle.getMessage(ColorCodesPreviewPanel.class, "ColorCodesPreviewPanel.mimeTypeRegexTextField.text")); // NOI18N
-
-        org.openide.awt.Mnemonics.setLocalizedText(colorTypesLabel, org.openide.util.NbBundle.getMessage(ColorCodesPreviewPanel.class, "ColorCodesPreviewPanel.colorTypesLabel.text")); // NOI18N
-
-        org.openide.awt.Mnemonics.setLocalizedText(namedColorsCheckBox, org.openide.util.NbBundle.getMessage(ColorCodesPreviewPanel.class, "ColorCodesPreviewPanel.namedColorsCheckBox.text")); // NOI18N
-
-        org.openide.awt.Mnemonics.setLocalizedText(resolveCssVariablesCheckBox, org.openide.util.NbBundle.getMessage(ColorCodesPreviewPanel.class, "ColorCodesPreviewPanel.resolveCssVariablesCheckBox.text")); // NOI18N
-
-        org.openide.awt.Mnemonics.setLocalizedText(hexCssLabel, org.openide.util.NbBundle.getMessage(ColorCodesPreviewPanel.class, "ColorCodesPreviewPanel.hexCssLabel.text")); // NOI18N
+        enabledLabel = new javax.swing.JLabel();
+        providersComboBox = new javax.swing.JComboBox<>();
+        providerOptionsPanel = new javax.swing.JPanel();
 
         enabledPanel.setLayout(new javax.swing.BoxLayout(enabledPanel, javax.swing.BoxLayout.LINE_AXIS));
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(ColorCodesPreviewPanel.class, "ColorCodesPreviewPanel.jLabel1.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(enabledLabel, org.openide.util.NbBundle.getMessage(ColorCodesPreviewPanel.class, "ColorCodesPreviewPanel.enabledLabel.text")); // NOI18N
+
+        providersComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                providersComboBoxItemStateChanged(evt);
+            }
+        });
+
+        providerOptionsPanel.setLayout(new java.awt.BorderLayout());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addComponent(namedColorsCheckBox)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(fileTypesLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(mimeTypeRegexTextField))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(colorTypesLabel)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(resolveCssVariablesCheckBox)
-                        .addGap(0, 0, Short.MAX_VALUE))))
             .addComponent(enabledPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(hexCssLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(hexCssSeparator))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel1)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(enabledLabel)
+            .addComponent(providersComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(providerOptionsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel1)
+                .addComponent(enabledLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(enabledPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(hexCssLabel, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(hexCssSeparator, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(providersComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(fileTypesLabel)
-                    .addComponent(mimeTypeRegexTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(resolveCssVariablesCheckBox)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(colorTypesLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(namedColorsCheckBox)
+                .addComponent(providerOptionsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void providersComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_providersComboBoxItemStateChanged
+        setProviderPanel();
+    }//GEN-LAST:event_providersComboBoxItemStateChanged
+
+    private void setProviderPanel() {
+        ColorCodesProvider selectedProvider = (ColorCodesProvider) providersComboBox.getSelectedItem();
+        providerOptionsPanel.remove(currentSelectedPanel);
+        providerOptionsPanel.add(providerOptionsPanels.get(selectedProvider));
+        currentSelectedPanel = providerOptionsPanels.get(selectedProvider);
+    }
+
     void load() {
+        providerOptionsPanels.forEach((provider, panel) -> panel.load());
         ColorCodesPreviewOptions options = ColorCodesPreviewOptions.getInstance();
-        setMimeTypeRegex(options.getMimeTypeRegex());
-        setNamedColors(options.useNamedColors());
-        setResolveCssVariables(options.resolveCssVariables());
         enabledCheckBoxes.forEach((id, checkBox) -> {
             checkBox.setSelected(options.isEnabled(id));
         });
     }
 
     void store() {
+        providerOptionsPanels.forEach((provider, panel) -> panel.store());
         ColorCodesPreviewOptions options = ColorCodesPreviewOptions.getInstance();
-        options.setMimeTypeRegex(getMimeTypeRegex());
-        options.setNamedColors(useNamedColors());
-        options.setResolveCssVariables(resolveCssVariables());
         enabledCheckBoxes.forEach((id, checkBox) -> {
             options.setEnabled(id, checkBox.isSelected());
         });
@@ -190,14 +143,9 @@ final class ColorCodesPreviewPanel extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel colorTypesLabel;
+    private javax.swing.JLabel enabledLabel;
     private javax.swing.JPanel enabledPanel;
-    private javax.swing.JLabel fileTypesLabel;
-    private javax.swing.JLabel hexCssLabel;
-    private javax.swing.JSeparator hexCssSeparator;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JTextField mimeTypeRegexTextField;
-    private javax.swing.JCheckBox namedColorsCheckBox;
-    private javax.swing.JCheckBox resolveCssVariablesCheckBox;
+    private javax.swing.JPanel providerOptionsPanel;
+    private javax.swing.JComboBox<ColorCodesProvider> providersComboBox;
     // End of variables declaration//GEN-END:variables
 }

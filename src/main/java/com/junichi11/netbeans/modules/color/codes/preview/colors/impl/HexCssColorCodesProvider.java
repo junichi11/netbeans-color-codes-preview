@@ -15,6 +15,8 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.colors.impl;
 
+import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.ColorCodesPreviewOptionsPanel;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.impl.ui.options.HexCssOptionsPanel;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.ColorCodesProvider;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.ColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.options.ColorCodesPreviewOptions;
@@ -128,6 +130,11 @@ public class HexCssColorCodesProvider implements ColorCodesProvider {
             Collections.sort(offsetNumbers);
             offsetNumbers.forEach(offset -> colorValues.addAll(cssVariables.get(map.get(offset))));
         }
+    }
+
+    @Override
+    public ColorCodesPreviewOptionsPanel getOptionsPanel() {
+        return new HexCssOptionsPanel();
     }
 
 }

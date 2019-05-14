@@ -72,10 +72,18 @@ public interface ColorCodesProvider {
     /**
      * Get start position for parsing lines.
      *
+     * @since 0.10.0
      * @param document
      * @param currentIndex
      * @return
      */
     public int getStartIndex(Document document, int currentIndex);
 
+    /**
+     * Get the panel for Options.
+     *
+     * @since 0.11.1
+     * @return the panel for Options
+     */
+    public ColorCodesPreviewOptionsPanel getOptionsPanel();
 }
