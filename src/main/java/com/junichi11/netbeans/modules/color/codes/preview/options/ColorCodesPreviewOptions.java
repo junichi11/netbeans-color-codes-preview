@@ -26,11 +26,11 @@ import org.openide.util.WeakListeners;
  */
 public final class ColorCodesPreviewOptions {
 
-    private static final String DEFAULT_MIME_TYPE_REGEX = "^text/(x-)?(css|less|sass|scss)$"; // NOI18N
-    public static final String MIME_TYPE_REGEX = "color.codes.preview.mimetype.regex"; // NOI18N
-    public static final String NAMED_COLORS = "color.codes.preview.color.types.named"; // NOI18N
     public static final String ENABLED_PREFIX = "color.codes.preview.enabled."; // NOI18N
-    private static final String RESOLVE_CSS_VARIABLES = "color.codes.preview.resolve.css.variables"; // NOI18N
+    public static final String HEX_CSS_MIME_TYPE_REGEX = "color.codes.preview.mimetype.regex"; // NOI18N
+    private static final String HEX_CSS_DEFAULT_MIME_TYPE_REGEX = "^text/(x-)?(css|less|sass|scss)$"; // NOI18N
+    private static final String HEX_CSS_NAMED_COLORS = "color.codes.preview.color.types.named"; // NOI18N
+    private static final String HEX_CSS_RESOLVE_CSS_VARIABLES = "color.codes.preview.resolve.css.variables"; // NOI18N
     private static final String ENABLED = ENABLED_PREFIX + "%s"; // NOI18N
 
     private static final ColorCodesPreviewOptions INSTANCE = new ColorCodesPreviewOptions();
@@ -43,27 +43,27 @@ public final class ColorCodesPreviewOptions {
     }
 
     public String getMimeTypeRegex() {
-        return getPreferences().get(MIME_TYPE_REGEX, DEFAULT_MIME_TYPE_REGEX);
+        return getPreferences().get(HEX_CSS_MIME_TYPE_REGEX, HEX_CSS_DEFAULT_MIME_TYPE_REGEX);
     }
 
     public void setMimeTypeRegex(String regex) {
-        getPreferences().put(MIME_TYPE_REGEX, regex);
+        getPreferences().put(HEX_CSS_MIME_TYPE_REGEX, regex);
     }
 
     public boolean useNamedColors() {
-        return getPreferences().getBoolean(NAMED_COLORS, false);
+        return getPreferences().getBoolean(HEX_CSS_NAMED_COLORS, false);
     }
 
     public void setNamedColors(boolean use) {
-        getPreferences().putBoolean(NAMED_COLORS, use);
+        getPreferences().putBoolean(HEX_CSS_NAMED_COLORS, use);
     }
 
     public boolean resolveCssVariables() {
-        return getPreferences().getBoolean(RESOLVE_CSS_VARIABLES, false);
+        return getPreferences().getBoolean(HEX_CSS_RESOLVE_CSS_VARIABLES, false);
     }
 
     public void setResolveCssVariables(boolean resolve) {
-        getPreferences().putBoolean(RESOLVE_CSS_VARIABLES, resolve);
+        getPreferences().putBoolean(HEX_CSS_RESOLVE_CSS_VARIABLES, resolve);
     }
 
     public boolean isEnabled(String providerId) {
