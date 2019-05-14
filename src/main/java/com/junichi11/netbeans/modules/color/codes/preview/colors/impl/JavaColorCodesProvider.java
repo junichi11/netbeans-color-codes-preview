@@ -167,23 +167,29 @@ public class JavaColorCodesProvider extends AbstractColorCodesProvider {
                 break;
             }
             String parameters = line.substring(index, closingParenthesisOffset);
-            List<Integer> params = new ArrayList<>(MAX_PRAMETER_SIZE);
-            for (String parameter : parameters.split(",")) { // NOI18N
-                try {
-                    params.add(Integer.parseInt(parameter.trim()));
-                    if (params.size() > MAX_PRAMETER_SIZE) {
-                        break;
-                    }
-                } catch (NumberFormatException ex) {
-                    break;
-                }
-            }
+            List<Integer> params = getRGBColorParameters(parameters);
             if (isValidColorParameters(params)) {
                 Color color = new Color(params.get(0), params.get(1), params.get(2));
                 int end = closingParenthesisOffset + ")".length(); // NOI18N
                 colorValues.add(new JavaIntRGBColorValue(line.substring(start, end), new OffsetRange(start, end), lineNumber, color));
             }
         }
+    }
+
+    private List<Integer> getRGBColorParameters(String parameters) {
+        List<Integer> params = new ArrayList<>(MAX_PRAMETER_SIZE);
+        for (String parameter : parameters.split(",")) { // NOI18N
+            try {
+                params.add(Integer.parseInt(parameter.trim()));
+                if (params.size() > MAX_PRAMETER_SIZE) {
+                    break;
+                }
+            } catch (NumberFormatException ex) {
+                // other than integer
+                break;
+            }
+        }
+        return params;
     }
 
     private boolean isValidColorParameters(List<Integer> params) {
