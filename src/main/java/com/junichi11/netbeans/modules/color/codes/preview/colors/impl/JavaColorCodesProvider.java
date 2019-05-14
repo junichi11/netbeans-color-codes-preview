@@ -82,7 +82,7 @@ public class JavaColorCodesProvider extends AbstractColorCodesProvider {
         }
 
         public String asMethod() {
-            return "Color." + colorName; // NOI18N
+            return COLOR_PREFIX + colorName;
         }
 
         private StandardColor(String colorName, Color color) {
@@ -109,7 +109,7 @@ public class JavaColorCodesProvider extends AbstractColorCodesProvider {
         return Bundle.JavaColorCodesProvider_displayName();
     }
 
-    @NbBundle.Messages("JavaColorCodesProvider.description=Preview Java Color object colors. e.g. new Color(153, 255, 0), Color.CYAN")
+    @NbBundle.Messages("JavaColorCodesProvider.description=Preview Java Color class colors. e.g. new Color(153, 255, 0), Color.CYAN")
     @Override
     public String getDescription() {
         return Bundle.JavaColorCodesProvider_description();

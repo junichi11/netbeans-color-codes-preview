@@ -34,6 +34,7 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = ColorCodesProvider.class, position = 0)
 public class HexCssColorCodesProvider implements ColorCodesProvider {
 
+    // check sass and less variables e.g. $green: #0f0;, @green: #0f0;
     private static final Pattern CSS_VARIABLE_PATTERN = Pattern.compile("(?<var>[\\$@][^ ]+)\\s*:\\s*(?<value>).+\\s*;"); // NOI18N
 
     @Override

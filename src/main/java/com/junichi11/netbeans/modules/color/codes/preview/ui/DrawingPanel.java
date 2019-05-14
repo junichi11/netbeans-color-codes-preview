@@ -91,7 +91,6 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
 
     private static final int DEFAULT_WIDTH = 16;
     private static final Logger LOGGER = Logger.getLogger(DrawingPanel.class.getName());
-    // check sass and less variables e.g. $green: #0f0;, @green: #0f0;
     private static final long serialVersionUID = 8161755434377410789L;
 
     public static DrawingPanel create(JTextComponent editor) {
