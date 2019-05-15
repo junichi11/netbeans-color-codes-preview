@@ -19,6 +19,8 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import org.netbeans.spi.options.OptionsPanelController;
 import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;
@@ -33,7 +35,7 @@ import org.openide.util.Lookup;
     "AdvancedOption_DisplayName_ColorCodesPreview=Color Codes Preview",
     "AdvancedOption_Keywords_ColorCodesPreview=Color Codes Preview"
 })
-public final class ColorCodesPreviewOptionsPanelController extends OptionsPanelController {
+public final class ColorCodesPreviewOptionsPanelController extends OptionsPanelController implements ChangeListener {
 
     private ColorCodesPreviewPanel panel;
     private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
@@ -60,7 +62,12 @@ public final class ColorCodesPreviewOptionsPanelController extends OptionsPanelC
 
     @Override
     public boolean isValid() {
-        return getPanel().valid();
+        boolean valid = getPanel().valid();
+        if (valid) {
+            changed = false;
+            pcs.firePropertyChange(OptionsPanelController.PROP_CHANGED, true, false);
+        }
+        return valid;
     }
 
     @Override
@@ -101,6 +108,11 @@ public final class ColorCodesPreviewOptionsPanelController extends OptionsPanelC
             pcs.firePropertyChange(OptionsPanelController.PROP_CHANGED, false, true);
         }
         pcs.firePropertyChange(OptionsPanelController.PROP_VALID, null, null);
+    }
+
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        changed();
     }
 
 }

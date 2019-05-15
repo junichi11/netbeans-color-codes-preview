@@ -17,6 +17,12 @@ package com.junichi11.netbeans.modules.color.codes.preview.colors.impl.ui.option
 
 import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.ColorCodesPreviewOptionsPanel;
 import com.junichi11.netbeans.modules.color.codes.preview.options.ColorCodesPreviewOptions;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import org.openide.util.ChangeSupport;
 
 /**
  *
@@ -24,13 +30,21 @@ import com.junichi11.netbeans.modules.color.codes.preview.options.ColorCodesPrev
  */
 public class HexCssOptionsPanel extends ColorCodesPreviewOptionsPanel {
 
-    private static final long serialVersionUID = 913882592024103873L;
+    private static final long serialVersionUID = 3753030644951555194L;
+
+    private final ChangeSupport changeSupport = new ChangeSupport(this);
+    private String errorMessage = null;
 
     /**
      * Creates new form HexCssOptionsPanel
      */
     public HexCssOptionsPanel() {
         initComponents();
+        init();
+    }
+
+    private void init() {
+        mimeTypeRegexTextField.getDocument().addDocumentListener(new DefaultDocumentListener());
     }
 
     public String getMimeTypeRegex() {
@@ -55,6 +69,10 @@ public class HexCssOptionsPanel extends ColorCodesPreviewOptionsPanel {
 
     private void setResolveCssVariables(boolean resolve) {
         resolveCssVariablesCheckBox.setSelected(resolve);
+    }
+
+    void fireChange() {
+        changeSupport.fireChange();
     }
 
     /**
@@ -86,7 +104,7 @@ public class HexCssOptionsPanel extends ColorCodesPreviewOptionsPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -145,7 +163,54 @@ public class HexCssOptionsPanel extends ColorCodesPreviewOptionsPanel {
         options.setResolveCssVariables(resolveCssVariables());
     }
 
+    @Override
     public boolean valid() {
-        return true;
+        errorMessage = null;
+        try {
+            Pattern pattern = Pattern.compile(getMimeTypeRegex());
+        } catch (PatternSyntaxException ex) {
+            errorMessage = ex.getMessage();
+        }
+        return errorMessage == null;
+    }
+
+    @Override
+    public void addChangeListener(ChangeListener listener) {
+        changeSupport.addChangeListener(listener);
+    }
+
+    @Override
+    public void removeChangeListener(ChangeListener listener) {
+        changeSupport.removeChangeListener(listener);
+    }
+
+    @Override
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    private class DefaultDocumentListener implements DocumentListener {
+
+        public DefaultDocumentListener() {
+        }
+
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            processUpdate();
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            processUpdate();
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            processUpdate();
+        }
+
+        private void processUpdate() {
+            fireChange();
+        }
     }
 }

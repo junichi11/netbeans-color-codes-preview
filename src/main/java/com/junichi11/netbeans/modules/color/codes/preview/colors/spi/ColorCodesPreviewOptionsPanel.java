@@ -16,6 +16,7 @@
 package com.junichi11.netbeans.modules.color.codes.preview.colors.spi;
 
 import javax.swing.JPanel;
+import javax.swing.event.ChangeListener;
 
 /**
  * ColorCodesPreviewOptionsPanel.
@@ -31,7 +32,7 @@ public abstract class ColorCodesPreviewOptionsPanel extends JPanel {
      * @since 0.11.1
      */
     public static ColorCodesPreviewOptionsPanel EMPTY_PANEL = new ColorCodesPreviewOptionsPanel() {
-        private static final long serialVersionUID = 7805207170547644887L;
+        private static final long serialVersionUID = 3772795247048065205L;
 
         @Override
         public void load() {
@@ -41,8 +42,26 @@ public abstract class ColorCodesPreviewOptionsPanel extends JPanel {
         public void store() {
         }
 
+        @Override
+        public boolean valid() {
+            return true;
+        }
+
+        @Override
+        public String getErrorMessage() {
+            return null;
+        }
+
+        @Override
+        public void addChangeListener(ChangeListener listener) {
+        }
+
+        @Override
+        public void removeChangeListener(ChangeListener listener) {
+        }
+
     };
-    private static final long serialVersionUID = 679165987508129100L;
+    private static final long serialVersionUID = -6323395294472234402L;
 
     /**
      * Load settings.
@@ -58,4 +77,36 @@ public abstract class ColorCodesPreviewOptionsPanel extends JPanel {
      */
     public abstract void store();
 
+    /**
+     * Check whether form is consistent and complete.
+     *
+     * @since 0.11.1
+     * @return {@code true} if the form is consistend and complete, otherwise
+     * {@code false}
+     */
+    public abstract boolean valid();
+
+    /**
+     * Get the error message.
+     *
+     * @since 0.11.1
+     * @return the error message
+     */
+    public abstract String getErrorMessage();
+
+    /**
+     * Add ChangeListener.
+     *
+     * @since 0.11.1
+     * @param listener the listener
+     */
+    public abstract void addChangeListener(ChangeListener listener);
+
+    /**
+     * Remove ChangeListener.
+     *
+     * @since 0.11.1
+     * @param listener the listener
+     */
+    public abstract void removeChangeListener(ChangeListener listener);
 }

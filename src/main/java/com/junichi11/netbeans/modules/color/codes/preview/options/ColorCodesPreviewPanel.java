@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JCheckBox;
+import javax.swing.UIManager;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 
@@ -49,10 +50,16 @@ final class ColorCodesPreviewPanel extends javax.swing.JPanel {
         providersComboBox.setRenderer(new ProvidersCellRenderer(providersComboBox.getRenderer()));
         for (ColorCodesProvider provider : getProviders()) {
             ColorCodesPreviewOptionsPanel panel = provider.getOptionsPanel();
-            providerOptionsPanels.put(provider, panel == null ? ColorCodesPreviewOptionsPanel.EMPTY_PANEL : panel);
+            if (panel == null) {
+                panel = ColorCodesPreviewOptionsPanel.EMPTY_PANEL;
+            }
+            panel.addChangeListener(controller);
+            providerOptionsPanels.put(provider, panel);
             providersComboBox.addItem(provider);
         }
         setProviderPanels();
+        errorLabel.setForeground(UIManager.getColor("nb.errorForeground")); // NOI18N
+        setErrorMessage(null);
     }
 
     private void setEnabledCheckBoxes() {
@@ -78,6 +85,7 @@ final class ColorCodesPreviewPanel extends javax.swing.JPanel {
         providersComboBox = new javax.swing.JComboBox<>();
         providerOptionsPanel = new javax.swing.JPanel();
         enabledPanel = new javax.swing.JPanel();
+        errorLabel = new javax.swing.JLabel();
 
         providersComboBox.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -89,6 +97,8 @@ final class ColorCodesPreviewPanel extends javax.swing.JPanel {
 
         enabledPanel.setLayout(new java.awt.BorderLayout());
 
+        org.openide.awt.Mnemonics.setLocalizedText(errorLabel, "ERROR"); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -98,6 +108,7 @@ final class ColorCodesPreviewPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(enabledPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addComponent(providerOptionsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(errorLabel)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -108,6 +119,8 @@ final class ColorCodesPreviewPanel extends javax.swing.JPanel {
                     .addComponent(enabledPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(providerOptionsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(errorLabel)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -158,12 +171,26 @@ final class ColorCodesPreviewPanel extends javax.swing.JPanel {
     }
 
     boolean valid() {
-        // TODO check whether form is consistent and complete
+        for (ColorCodesPreviewOptionsPanel panel : providerOptionsPanels.values()) {
+            if (!panel.valid()) {
+                setErrorMessage(panel.getErrorMessage());
+                return false;
+            }
+        }
+        setErrorMessage(null);
         return true;
+    }
+
+    private void setErrorMessage(String errorMessage) {
+        if (errorMessage != null) {
+            errorMessage = "<html>" + errorMessage.replaceAll("\n", "<br>"); // NOI18N
+        }
+        errorLabel.setText(errorMessage);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel enabledPanel;
+    private javax.swing.JLabel errorLabel;
     private javax.swing.JPanel providerOptionsPanel;
     private javax.swing.JComboBox<ColorCodesProvider> providersComboBox;
     // End of variables declaration//GEN-END:variables
