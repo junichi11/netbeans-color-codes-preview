@@ -16,6 +16,7 @@
 package com.junichi11.netbeans.modules.color.codes.preview.colors.spi;
 
 import java.awt.Color;
+import org.netbeans.api.annotations.common.NonNull;
 
 /**
  * Color code formatter.
@@ -32,5 +33,5 @@ public interface ColorCodeFormatter {
      * @param color
      * @return the formatted color
      */
-    public String format(Color color);
+    public @NonNull String format(Color color);
 }

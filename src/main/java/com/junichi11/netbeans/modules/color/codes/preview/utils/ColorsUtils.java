@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 junichi11.
+ * Copyright 2019 junichi11.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,12 @@ import com.junichi11.netbeans.modules.color.codes.preview.colors.CssIntRGBColorV
 import com.junichi11.netbeans.modules.color.codes.preview.colors.CssPercentRGBAColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.CssPercentRGBColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.HexColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.JavaIntRGBAColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.JavaIntRGBColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.JavaStandardColor;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.JavaStandardColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.NamedColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.api.OffsetRange;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.ColorValue;
 import java.awt.Color;
 import java.math.BigDecimal;
@@ -42,6 +47,11 @@ import org.netbeans.api.annotations.common.CheckForNull;
  */
 public final class ColorsUtils {
 
+    private static final int SHORT_HEX_COLOR_CODE_LENGTH = 3;
+    private static final int SHORT_HEX_COLOR_CODE_FULL_LENGTH = 4;
+    private static final int HEX_COLOR_CODE_LENGTH = 6;
+    private static final int HEX_COLOR_CODE_FULL_LENGTH = 7;
+
     private static final String HEX_VALUE_FORMAT = "#%02x%02x%02x"; // NOI18N
     private static final String RGB_VALUE_FORMAT = "rgb(%s, %s, %s)"; // NOI18N
     private static final String RGBA_VALUE_FORMAT = "rgba(%s, %s, %s, %s)"; // NOI18N
@@ -53,6 +63,9 @@ public final class ColorsUtils {
     private static final String GROUP_CSS_RGBA = "cssrgba"; // NOI18N
     private static final String GROUP_CSS_HSL = "csshsl"; // NOI18N
     private static final String GROUP_CSS_HSLA = "csshsla"; // NOI18N
+    private static final String GROUP_JAVA_STANDARD = "javastandard";// NOI18N
+    private static final String GROUP_JAVA_RGB = "javargb";// NOI18N
+    private static final String GROUP_JAVA_RGBA = "javargba";// NOI18N
     private static final String GROUP_RED = "r"; // NOI18N
     private static final String GROUP_GREEN = "g"; // NOI18N
     private static final String GROUP_BLUE = "b"; // NOI18N
@@ -60,6 +73,7 @@ public final class ColorsUtils {
     private static final String GROUP_HUE = "h"; // NOI18N
     private static final String GROUP_SATURATION = "s"; // NOI18N
     private static final String GROUP_LIGHTNESS = "l"; // NOI18N
+    private static final String GROUP_COROR_NAME = "colorname"; // NOI18N
 
     private static final Comparator COLOR_VALUE_COMPARATOR = new ColorValueComparator();
 
@@ -246,11 +260,11 @@ public final class ColorsUtils {
             final String colorCode = matcher.group(GROUP_CODENUMBER);
             int length = colorCode.length();
             String hexCode = colorCode;
-            if (length == 3) {
+            if (length == SHORT_HEX_COLOR_CODE_LENGTH) {
                 hexCode = convertToRRGGBB(colorCode);
             }
 
-            if (hexCode.length() == 6) {
+            if (hexCode.length() == HEX_COLOR_CODE_LENGTH) {
                 colorCodes.add(String.format("#%s", hexCode)); // NOI18N
             }
         }
@@ -270,12 +284,12 @@ public final class ColorsUtils {
             final String colorCode = matcher.group(GROUP_CODENUMBER);
             int length = colorCode.length();
             String hexCode = colorCode;
-            if (length == 3) {
+            if (length == SHORT_HEX_COLOR_CODE_LENGTH) {
                 hexCode = convertToRRGGBB(colorCode);
             }
 
-            if (hexCode.length() == 6) {
-                ColorValue colorValue = new HexColorValue(String.format("#%s", hexCode), matcher.start(), matcher.end(), lineNumber); // NOI18N
+            if (hexCode.length() == HEX_COLOR_CODE_LENGTH) {
+                ColorValue colorValue = new HexColorValue(String.format("#%s", hexCode), new OffsetRange(matcher.start(), matcher.end()), lineNumber); // NOI18N
                 colorValues.add(colorValue);
             }
 
@@ -294,7 +308,7 @@ public final class ColorsUtils {
         ArrayList<ColorValue> colorValues = new ArrayList<>();
         while (matcher.find()) {
             final String namedColor = matcher.group(0);
-            ColorValue colorValue = new NamedColorValue(namedColor, matcher.start(), matcher.end(), lineNumber);
+            ColorValue colorValue = new NamedColorValue(namedColor, new OffsetRange(matcher.start(), matcher.end()), lineNumber);
             colorValues.add(colorValue);
         }
         return colorValues;
@@ -406,7 +420,7 @@ public final class ColorsUtils {
         String groupName = getCssColorGroupName(type);
         while (matcher.find()) {
             final String colorCode = matcher.group(groupName);
-            ColorValue colorValue = createCssColorValue(colorCode, matcher.start(), matcher.end(), lineNumber, type);
+            ColorValue colorValue = createCssColorValue(colorCode, new OffsetRange(matcher.start(), matcher.end()), lineNumber, type);
             if (colorValue != null) {
                 colorCodes.add(colorValue);
             }
@@ -414,7 +428,71 @@ public final class ColorsUtils {
         return colorCodes;
     }
 
-    private static Matcher getColorMatcher(String line, HexCssColorType type) {
+    /**
+     * Get Java standard colors.
+     *
+     * @param line the line text
+     * @param lineNumber the line number
+     * @return ColorValues
+     */
+    public static List<ColorValue> getJavaStandardColors(String line, int lineNumber) {
+        Matcher matcher = getColorMatcher(line, JavaColorType.JAVA_STANDARD_COLOR);
+        ArrayList<ColorValue> colorValues = new ArrayList<>();
+        while (matcher.find()) {
+            final String colorName = matcher.group(GROUP_COROR_NAME);
+            JavaStandardColor stdColor = JavaStandardColor.valueOf(colorName);
+            ColorValue colorValue = new JavaStandardColorValue(matcher.group(GROUP_JAVA_STANDARD), new OffsetRange(matcher.start(), matcher.end()), lineNumber, stdColor.getColor());
+            colorValues.add(colorValue);
+        }
+        return colorValues;
+    }
+
+    /**
+     * Get Java int RGB colors.
+     *
+     * @param line the line text
+     * @param lineNumber the line number
+     * @return ColorValues
+     */
+    public static List<ColorValue> getJavaIntRGBColors(String line, int lineNumber) {
+        Matcher matcher = getColorMatcher(line, JavaColorType.JAVA_INT_RGB);
+        ArrayList<ColorValue> colorValues = new ArrayList<>();
+        while (matcher.find()) {
+            final String colorCode = matcher.group(GROUP_JAVA_RGB);
+            int r = Integer.parseInt(matcher.group(GROUP_RED));
+            int g = Integer.parseInt(matcher.group(GROUP_GREEN));
+            int b = Integer.parseInt(matcher.group(GROUP_BLUE));
+            Color color = new Color(r, g, b);
+            ColorValue colorValue = new JavaIntRGBColorValue(colorCode, new OffsetRange(matcher.start(), matcher.end()), lineNumber, color);
+            colorValues.add(colorValue);
+        }
+        return colorValues;
+    }
+
+    /**
+     * Get Java int RGBA colors.
+     *
+     * @param line the line text
+     * @param lineNumber the line number
+     * @return ColorValues
+     */
+    public static List<ColorValue> getJavaIntRGBAColors(String line, int lineNumber) {
+        Matcher matcher = getColorMatcher(line, JavaColorType.JAVA_INT_RGBA);
+        ArrayList<ColorValue> colorValues = new ArrayList<>();
+        while (matcher.find()) {
+            final String colorCode = matcher.group(GROUP_JAVA_RGBA);
+            int r = Integer.parseInt(matcher.group(GROUP_RED));
+            int g = Integer.parseInt(matcher.group(GROUP_GREEN));
+            int b = Integer.parseInt(matcher.group(GROUP_BLUE));
+            int a = Integer.parseInt(matcher.group(GROUP_ALPHA));
+            Color color = new Color(r, g, b, a);
+            ColorValue colorValue = new JavaIntRGBAColorValue(colorCode, new OffsetRange(matcher.start(), matcher.end()), lineNumber, color);
+            colorValues.add(colorValue);
+        }
+        return colorValues;
+    }
+
+    private static Matcher getColorMatcher(String line, ColorType type) {
         return type.getPattern().matcher(line);
     }
 
@@ -437,20 +515,20 @@ public final class ColorsUtils {
         }
     }
 
-    private static ColorValue createCssColorValue(String value, int startOffset, int endOffset, int lineNumber, HexCssColorType type) {
+    private static ColorValue createCssColorValue(String value, OffsetRange offsetRange, int lineNumber, HexCssColorType type) {
         switch (type) {
             case CSS_INT_RGB:
-                return new CssIntRGBColorValue(value, startOffset, endOffset, lineNumber);
+                return new CssIntRGBColorValue(value, offsetRange, lineNumber);
             case CSS_INT_RGBA:
-                return new CssIntRGBAColorValue(value, startOffset, endOffset, lineNumber);
+                return new CssIntRGBAColorValue(value, offsetRange, lineNumber);
             case CSS_PERCENT_RGB:
-                return new CssPercentRGBColorValue(value, startOffset, endOffset, lineNumber);
+                return new CssPercentRGBColorValue(value, offsetRange, lineNumber);
             case CSS_PERCENT_RGBA:
-                return new CssPercentRGBAColorValue(value, startOffset, endOffset, lineNumber);
+                return new CssPercentRGBAColorValue(value, offsetRange, lineNumber);
             case CSS_HSL:
-                return new CssHSLColorValue(value, startOffset, endOffset, lineNumber);
+                return new CssHSLColorValue(value, offsetRange, lineNumber);
             case CSS_HSLA:
-                return new CssHSLAColorValue(value, startOffset, endOffset, lineNumber);
+                return new CssHSLAColorValue(value, offsetRange, lineNumber);
             default:
                 throw new AssertionError();
         }
@@ -516,10 +594,10 @@ public final class ColorsUtils {
         Matcher matcher = getColorMatcher(code, HexCssColorType.HEX);
         if (matcher.matches()) {
             int length = code.length();
-            if (length == 4) {
+            if (length == SHORT_HEX_COLOR_CODE_FULL_LENGTH) {
                 return Color.decode(convertToRRGGBB(code));
             }
-            if (length == 7) {
+            if (length == HEX_COLOR_CODE_FULL_LENGTH) {
                 return Color.decode(code);
             }
         }

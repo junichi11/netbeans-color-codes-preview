@@ -16,42 +16,17 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
+          <Component id="providerOptionsPanel" alignment="0" max="32767" attributes="0"/>
           <Group type="102" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="12" pref="12" max="-2" attributes="0"/>
-                      <Component id="namedColorsCheckBox" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="fileTypesLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="mimeTypeRegexTextField" max="32767" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <Component id="colorTypesLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                  </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="resolveCssVariablesCheckBox" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <Component id="providersComboBox" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="enabledPanel" min="-2" max="-2" attributes="0"/>
                   </Group>
+                  <Component id="errorLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="descriptionLabel" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
-          </Group>
-          <Component id="enabledPanel" alignment="0" max="32767" attributes="0"/>
-          <Group type="102" attributes="0">
-              <Component id="hexCssLabel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="hexCssSeparator" max="32767" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="0" attributes="0">
-              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -59,84 +34,50 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="enabledPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="hexCssLabel" alignment="1" min="-2" max="-2" attributes="0"/>
-                  <Component id="hexCssSeparator" alignment="1" min="-2" pref="10" max="-2" attributes="0"/>
+                  <Component id="providersComboBox" min="-2" max="-2" attributes="0"/>
+                  <Component id="enabledPanel" min="-2" pref="27" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="fileTypesLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="mimeTypeRegexTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
+              <Component id="descriptionLabel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="resolveCssVariablesCheckBox" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="colorTypesLabel" min="-2" max="-2" attributes="0"/>
+              <Component id="providerOptionsPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="namedColorsCheckBox" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
+              <Component id="errorLabel" min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JLabel" name="fileTypesLabel">
+    <Component class="javax.swing.JComboBox" name="providersComboBox">
       <Properties>
-        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="com/junichi11/netbeans/modules/color/codes/preview/options/Bundle.properties" key="ColorCodesPreviewPanel.fileTypesLabel.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="0"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="providersComboBoxItemStateChanged"/>
+      </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;ColorCodesProvider&gt;"/>
+      </AuxValues>
     </Component>
-    <Component class="javax.swing.JTextField" name="mimeTypeRegexTextField">
-      <Properties>
-        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="com/junichi11/netbeans/modules/color/codes/preview/options/Bundle.properties" key="ColorCodesPreviewPanel.mimeTypeRegexTextField.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-        </Property>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="colorTypesLabel">
-      <Properties>
-        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="com/junichi11/netbeans/modules/color/codes/preview/options/Bundle.properties" key="ColorCodesPreviewPanel.colorTypesLabel.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-        </Property>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JCheckBox" name="namedColorsCheckBox">
-      <Properties>
-        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="com/junichi11/netbeans/modules/color/codes/preview/options/Bundle.properties" key="ColorCodesPreviewPanel.namedColorsCheckBox.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-        </Property>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JCheckBox" name="resolveCssVariablesCheckBox">
-      <Properties>
-        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="com/junichi11/netbeans/modules/color/codes/preview/options/Bundle.properties" key="ColorCodesPreviewPanel.resolveCssVariablesCheckBox.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-        </Property>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="hexCssLabel">
-      <Properties>
-        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="com/junichi11/netbeans/modules/color/codes/preview/options/Bundle.properties" key="ColorCodesPreviewPanel.hexCssLabel.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-        </Property>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JSeparator" name="hexCssSeparator">
-    </Component>
+    <Container class="javax.swing.JPanel" name="providerOptionsPanel">
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+    </Container>
     <Container class="javax.swing.JPanel" name="enabledPanel">
 
-      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
     </Container>
-    <Component class="javax.swing.JLabel" name="jLabel1">
+    <Component class="javax.swing.JLabel" name="errorLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="com/junichi11/netbeans/modules/color/codes/preview/options/Bundle.properties" key="ColorCodesPreviewPanel.jLabel1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-        </Property>
+        <Property name="text" type="java.lang.String" value="ERROR" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="descriptionLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="DESCRIPTION" noResource="true"/>
       </Properties>
     </Component>
   </SubComponents>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 junichi11.
+ * Copyright 2019 junichi11.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,15 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.colors;
 
+import com.junichi11.netbeans.modules.color.codes.preview.colors.api.OffsetRange;
 import com.junichi11.netbeans.modules.color.codes.preview.utils.HexCssColorType;
 import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils;
 import java.awt.Color;
 
 public class CssIntRGBAColorValue extends HexCssColorValue {
 
-    public CssIntRGBAColorValue(String value, int startOffset, int endOffset, int line) {
-        super(value, startOffset, endOffset, line);
+    public CssIntRGBAColorValue(String value, OffsetRange offsetRange, int line) {
+        super(value, offsetRange, line);
     }
 
     @Override

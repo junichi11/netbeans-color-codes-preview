@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 junichi11.
+ * Copyright 2019 junichi11.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,6 +53,7 @@ import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.Position;
 import javax.swing.text.View;
+import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.editor.document.LineDocumentUtils;
 import org.netbeans.api.editor.fold.FoldHierarchy;
 import org.netbeans.api.editor.fold.FoldHierarchyEvent;
@@ -90,10 +91,16 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
 
     private static final int DEFAULT_WIDTH = 16;
     private static final Logger LOGGER = Logger.getLogger(DrawingPanel.class.getName());
-    // check sass and less variables e.g. $green: #0f0;, @green: #0f0;
     private static final long serialVersionUID = 8161755434377410789L;
 
-    public DrawingPanel(JTextComponent editor) {
+    public static DrawingPanel create(JTextComponent editor) {
+        DrawingPanel panel = new DrawingPanel(editor);
+        // avoid leaking this in constructor
+        panel.addPreferenceChangeListener();
+        return panel;
+    }
+
+    private DrawingPanel(JTextComponent editor) {
         super(new BorderLayout());
         this.textComponent = editor;
         this.document = (BaseDocument) editor.getDocument();
@@ -101,15 +108,18 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
         updateColors();
 
         prefs = MimeLookup.getLookup(MimePath.EMPTY).lookup(Preferences.class);
-        prefs.addPreferenceChangeListener(WeakListeners.create(PreferenceChangeListener.class, this, prefs));
-        ColorCodesPreviewOptions options = ColorCodesPreviewOptions.getInstance();
-        options.addPreferenceChangeListener(WeakListeners.create(PreferenceChangeListener.class, this, prefs));
         // lookup listener
         Lookup.Result<FontColorSettings> lookupResult = MimeLookup.getLookup(MimePath.get(NbEditorUtilities.getMimeType(textComponent))).lookupResult(FontColorSettings.class);
         lookupListener = (LookupEvent le) -> updateColors();
         lookupResult.addLookupListener(WeakListeners.create(LookupListener.class, lookupListener, lookupResult));
         preferenceChange(null);
         enableEvents(AWTEvent.MOUSE_EVENT_MASK);
+    }
+
+    private void addPreferenceChangeListener() {
+        prefs.addPreferenceChangeListener(WeakListeners.create(PreferenceChangeListener.class, this, prefs));
+        ColorCodesPreviewOptions options = ColorCodesPreviewOptions.getInstance();
+        options.addPreferenceChangeListener(this);
     }
 
     @Override
@@ -137,6 +147,9 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
 
         JTextComponent component = textComponent;
         TextUI textUI = component.getUI();
+        if (textUI == null) {
+            return;
+        }
         EditorUI editorUI = Utilities.getEditorUI(component);
         if (editorUI == null) {
             return;
@@ -152,7 +165,7 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
         }
     }
 
-    private void drawColorRect(JTextComponent component, TextUI textUI, Rectangle clip, View rootView, Graphics2D g2d) throws BadLocationException {
+    private void drawColorRect(JTextComponent component, @NonNull TextUI textUI, Rectangle clip, View rootView, Graphics2D g2d) throws BadLocationException {
         int startPos = getPosFromY(component, textUI, clip.y);
         int startViewIndex = rootView.getViewIndex(startPos, Position.Bias.Forward);
         int rootViewCount = rootView.getViewCount();
@@ -267,7 +280,7 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
     }
 
     /* from versioning.ui DiffSidebar */
-    private int getPosFromY(JTextComponent component, TextUI textUI, int y) throws BadLocationException {
+    private int getPosFromY(JTextComponent component, @NonNull TextUI textUI, int y) throws BadLocationException {
         if (textUI instanceof BaseTextUI) {
             return ((BaseTextUI) textUI).getPosFromY(y);
         } else {
@@ -330,7 +343,8 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
     public void preferenceChange(PreferenceChangeEvent evt) {
         if (evt == null
                 || ColorsSideBarFactory.KEY_COLORS.equals(evt.getKey())
-                || ColorCodesPreviewOptions.MIME_TYPE_REGEX.equals(evt.getKey())) {
+                || ColorCodesPreviewOptions.HEX_CSS_MIME_TYPE_REGEX.equals(evt.getKey())
+                || evt.getKey().startsWith(ColorCodesPreviewOptions.ENABLED_PREFIX)) {
             enabled = prefs.getBoolean(ColorsSideBarFactory.KEY_COLORS, ColorsSideBarFactory.DEFAULT_COLORS)
                     && isProviderEnabled();
             setVisible(enabled);

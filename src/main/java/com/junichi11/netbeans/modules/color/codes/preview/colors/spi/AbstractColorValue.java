@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 junichi11.
+ * Copyright 2019 junichi11.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,7 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.colors.spi;
 
-import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils;
-import java.awt.Color;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.api.OffsetRange;
 import org.netbeans.api.annotations.common.NonNull;
 
 /**
@@ -32,10 +31,18 @@ public abstract class AbstractColorValue implements ColorValue {
     private final int endOffset;
     private final String value;
 
-    public AbstractColorValue(@NonNull String value, int startOffset, int endOffset, int line) {
+    /**
+     * Constructor.
+     *
+     * @since 0.11.1
+     * @param value the color value
+     * @param offsetRange the offset range
+     * @param line the line number
+     */
+    public AbstractColorValue(@NonNull String value, OffsetRange offsetRange, int line) {
         this.value = value;
-        this.startOffset = startOffset;
-        this.endOffset = endOffset;
+        this.startOffset = offsetRange.getStartOffset();
+        this.endOffset = offsetRange.getEndOffset();
         this.line = line;
     }
 
@@ -57,11 +64,6 @@ public abstract class AbstractColorValue implements ColorValue {
     @Override
     public String getValue() {
         return value;
-    }
-
-    @Override
-    public Color getColor() {
-        return ColorsUtils.decode(value);
     }
 
 }

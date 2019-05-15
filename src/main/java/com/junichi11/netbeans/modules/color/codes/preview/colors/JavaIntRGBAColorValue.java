@@ -20,36 +20,42 @@ import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.AbstractCol
 import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.ColorCodeFormatter;
 import com.junichi11.netbeans.modules.color.codes.preview.utils.JavaColorType;
 import java.awt.Color;
+import javax.swing.UIManager;
 
 /**
  *
- * @author arsi
+ * @author junichi11
  */
-public class JavaIntRGBColorValue extends AbstractColorValue {
+public class JavaIntRGBAColorValue extends AbstractColorValue {
 
     private final int r;
     private final int g;
     private final int b;
+    private final int a;
+    private static final String GTK_LOOK_AND_FEEL_NAME = "GTK look and feel"; // NOI18N
+    private static final String LOOK_AND_FEEL_NAME = UIManager.getLookAndFeel().getName();
 
-    public JavaIntRGBColorValue(String value, OffsetRange offsetRange, int line, Color color) {
+    public JavaIntRGBAColorValue(String value, OffsetRange offsetRange, int line, Color color) {
         super(value, offsetRange, line);
         this.r = color.getRed();
         this.g = color.getGreen();
         this.b = color.getBlue();
+        this.a = color.getAlpha();
     }
 
     @Override
     public Color getColor() {
-        return new Color(r, g, b);
+        return new Color(r, g, b, a);
     }
 
     public JavaColorType getType() {
-        return JavaColorType.JAVA_INT_RGB;
+        return JavaColorType.JAVA_INT_RGBA;
     }
 
     @Override
     public boolean isEditable() {
-        return true;
+        // ColorChooser of GTK cannot change transparency
+        return !GTK_LOOK_AND_FEEL_NAME.equals(LOOK_AND_FEEL_NAME);
     }
 
     @Override

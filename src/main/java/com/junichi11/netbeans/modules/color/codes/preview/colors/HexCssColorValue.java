@@ -15,6 +15,7 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.colors;
 
+import com.junichi11.netbeans.modules.color.codes.preview.colors.api.OffsetRange;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.AbstractColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.ColorCodeFormatter;
 import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils;
@@ -27,8 +28,8 @@ import java.awt.Color;
  */
 abstract class HexCssColorValue extends AbstractColorValue {
 
-    public HexCssColorValue(String value, int startOffset, int endOffset, int line) {
-        super(value, startOffset, endOffset, line);
+    public HexCssColorValue(String value, OffsetRange offsetRange, int line) {
+        super(value, offsetRange, line);
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 junichi11.
+ * Copyright 2019 junichi11.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,11 @@ import java.util.regex.Pattern;
  *
  * @author junichi11
  */
-public enum HexCssColorType {
+public enum HexCssColorType implements ColorType {
     HEX("#(?<codenumber>[0-9a-fA-F]{6,}|[0-9a-fA-F]{3,})"), // NOI18N
-    CSS_INT_RGB(String.format(HexCssColorType.CSS_RGB_FORMAT, HexCssColorType.INT_RGB_VALUE_FORMAT, HexCssColorType.INT_RGB_VALUE_FORMAT, HexCssColorType.INT_RGB_VALUE_FORMAT)),
+    CSS_INT_RGB(String.format(HexCssColorType.CSS_RGB_FORMAT, ColorType.INT_RGB_VALUE_FORMAT, ColorType.INT_RGB_VALUE_FORMAT, ColorType.INT_RGB_VALUE_FORMAT)),
     CSS_PERCENT_RGB(String.format(HexCssColorType.CSS_RGB_FORMAT, HexCssColorType.PERCENT_VALUE_FORMAT, HexCssColorType.PERCENT_VALUE_FORMAT, HexCssColorType.PERCENT_VALUE_FORMAT)),
-    CSS_INT_RGBA(String.format(HexCssColorType.CSS_RGBA_FORMAT, HexCssColorType.INT_RGB_VALUE_FORMAT, HexCssColorType.INT_RGB_VALUE_FORMAT, HexCssColorType.INT_RGB_VALUE_FORMAT, HexCssColorType.ALPHA_VALUE_FORMAT)),
+    CSS_INT_RGBA(String.format(HexCssColorType.CSS_RGBA_FORMAT, ColorType.INT_RGB_VALUE_FORMAT, ColorType.INT_RGB_VALUE_FORMAT, ColorType.INT_RGB_VALUE_FORMAT, HexCssColorType.ALPHA_VALUE_FORMAT)),
     CSS_PERCENT_RGBA(String.format(HexCssColorType.CSS_RGBA_FORMAT, HexCssColorType.PERCENT_VALUE_FORMAT, HexCssColorType.PERCENT_VALUE_FORMAT, HexCssColorType.PERCENT_VALUE_FORMAT, HexCssColorType.ALPHA_VALUE_FORMAT)),
     CSS_HSL(String.format(HexCssColorType.CSS_HSL_FORMAT, HexCssColorType.HUE_VALUE_FORMAT, HexCssColorType.PERCENT_VALUE_FORMAT, HexCssColorType.PERCENT_VALUE_FORMAT)),
     CSS_HSLA(String.format(HexCssColorType.CSS_HSLA_FORMAT, HexCssColorType.HUE_VALUE_FORMAT, HexCssColorType.PERCENT_VALUE_FORMAT, HexCssColorType.PERCENT_VALUE_FORMAT, HexCssColorType.ALPHA_VALUE_FORMAT)),
@@ -44,7 +44,6 @@ public enum HexCssColorType {
             + "white|snow|honeydew|mintcream|azure|aliceblue|ghostwhite|whitesmoke|seashell|beige|oldlace|floralwhite|ivory|antiquewhite|linen|lavenderblush|mistyrose|" // NOI18N
             + "gainsboro|lightgray|silver|darkgray|gray|dimgray|lightslategray|slategray|darkslategray|black" // NOI18N
             + ")[ ;,\"]"; // NOI18N
-    static final String INT_RGB_VALUE_FORMAT = "25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]"; // NOI18N
     static final String CSS_RGB_FORMAT = "(?<cssrgb>rgb\\((?<codenumber>(?<r>%s) *, *(?<g>%s) *, *(?<b>%s))\\))"; // NOI18N
     static final String CSS_RGBA_FORMAT = "(?<cssrgba>rgba\\((?<codenumber>(?<r>%s) *, *(?<g>%s) *, *(?<b>%s) *, *(?<a>%s))\\))"; // NOI18N
     static final String HUE_VALUE_FORMAT = "(360|3[0-5][0-9]|[1-2][0-9][0-9]|[1-9]?[0-9])"; // NOI18N
@@ -57,6 +56,7 @@ public enum HexCssColorType {
         this.pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
     }
 
+    @Override
     public Pattern getPattern() {
         return pattern;
     }

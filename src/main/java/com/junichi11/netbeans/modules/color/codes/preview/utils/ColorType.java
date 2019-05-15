@@ -13,22 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.junichi11.netbeans.modules.color.codes.preview.ui;
+package com.junichi11.netbeans.modules.color.codes.preview.utils;
 
-import java.awt.BorderLayout;
-import javax.swing.JPanel;
-import javax.swing.text.JTextComponent;
+import java.util.regex.Pattern;
 
 /**
  *
  * @author junichi11
  */
-class ColorsSideBarPanel extends JPanel {
+public interface ColorType {
 
-    private static final long serialVersionUID = 2127732014591025184L;
+    static final String INT_RGB_VALUE_FORMAT = "25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]"; // NOI18N
 
-    public ColorsSideBarPanel(JTextComponent editor) {
-        super(new BorderLayout());
-        add(DrawingPanel.create(editor), BorderLayout.CENTER);
-    }
+    Pattern getPattern();
 }

@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.junichi11</groupId>
     <artifactId>netbeans-color-codes-preview</artifactId>
-    <version>0.11.0</version>
+    <version>0.11.1</version>
     <packaging>nbm</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <netbeans.api.version>RELEASE81</netbeans.api.version>
+        <netbeans.api.version>RELEASE110</netbeans.api.version>
     </properties>
     <build>
         <plugins>
@@ -158,6 +158,7 @@
 &lt;li&gt;Css rgb/rgba values (e.g. rgb(0,0,0), rgba(255, 255, 255, 0.8))&lt;/li&gt;
 &lt;li&gt;Css hsl/hsla values (e.g. hsl(0, 100%, 50%), hsla(120, 100%, 50%, 0.5))&lt;/li&gt;
 &lt;li&gt;Named colors (e.g. red, blue)&lt;/li&gt;
+&lt;li&gt;Java Color class (e.g. Color.black, new Color(100, 100, 100))&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2&gt;Multiple colors&lt;/h2&gt;
@@ -178,7 +179,7 @@
 
         Tools &gt; Options &gt; Miscellaneous &gt; Color Codes Preview
 
-&lt;h3&gt;Regex for enabled mime-types&lt;/h3&gt;
+&lt;h3&gt;Regex for enabled mime-types for Hex and CSS colors&lt;/h3&gt;
 
         Default value is `^text/(x-)?(css|less|sass|scss)$`.
         If you would like to disable/enable some mime-types, please change the default regex.
@@ -190,6 +191,7 @@
 
 &lt;h2&gt;NOTE&lt;/h2&gt;
 &lt;ul&gt;
+&lt;li&gt;If you would like to show colors of `Color.decode(&lt;hex&gt;)` e.g. `Color.decode(#000000)`, Please add `java` to "Regex for enabled mime-types" of Hex and CSS e.g. (`^text/(x-)?(css|less|sass|scss|java)$`)&lt;/li&gt;
 &lt;li&gt;Colors may be shown if they are not color codes. e.g. "#feature" contains #fea. This plugin recognizes it as a hex color code.&lt;/li&gt;
 &lt;li&gt;If you use the GTK Look and Feel, you cannot change an alpha value in the color chooser.&lt;/li&gt;
 &lt;li&gt;Hsl or hsla color values may not be changed correctly when you use the color chooser. (There may be 1% errors.)&lt;/li&gt;
