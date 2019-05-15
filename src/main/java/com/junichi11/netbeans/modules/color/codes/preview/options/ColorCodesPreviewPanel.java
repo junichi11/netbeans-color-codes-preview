@@ -47,6 +47,7 @@ final class ColorCodesPreviewPanel extends javax.swing.JPanel {
 
     @NbBundle.Messages("ColorCodesPreviewPanel.enabled=Enabled")
     private void init() {
+        descriptionLabel.setText(""); // NOI18N
         providersComboBox.setRenderer(new ProvidersCellRenderer(providersComboBox.getRenderer()));
         for (ColorCodesProvider provider : getProviders()) {
             ColorCodesPreviewOptionsPanel panel = provider.getOptionsPanel();
@@ -57,6 +58,7 @@ final class ColorCodesPreviewPanel extends javax.swing.JPanel {
             providerOptionsPanels.put(provider, panel);
             providersComboBox.addItem(provider);
         }
+        setDescription();
         setProviderPanels();
         errorLabel.setForeground(UIManager.getColor("nb.errorForeground")); // NOI18N
         setErrorMessage(null);
@@ -86,6 +88,7 @@ final class ColorCodesPreviewPanel extends javax.swing.JPanel {
         providerOptionsPanel = new javax.swing.JPanel();
         enabledPanel = new javax.swing.JPanel();
         errorLabel = new javax.swing.JLabel();
+        descriptionLabel = new javax.swing.JLabel();
 
         providersComboBox.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -99,34 +102,41 @@ final class ColorCodesPreviewPanel extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(errorLabel, "ERROR"); // NOI18N
 
+        org.openide.awt.Mnemonics.setLocalizedText(descriptionLabel, "DESCRIPTION"); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(providersComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(enabledPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addComponent(providerOptionsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(errorLabel)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(providersComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(enabledPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(errorLabel)
+                    .addComponent(descriptionLabel))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(providersComboBox)
-                    .addComponent(enabledPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(providersComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(enabledPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(descriptionLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(providerOptionsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(errorLabel)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(errorLabel))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void providersComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_providersComboBoxItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
+            setDescription();
             setProviderPanels();
         }
     }//GEN-LAST:event_providersComboBoxItemStateChanged
@@ -135,6 +145,11 @@ final class ColorCodesPreviewPanel extends javax.swing.JPanel {
         ColorCodesProvider selectedProvider = (ColorCodesProvider) providersComboBox.getSelectedItem();
         setEnabledPanel(selectedProvider);
         setOptionsPanel(selectedProvider);
+    }
+
+    private void setDescription() {
+        ColorCodesProvider selectedProvider = (ColorCodesProvider) providersComboBox.getSelectedItem();
+        descriptionLabel.setText(selectedProvider.getDescription());
     }
 
     private void setEnabledPanel(ColorCodesProvider selectedProvider) {
@@ -189,6 +204,7 @@ final class ColorCodesPreviewPanel extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel descriptionLabel;
     private javax.swing.JPanel enabledPanel;
     private javax.swing.JLabel errorLabel;
     private javax.swing.JPanel providerOptionsPanel;
