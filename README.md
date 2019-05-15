@@ -14,11 +14,11 @@ Uncheck/Check `View > Show Colors`
 
 ## Supported color patterns
 
-- Hex color code (e.g. #fff #000000)
-- Css rgb/rgba values (e.g. rgb(0, 0, 0), rgb(50%, 0%, 100%), rgba(255,255,255, 0.8))
-- Css hsl/hsla values (e.g. hsl(0, 100%, 50%), hsla(120, 100%, 50%, 0.5))
-- Named colors (e.g. red, blue)
-- Java Color class colors (e.g. Color.black, new Color(100, 100, 100))
+- Hex color code (e.g. `#fff` `#000000`)
+- Css rgb/rgba values (e.g. `rgb(0, 0, 0)`, `rgb(50%, 0%, 100%)`, `rgba(255,255,255, 0.8)`)
+- Css hsl/hsla values (e.g. `hsl(0, 100%, 50%)`, `hsla(120, 100%, 50%, 0.5)`)
+- Named colors (e.g. `red`, `blue`)
+- Java Color class colors (e.g. `Color.black`, `new Color(100, 100, 100)`, `new Color(0, 0, 255, 255)`)
 
 ## Multiple colors
 
@@ -30,7 +30,11 @@ Uncheck/Check `View > Show Colors`
 - Click a colored rectangle
 - Click a color value of a list
 - Select a new color in the color chooser
-- An old color value will be changed to new one with the same format
+- An old color value will be changed to new one with the same format(Hex and CSS)
+
+### NOTE
+
+If "GTK look and feel" is used, an alpha value is not available. So, in that case, this plugin doesn't show the color chooser for `new Color(r, g, b, a)`.
 
 ## Options
 
@@ -43,6 +47,8 @@ Tools > Options > Miscellaneous > Color Codes Preview
 Default value is `^text/(x-)?(css|less|sass|scss)$`.
 If you would like to disable/enable some mime-types, please change the default regex.
 This pattern is used when the plugin checks a mime-type.
+
+If you would like to enable xml files, please add `|.*xml`. i.e. `^text/(x-)?(css|less|sass|scss|.*xml)$`
 
 #### Resolve Sass and Less Variables
 
