@@ -39,6 +39,7 @@ final class PopupWindow implements AWTEventListener, WindowFocusListener {
     private final JWindow mainWindow;
     private final DrawingPanel master;
     private final List<ColorValue> colorValues;
+    private ColorCodesPanel colorCodesPanel = null;
 
     public PopupWindow(DrawingPanel master, List<ColorValue> colorValues) {
         this.master = master;
@@ -48,7 +49,7 @@ final class PopupWindow implements AWTEventListener, WindowFocusListener {
     }
 
     public void show(Point point) {
-        ColorCodesPanel colorCodesPanel = new ColorCodesPanel(new ArrayList<>(colorValues));
+        colorCodesPanel = new ColorCodesPanel(new ArrayList<>(colorValues));
         mainWindow.add(colorCodesPanel);
         mainWindow.pack();
         mainWindow.setLocation(point);
@@ -90,6 +91,9 @@ final class PopupWindow implements AWTEventListener, WindowFocusListener {
         mainWindow.getOwner().removeWindowFocusListener(this);
         mainWindow.removeWindowFocusListener(this);
         mainWindow.dispose();
+        if (colorCodesPanel != null) {
+            colorCodesPanel.shutdown();
+        }
     }
 
 }

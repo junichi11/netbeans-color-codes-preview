@@ -47,7 +47,7 @@ final class JavaColorCodeFormatter implements ColorCodeFormatter {
     }
 
     private String asRGBIntColorValue(Color color) {
-        if (type == JavaColorType.JAVA_INT_RGBA) {
+        if (type == JavaColorType.JAVA_INT_RGBA || color.getAlpha() != 255) {
             return String.format(RGBA_VALUE_FORMAT, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
         }
         return String.format(RGB_VALUE_FORMAT, color.getRed(), color.getGreen(), color.getBlue());

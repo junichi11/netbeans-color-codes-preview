@@ -41,7 +41,7 @@ public class JavaStandardColorValue extends AbstractColorValue {
 
     @Override
     public boolean isEditable() {
-        return false;
+        return true;
     }
 
     public JavaColorType getType() {

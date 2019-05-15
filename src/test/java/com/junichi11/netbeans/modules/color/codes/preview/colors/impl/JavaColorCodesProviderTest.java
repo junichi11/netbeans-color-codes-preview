@@ -63,7 +63,7 @@ public class JavaColorCodesProviderTest {
         assertEquals("Color.black", result.get(0).getValue());
         assertEquals(2, result.get(0).getStartOffset());
         assertEquals(13, result.get(0).getEndOffset());
-        assertEquals(false, result.get(0).isEditable());
+        assertEquals(true, result.get(0).isEditable());
     }
 
     @Test
@@ -75,7 +75,7 @@ public class JavaColorCodesProviderTest {
         assertEquals("new Color( 0, 0, 255)", result.get(0).getValue());
         assertEquals(14, result.get(0).getStartOffset());
         assertEquals(35, result.get(0).getEndOffset());
-        assertEquals(false, result.get(0).isEditable());
+        assertEquals(true, result.get(0).isEditable());
 
         try {
             result = provider.getColorValues(null, "Color color = new Color(256, 0, 0);", 0, Collections.emptyMap());
@@ -118,7 +118,7 @@ public class JavaColorCodesProviderTest {
         assertEquals("new Color( 255, 0, 255, 100 )", result.get(0).getValue());
         assertEquals(14, result.get(0).getStartOffset());
         assertEquals(43, result.get(0).getEndOffset());
-        assertEquals(false, result.get(0).isEditable());
+        assertEquals(true, result.get(0).isEditable());
 
         try {
             result = provider.getColorValues(null, "Color color = new Color(256, 0, 0, 0);", 0, Collections.emptyMap());

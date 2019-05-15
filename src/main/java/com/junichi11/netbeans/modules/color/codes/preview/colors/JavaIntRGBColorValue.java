@@ -49,7 +49,7 @@ public class JavaIntRGBColorValue extends AbstractColorValue {
 
     @Override
     public boolean isEditable() {
-        return false;
+        return true;
     }
 
     @Override

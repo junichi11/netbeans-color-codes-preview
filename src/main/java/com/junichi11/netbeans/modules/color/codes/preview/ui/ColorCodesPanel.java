@@ -18,10 +18,12 @@ package com.junichi11.netbeans.modules.color.codes.preview.ui;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.ColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,7 +46,7 @@ import org.openide.util.NbBundle;
  */
 public class ColorCodesPanel extends JComponent {
 
-    private static final long serialVersionUID = -1386991598331115862L;
+    private static final long serialVersionUID = -3952049801816937809L;
     private static final Logger LOGGER = Logger.getLogger(ColorCodesPanel.class.getName());
 
     @NbBundle.Messages({
@@ -66,10 +68,10 @@ public class ColorCodesPanel extends JComponent {
 
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    // show dialog
-                    if (!colorValue.isEditable()) {
+                    if (!colorValue.isEditable() || colorValue.getFormatter() == null) {
                         return;
                     }
+                    // show dialog
                     final Color selectedColor = JColorChooser.showDialog(
                             ColorCodesPanel.this,
                             Bundle.ColorCodesPanel_colorChooser_title(),
@@ -112,6 +114,18 @@ public class ColorCodesPanel extends JComponent {
                 }
             });
             add(label);
+        }
+    }
+
+    public void shutdown() {
+        // remove listeners
+        for (Component component : getComponents()) {
+            if (component instanceof JLabel) {
+                JLabel label = (JLabel) component;
+                for (MouseListener mouseListener : label.getMouseListeners()) {
+                    label.removeMouseListener(mouseListener);
+                }
+            }
         }
     }
 
