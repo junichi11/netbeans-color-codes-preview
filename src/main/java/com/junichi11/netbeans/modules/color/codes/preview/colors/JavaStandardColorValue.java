@@ -23,33 +23,29 @@ import java.awt.Color;
 
 /**
  *
- * @author arsi
+ * @author junichi11
  */
-public class JavaIntRGBColorValue extends AbstractColorValue {
+public class JavaStandardColorValue extends AbstractColorValue {
 
-    private final int r;
-    private final int g;
-    private final int b;
+    private final Color color;
 
-    public JavaIntRGBColorValue(String value, OffsetRange offsetRange, int line, Color color) {
-        super(value, offsetRange, line);
-        this.r = color.getRed();
-        this.g = color.getGreen();
-        this.b = color.getBlue();
+    public JavaStandardColorValue(String value, OffsetRange offsetRange, int lineNumber, Color color) {
+        super(value, offsetRange, lineNumber);
+        this.color = color;
     }
 
     @Override
     public Color getColor() {
-        return new Color(r, g, b);
-    }
-
-    public JavaColorType getType() {
-        return JavaColorType.JAVA_INT_RGB;
+        return color;
     }
 
     @Override
     public boolean isEditable() {
         return false;
+    }
+
+    public JavaColorType getType() {
+        return JavaColorType.JAVA_STANDARD_COLOR;
     }
 
     @Override

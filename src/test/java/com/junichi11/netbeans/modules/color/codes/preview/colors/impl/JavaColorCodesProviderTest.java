@@ -21,10 +21,10 @@ import java.util.Collections;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -103,12 +103,43 @@ public class JavaColorCodesProviderTest {
         assertEquals(0, result.size());
         result = provider.getColorValues(null, "Color color = new Color(0.0f, 0.1f, 0.5f, 0.0f);", 0, Collections.emptyMap());
         assertEquals(0, result.size());
-        result = provider.getColorValues(null, "Color color = new Color(0, 0, 0, 0);", 0, Collections.emptyMap());
-        assertEquals(0, result.size());
         result = provider.getColorValues(null, "Color color = new Color(0);", 0, Collections.emptyMap());
         assertEquals(0, result.size());
         result = provider.getColorValues(null, "\"new Color(\";", 0, Collections.emptyMap());
         assertEquals(0, result.size());
+    }
+
+    @Test
+    public void testGetColorValuesRGBAColor() {
+        JavaColorCodesProvider provider = new JavaColorCodesProvider();
+        List<ColorValue> result = provider.getColorValues(null, "Color color = new Color( 255, 0, 255, 100 );", 0, Collections.emptyMap());
+        assertEquals(1, result.size());
+        assertEquals(new Color(255, 0, 255, 100), result.get(0).getColor());
+        assertEquals("new Color( 255, 0, 255, 100 )", result.get(0).getValue());
+        assertEquals(14, result.get(0).getStartOffset());
+        assertEquals(43, result.get(0).getEndOffset());
+        assertEquals(false, result.get(0).isEditable());
+
+        try {
+            result = provider.getColorValues(null, "Color color = new Color(256, 0, 0, 0);", 0, Collections.emptyMap());
+            assertEquals(0, result.size());
+            result = provider.getColorValues(null, "Color color = new Color(-1, 0, 0, 100);", 0, Collections.emptyMap());
+            assertEquals(0, result.size());
+            result = provider.getColorValues(null, "Color color = new Color(0, 256, 0, 10);", 0, Collections.emptyMap());
+            assertEquals(0, result.size());
+            result = provider.getColorValues(null, "Color color = new Color(0, -256, 0, 0);", 0, Collections.emptyMap());
+            assertEquals(0, result.size());
+            result = provider.getColorValues(null, "Color color = new Color(0, 0, 256, 0);", 0, Collections.emptyMap());
+            assertEquals(0, result.size());
+            result = provider.getColorValues(null, "Color color = new Color(0, 0, -1, 0);", 0, Collections.emptyMap());
+            assertEquals(0, result.size());
+            result = provider.getColorValues(null, "Color color = new Color(0, 0, 255, 256);", 0, Collections.emptyMap());
+            assertEquals(0, result.size());
+            result = provider.getColorValues(null, "Color color = new Color(0, 0, 1, -1);", 0, Collections.emptyMap());
+            assertEquals(0, result.size());
+        } catch (Exception ex) {
+            fail(ex.getMessage());
+        }
     }
 
     @Test

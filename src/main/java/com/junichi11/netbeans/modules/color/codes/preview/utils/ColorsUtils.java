@@ -22,6 +22,10 @@ import com.junichi11.netbeans.modules.color.codes.preview.colors.CssIntRGBColorV
 import com.junichi11.netbeans.modules.color.codes.preview.colors.CssPercentRGBAColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.CssPercentRGBColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.HexColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.JavaIntRGBAColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.JavaIntRGBColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.JavaStandardColor;
+import com.junichi11.netbeans.modules.color.codes.preview.colors.JavaStandardColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.NamedColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.api.OffsetRange;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.ColorValue;
@@ -59,6 +63,9 @@ public final class ColorsUtils {
     private static final String GROUP_CSS_RGBA = "cssrgba"; // NOI18N
     private static final String GROUP_CSS_HSL = "csshsl"; // NOI18N
     private static final String GROUP_CSS_HSLA = "csshsla"; // NOI18N
+    private static final String GROUP_JAVA_STANDARD = "javastandard";// NOI18N
+    private static final String GROUP_JAVA_RGB = "javargb";// NOI18N
+    private static final String GROUP_JAVA_RGBA = "javargba";// NOI18N
     private static final String GROUP_RED = "r"; // NOI18N
     private static final String GROUP_GREEN = "g"; // NOI18N
     private static final String GROUP_BLUE = "b"; // NOI18N
@@ -66,6 +73,7 @@ public final class ColorsUtils {
     private static final String GROUP_HUE = "h"; // NOI18N
     private static final String GROUP_SATURATION = "s"; // NOI18N
     private static final String GROUP_LIGHTNESS = "l"; // NOI18N
+    private static final String GROUP_COROR_NAME = "colorname"; // NOI18N
 
     private static final Comparator COLOR_VALUE_COMPARATOR = new ColorValueComparator();
 
@@ -420,7 +428,71 @@ public final class ColorsUtils {
         return colorCodes;
     }
 
-    private static Matcher getColorMatcher(String line, HexCssColorType type) {
+    /**
+     * Get Java standard colors.
+     *
+     * @param line the line text
+     * @param lineNumber the line number
+     * @return ColorValues
+     */
+    public static List<ColorValue> getJavaStandardColors(String line, int lineNumber) {
+        Matcher matcher = getColorMatcher(line, JavaColorType.JAVA_STANDARD_COLOR);
+        ArrayList<ColorValue> colorValues = new ArrayList<>();
+        while (matcher.find()) {
+            final String colorName = matcher.group(GROUP_COROR_NAME);
+            JavaStandardColor stdColor = JavaStandardColor.valueOf(colorName);
+            ColorValue colorValue = new JavaStandardColorValue(matcher.group(GROUP_JAVA_STANDARD), new OffsetRange(matcher.start(), matcher.end()), lineNumber, stdColor.getColor());
+            colorValues.add(colorValue);
+        }
+        return colorValues;
+    }
+
+    /**
+     * Get Java int RGB colors.
+     *
+     * @param line the line text
+     * @param lineNumber the line number
+     * @return ColorValues
+     */
+    public static List<ColorValue> getJavaIntRGBColors(String line, int lineNumber) {
+        Matcher matcher = getColorMatcher(line, JavaColorType.JAVA_INT_RGB);
+        ArrayList<ColorValue> colorValues = new ArrayList<>();
+        while (matcher.find()) {
+            final String colorCode = matcher.group(GROUP_JAVA_RGB);
+            int r = Integer.parseInt(matcher.group(GROUP_RED));
+            int g = Integer.parseInt(matcher.group(GROUP_GREEN));
+            int b = Integer.parseInt(matcher.group(GROUP_BLUE));
+            Color color = new Color(r, g, b);
+            ColorValue colorValue = new JavaIntRGBColorValue(colorCode, new OffsetRange(matcher.start(), matcher.end()), lineNumber, color);
+            colorValues.add(colorValue);
+        }
+        return colorValues;
+    }
+
+    /**
+     * Get Java int RGBA colors.
+     *
+     * @param line the line text
+     * @param lineNumber the line number
+     * @return ColorValues
+     */
+    public static List<ColorValue> getJavaIntRGBAColors(String line, int lineNumber) {
+        Matcher matcher = getColorMatcher(line, JavaColorType.JAVA_INT_RGBA);
+        ArrayList<ColorValue> colorValues = new ArrayList<>();
+        while (matcher.find()) {
+            final String colorCode = matcher.group(GROUP_JAVA_RGBA);
+            int r = Integer.parseInt(matcher.group(GROUP_RED));
+            int g = Integer.parseInt(matcher.group(GROUP_GREEN));
+            int b = Integer.parseInt(matcher.group(GROUP_BLUE));
+            int a = Integer.parseInt(matcher.group(GROUP_ALPHA));
+            Color color = new Color(r, g, b, a);
+            ColorValue colorValue = new JavaIntRGBAColorValue(colorCode, new OffsetRange(matcher.start(), matcher.end()), lineNumber, color);
+            colorValues.add(colorValue);
+        }
+        return colorValues;
+    }
+
+    private static Matcher getColorMatcher(String line, ColorType type) {
         return type.getPattern().matcher(line);
     }
 
