@@ -18,7 +18,7 @@ package com.junichi11.netbeans.modules.color.codes.preview.impl.colors;
 import com.junichi11.netbeans.modules.color.codes.preview.api.OffsetRange;
 import com.junichi11.netbeans.modules.color.codes.preview.spi.AbstractColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodeFormatter;
-import com.junichi11.netbeans.modules.color.codes.preview.utils.JavaColorType;
+import com.junichi11.netbeans.modules.color.codes.preview.impl.utils.JavaColorType;
 import java.awt.Color;
 
 /**

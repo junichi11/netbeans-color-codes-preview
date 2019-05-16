@@ -16,7 +16,6 @@
 package com.junichi11.netbeans.modules.color.codes.preview.ui;
 
 import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorValue;
-import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils;
 import com.junichi11.netbeans.modules.color.codes.preview.utils.Utils;
 import java.awt.Color;
 import java.awt.Component;

@@ -18,8 +18,8 @@ package com.junichi11.netbeans.modules.color.codes.preview.impl.colors;
 import com.junichi11.netbeans.modules.color.codes.preview.api.OffsetRange;
 import com.junichi11.netbeans.modules.color.codes.preview.spi.AbstractColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodeFormatter;
-import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils;
-import com.junichi11.netbeans.modules.color.codes.preview.utils.HexCssColorType;
+import com.junichi11.netbeans.modules.color.codes.preview.impl.utils.ColorsUtils;
+import com.junichi11.netbeans.modules.color.codes.preview.impl.utils.HexCssColorType;
 import java.awt.Color;
 
 /**

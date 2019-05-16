@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.junichi11.netbeans.modules.color.codes.preview.utils;
+package com.junichi11.netbeans.modules.color.codes.preview.impl.utils;
 
 import com.junichi11.netbeans.modules.color.codes.preview.api.OffsetRange;
 import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.CssHSLAColorValue;

@@ -16,7 +16,7 @@
 package com.junichi11.netbeans.modules.color.codes.preview.impl.colors;
 
 import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodeFormatter;
-import com.junichi11.netbeans.modules.color.codes.preview.utils.JavaColorType;
+import com.junichi11.netbeans.modules.color.codes.preview.impl.utils.JavaColorType;
 import java.awt.Color;
 import org.netbeans.api.annotations.common.CheckForNull;
 

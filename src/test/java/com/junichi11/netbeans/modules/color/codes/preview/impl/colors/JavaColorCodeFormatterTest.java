@@ -15,8 +15,7 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.impl.colors;
 
-import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.JavaColorCodeFormatter;
-import com.junichi11.netbeans.modules.color.codes.preview.utils.JavaColorType;
+import com.junichi11.netbeans.modules.color.codes.preview.impl.utils.JavaColorType;
 import java.awt.Color;
 import org.junit.After;
 import org.junit.AfterClass;
