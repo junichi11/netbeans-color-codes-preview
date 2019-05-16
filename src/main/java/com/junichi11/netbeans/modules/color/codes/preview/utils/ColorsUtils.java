@@ -15,20 +15,20 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.utils;
 
-import com.junichi11.netbeans.modules.color.codes.preview.colors.CssHSLAColorValue;
-import com.junichi11.netbeans.modules.color.codes.preview.colors.CssHSLColorValue;
-import com.junichi11.netbeans.modules.color.codes.preview.colors.CssIntRGBAColorValue;
-import com.junichi11.netbeans.modules.color.codes.preview.colors.CssIntRGBColorValue;
-import com.junichi11.netbeans.modules.color.codes.preview.colors.CssPercentRGBAColorValue;
-import com.junichi11.netbeans.modules.color.codes.preview.colors.CssPercentRGBColorValue;
-import com.junichi11.netbeans.modules.color.codes.preview.colors.HexColorValue;
-import com.junichi11.netbeans.modules.color.codes.preview.colors.JavaIntRGBAColorValue;
-import com.junichi11.netbeans.modules.color.codes.preview.colors.JavaIntRGBColorValue;
-import com.junichi11.netbeans.modules.color.codes.preview.colors.JavaStandardColor;
-import com.junichi11.netbeans.modules.color.codes.preview.colors.JavaStandardColorValue;
-import com.junichi11.netbeans.modules.color.codes.preview.colors.NamedColorValue;
-import com.junichi11.netbeans.modules.color.codes.preview.colors.api.OffsetRange;
-import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.ColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.CssHSLAColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.CssHSLColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.CssIntRGBAColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.CssIntRGBColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.CssPercentRGBAColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.CssPercentRGBColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.HexColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.JavaIntRGBAColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.JavaIntRGBColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.JavaStandardColor;
+import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.JavaStandardColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.NamedColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.api.OffsetRange;
+import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorValue;
 import java.awt.Color;
 import java.math.BigDecimal;
 import java.text.NumberFormat;

@@ -15,7 +15,7 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.options;
 
-import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.ColorCodesProvider;
+import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodesProvider;
 import java.awt.Component;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;

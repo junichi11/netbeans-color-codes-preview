@@ -23,8 +23,8 @@
                     <author>junichi11(Junichi Yamamoto)</author>
                     <homePageUrl>https://github.com/junichi11/netbeans-color-codes-preview</homePageUrl>
                     <publicPackages>
-                        <publicPackage>com.junichi11.netbeans.modules.color.codes.preview.colors.api</publicPackage>
-                        <publicPackage>com.junichi11.netbeans.modules.color.codes.preview.colors.spi</publicPackage>
+                        <publicPackage>com.junichi11.netbeans.modules.color.codes.preview.api</publicPackage>
+                        <publicPackage>com.junichi11.netbeans.modules.color.codes.preview.spi</publicPackage>
                     </publicPackages>
                 </configuration>
             </plugin>

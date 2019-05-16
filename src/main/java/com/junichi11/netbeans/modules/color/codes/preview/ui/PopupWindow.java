@@ -15,7 +15,7 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.ui;
 
-import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.ColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorValue;
 import java.awt.AWTEvent;
 import java.awt.Component;
 import java.awt.Point;
