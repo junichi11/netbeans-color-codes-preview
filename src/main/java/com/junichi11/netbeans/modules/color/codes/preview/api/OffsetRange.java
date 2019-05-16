@@ -35,6 +35,10 @@ public final class OffsetRange {
     public OffsetRange(int startOffset, int endOffset) {
         this.startOffset = startOffset;
         this.endOffset = endOffset;
+        if (startOffset > endOffset) {
+            throw new IllegalArgumentException("The end offset must be greater than or equal to the start offset (start offset: " // NOI18N
+                    + startOffset + ", end offset: " + endOffset + ")"); // NOI18N
+        }
     }
 
     /**
