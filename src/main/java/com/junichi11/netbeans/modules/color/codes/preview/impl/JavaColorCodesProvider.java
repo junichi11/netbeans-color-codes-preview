@@ -15,12 +15,11 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.impl;
 
+import com.junichi11.netbeans.modules.color.codes.preview.impl.utils.ColorsUtils;
 import com.junichi11.netbeans.modules.color.codes.preview.options.ColorCodesPreviewOptions;
 import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodesPreviewOptionsPanel;
 import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodesProvider;
 import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorValue;
-import com.junichi11.netbeans.modules.color.codes.preview.impl.utils.ColorsUtils;
-import com.junichi11.netbeans.modules.color.codes.preview.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -76,7 +75,6 @@ public class JavaColorCodesProvider extends AbstractColorCodesProvider {
             collectRGBColors(line, colorValues, lineNumber);
             collectRGBAColors(line, colorValues, lineNumber);
         }
-        Utils.sort(colorValues);
         return colorValues;
     }
 
