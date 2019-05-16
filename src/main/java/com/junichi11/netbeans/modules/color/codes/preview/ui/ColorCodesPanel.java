@@ -17,6 +17,7 @@ package com.junichi11.netbeans.modules.color.codes.preview.ui;
 
 import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils;
+import com.junichi11.netbeans.modules.color.codes.preview.utils.Utils;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -60,7 +61,7 @@ public class ColorCodesPanel extends JComponent {
             label.setFont(new Font(Font.MONOSPACED, Font.BOLD, font.getSize()));
             label.setOpaque(true);
             final Color backgroundColor = colorValue.getColor();
-            Color foregroundColor = ColorsUtils.getForeground(backgroundColor);
+            Color foregroundColor = Utils.getForeground(backgroundColor);
             label.setBackground(backgroundColor);
             label.setForeground(foregroundColor);
             label.setBorder(new EmptyBorder(3, 5, 3, 5));

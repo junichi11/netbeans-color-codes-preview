@@ -21,6 +21,7 @@ import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodesPreviewO
 import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodesProvider;
 import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils;
+import com.junichi11.netbeans.modules.color.codes.preview.utils.Utils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -77,7 +78,7 @@ public class HexCssColorCodesProvider implements ColorCodesProvider {
         if (options.useNamedColors()) {
             colorValues.addAll(ColorsUtils.getNamedColors(line, lineNumber));
         }
-        ColorsUtils.sort(colorValues);
+        Utils.sort(colorValues);
 
         // for sass and less variables
         checkVariables(document, line, variableColorValues, colorValues);

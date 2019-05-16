@@ -15,6 +15,7 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.utils;
 
+import com.junichi11.netbeans.modules.color.codes.preview.api.OffsetRange;
 import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.CssHSLAColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.CssHSLColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.CssIntRGBAColorValue;
@@ -27,14 +28,11 @@ import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.JavaIntRGB
 import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.JavaStandardColor;
 import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.JavaStandardColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.NamedColorValue;
-import com.junichi11.netbeans.modules.color.codes.preview.api.OffsetRange;
 import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorValue;
 import java.awt.Color;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,8 +72,6 @@ public final class ColorsUtils {
     private static final String GROUP_SATURATION = "s"; // NOI18N
     private static final String GROUP_LIGHTNESS = "l"; // NOI18N
     private static final String GROUP_COROR_NAME = "colorname"; // NOI18N
-
-    private static final Comparator COLOR_VALUE_COMPARATOR = new ColorValueComparator();
 
     private static final Map<String, String> NAMED_COLOR_TABLE = new HashMap<>();
 
@@ -802,37 +798,6 @@ public final class ColorsUtils {
     }
 
     /**
-     * Get a foreground color for a background color.
-     *
-     * @param bgColor
-     * @return {@code Color.WHITE} or {@code Color.BLACK}
-     */
-    public static Color getForeground(Color bgColor) {
-        int brightness = getBrightness(bgColor);
-        return brightness < 130 ? Color.WHITE : Color.BLACK;
-    }
-
-    /**
-     * Compute a brightness value.
-     * {@link http://www.w3.org/TR/AERT#color-contrast}
-     *
-     * @param color Color
-     * @return a brightness value
-     */
-    private static int getBrightness(Color color) {
-        return (color.getRed() * 299 + color.getGreen() * 578 + color.getBlue() * 114) / 1000;
-    }
-
-    /**
-     * Sort {@link ColorValue}s.
-     *
-     * @param colorValues
-     */
-    public static void sort(List<ColorValue> colorValues) {
-        Collections.sort(colorValues, COLOR_VALUE_COMPARATOR);
-    }
-
-    /**
      * A specific color to a hex color code string.(e.g #999999)
      *
      * @param color a Color
@@ -967,25 +932,6 @@ public final class ColorsUtils {
                 return HSLAValueString(color);
             default:
                 return hexValueString(color);
-        }
-    }
-
-    private static class ColorValueComparator implements Comparator<ColorValue> {
-
-        public ColorValueComparator() {
-        }
-
-        @Override
-        public int compare(ColorValue c1, ColorValue c2) {
-            int line1 = c1.getLine();
-            int line2 = c2.getLine();
-            if (line1 == line2) {
-                int startOffset1 = c1.getStartOffset();
-                int startOffset2 = c2.getStartOffset();
-                return startOffset1 - startOffset2;
-            } else {
-                return line1 - line2;
-            }
         }
     }
 }
