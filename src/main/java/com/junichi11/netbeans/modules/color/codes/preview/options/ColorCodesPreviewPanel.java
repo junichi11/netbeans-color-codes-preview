@@ -15,7 +15,6 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.options;
 
-import com.junichi11.netbeans.modules.color.codes.preview.colors.impl.ui.options.ProvidersCellRenderer;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.ColorCodesPreviewOptionsPanel;
 import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.ColorCodesProvider;
 import java.awt.event.ItemEvent;

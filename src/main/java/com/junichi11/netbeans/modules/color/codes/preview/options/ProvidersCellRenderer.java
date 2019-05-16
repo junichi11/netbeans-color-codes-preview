@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.junichi11.netbeans.modules.color.codes.preview.colors.impl.ui.options;
+package com.junichi11.netbeans.modules.color.codes.preview.options;
 
 import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.ColorCodesProvider;
 import java.awt.Component;
