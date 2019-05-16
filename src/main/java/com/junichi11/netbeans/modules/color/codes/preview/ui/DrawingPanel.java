@@ -15,10 +15,10 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.ui;
 
-import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.ColorCodesProvider;
-import com.junichi11.netbeans.modules.color.codes.preview.colors.spi.ColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.options.ColorCodesPreviewOptions;
-import com.junichi11.netbeans.modules.color.codes.preview.utils.ColorsUtils;
+import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodesProvider;
+import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.utils.Utils;
 import java.awt.AWTEvent;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
@@ -276,6 +276,7 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
             }
             colorValues.addAll(provider.getColorValues(document, lineString, lineNumber, variableValues));
         }
+        Utils.sort(colorValues);
         return colorValues;
     }
 
@@ -375,7 +376,6 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
         Point point = new Point(e.getPoint());
         SwingUtilities.convertPointToScreen(point, this);
         List<ColorValue> colorValues = getColorValuesAt(e);
-        ColorsUtils.sort(colorValues);
         if (colorValues.isEmpty()) {
             return;
         }
