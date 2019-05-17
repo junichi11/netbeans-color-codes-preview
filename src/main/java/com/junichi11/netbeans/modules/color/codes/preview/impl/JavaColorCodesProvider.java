@@ -97,7 +97,7 @@ public class JavaColorCodesProvider extends AbstractColorCodesProvider {
 
     @Override
     public ColorCodesPreviewOptionsPanel getOptionsPanel() {
-        return ColorCodesPreviewOptionsPanel.EMPTY_PANEL;
+        return ColorCodesPreviewOptionsPanel.createEmptyPanel();
     }
 
 }

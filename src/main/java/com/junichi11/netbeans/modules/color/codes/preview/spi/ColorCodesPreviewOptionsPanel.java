@@ -27,41 +27,24 @@ import javax.swing.event.ChangeListener;
 public abstract class ColorCodesPreviewOptionsPanel extends JPanel {
 
     /**
-     * Empty panel.
+     * Empty panel. Instead, please use
+     * ColorCodesPreviewOptionsPanel.createEmptyPanel().
      *
+     * @deprecated
      * @since 0.11.1
      */
-    public static ColorCodesPreviewOptionsPanel EMPTY_PANEL = new ColorCodesPreviewOptionsPanel() {
-        private static final long serialVersionUID = 3772795247048065205L;
-
-        @Override
-        public void load() {
-        }
-
-        @Override
-        public void store() {
-        }
-
-        @Override
-        public boolean valid() {
-            return true;
-        }
-
-        @Override
-        public String getErrorMessage() {
-            return null;
-        }
-
-        @Override
-        public void addChangeListener(ChangeListener listener) {
-        }
-
-        @Override
-        public void removeChangeListener(ChangeListener listener) {
-        }
-
-    };
+    public static final ColorCodesPreviewOptionsPanel EMPTY_PANEL = new ColorCodesPreviewOptionsEmptyPanel();
     private static final long serialVersionUID = -6323395294472234402L;
+
+    /**
+     * Create an empty panel. It can be used if Options is not needed.
+     *
+     * @since 0.12.1
+     * @return an empty panel
+     */
+    public static ColorCodesPreviewOptionsPanel createEmptyPanel() {
+        return new ColorCodesPreviewOptionsEmptyPanel();
+    }
 
     /**
      * Load settings.
@@ -109,4 +92,38 @@ public abstract class ColorCodesPreviewOptionsPanel extends JPanel {
      * @param listener the listener
      */
     public abstract void removeChangeListener(ChangeListener listener);
+
+    //~ Nested class
+    private static class ColorCodesPreviewOptionsEmptyPanel extends ColorCodesPreviewOptionsPanel {
+
+        public ColorCodesPreviewOptionsEmptyPanel() {
+        }
+        private static final long serialVersionUID = 3772795247048065205L;
+
+        @Override
+        public void load() {
+        }
+
+        @Override
+        public void store() {
+        }
+
+        @Override
+        public boolean valid() {
+            return true;
+        }
+
+        @Override
+        public String getErrorMessage() {
+            return null;
+        }
+
+        @Override
+        public void addChangeListener(ChangeListener listener) {
+        }
+
+        @Override
+        public void removeChangeListener(ChangeListener listener) {
+        }
+    }
 }
