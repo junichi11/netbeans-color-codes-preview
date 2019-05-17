@@ -15,11 +15,10 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.impl;
 
-import com.junichi11.netbeans.modules.color.codes.preview.impl.HexCssColorCodesProvider;
-import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.HexColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.api.OffsetRange;
-import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.HexColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.options.ColorCodesPreviewOptions;
+import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorValue;
 import java.awt.Color;
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,10 +27,10 @@ import java.util.List;
 import javax.swing.text.BadLocationException;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.netbeans.editor.BaseDocument;
 
 /**
