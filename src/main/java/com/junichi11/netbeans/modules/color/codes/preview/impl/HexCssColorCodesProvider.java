@@ -15,9 +15,13 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.impl;
 
+import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.HexCssColorCodeFormatter;
 import com.junichi11.netbeans.modules.color.codes.preview.impl.ui.options.HexCssOptionsPanel;
 import com.junichi11.netbeans.modules.color.codes.preview.impl.utils.ColorsUtils;
+import com.junichi11.netbeans.modules.color.codes.preview.impl.utils.HexCssColorType;
 import com.junichi11.netbeans.modules.color.codes.preview.options.ColorCodesPreviewOptions;
+import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodeFormatter;
+import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodeGeneratorItem;
 import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodesPreviewOptionsPanel;
 import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodesProvider;
 import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorValue;
@@ -38,6 +42,7 @@ public class HexCssColorCodesProvider implements ColorCodesProvider {
 
     // check sass and less variables e.g. $green: #0f0;, @green: #0f0;
     private static final Pattern CSS_VARIABLE_PATTERN = Pattern.compile("(?<var>[\\$@][^ ]+)\\s*:\\s*(?<value>).+\\s*;"); // NOI18N
+    private static final Pattern DEFAULT_PATTERN = Pattern.compile(ColorCodesPreviewOptions.HEX_CSS_DEFAULT_MIME_TYPE_REGEX);
 
     @Override
     public String getId() {
@@ -134,6 +139,92 @@ public class HexCssColorCodesProvider implements ColorCodesProvider {
     @Override
     public ColorCodesPreviewOptionsPanel getOptionsPanel() {
         return new HexCssOptionsPanel();
+    }
+
+    @Override
+    public boolean canGenerateColorCode() {
+        return true;
+    }
+
+    @Override
+    public List<ColorCodeGeneratorItem> getColorCodeGeneratorItems(String mimeType) {
+        Matcher matcher = Pattern.compile(ColorCodesPreviewOptions.getInstance().getMimeTypeRegex()).matcher(mimeType);
+        if (!matcher.matches()) {
+            return Collections.emptyList();
+        }
+        List<ColorCodeGeneratorItem> items = new ArrayList<>();
+        items.add(HexCssColorCodeGeneratorItem.HEX);
+        for (HexCssColorCodeGeneratorItem item : HexCssColorCodeGeneratorItem.values()) {
+            if (item != HexCssColorCodeGeneratorItem.HEX && DEFAULT_PATTERN.matcher(mimeType).matches()) {
+                items.add(item);
+            }
+        }
+        return items;
+    }
+
+    private static enum HexCssColorCodeGeneratorItem implements ColorCodeGeneratorItem {
+        HEX(HexCssColorType.HEX) {
+            @Override
+            public String getDisplayName() {
+                return "#<hex>"; // NOI18N
+            }
+        },
+        CSS_INT_RGB(HexCssColorType.CSS_INT_RGB) {
+            @Override
+            public String getDisplayName() {
+                return "rgb(r, g, b)"; // NOI18N
+            }
+
+        },
+        CSS_PERCENT_RGB(HexCssColorType.CSS_PERCENT_RGB) {
+            @Override
+            public String getDisplayName() {
+                return "rgb(r%, g%, b%)"; // NOI18N
+            }
+
+        },
+        CSS_INT_RGBA(HexCssColorType.CSS_INT_RGBA) {
+            @Override
+            public String getDisplayName() {
+                return "rgba(r, g, b, a)"; // NOI18N
+            }
+        },
+        CSS_PERCENT_RGBA(HexCssColorType.CSS_PERCENT_RGBA) {
+            @Override
+            public String getDisplayName() {
+                return "rgba(r%, g%, b%, a)"; // NOI18N
+            }
+        },
+        CSS_HSL(HexCssColorType.CSS_HSL) {
+            @Override
+            public String getDisplayName() {
+                return "hsl(h, s%, l%)"; // NOI18N
+            }
+        },
+        CSS_HSLA(HexCssColorType.CSS_HSLA) {
+            @Override
+            public String getDisplayName() {
+                return "hsla(h, s%, l%, a)"; // NOI18N
+            }
+        };
+
+        private final HexCssColorType type;
+
+        private HexCssColorCodeGeneratorItem(HexCssColorType type) {
+            this.type = type;
+        }
+
+        @NbBundle.Messages("HexCssColorCodeGeneratorItem.tooltipText=Generate Hex and CSS color codes")
+        @Override
+        public String getTooltipText() {
+            return Bundle.HexCssColorCodeGeneratorItem_tooltipText();
+        }
+
+        @Override
+        public ColorCodeFormatter getFormatter() {
+            return new HexCssColorCodeFormatter(type);
+        }
+
     }
 
 }

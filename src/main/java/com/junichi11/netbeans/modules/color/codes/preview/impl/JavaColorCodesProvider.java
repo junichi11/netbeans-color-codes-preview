@@ -15,12 +15,18 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.impl;
 
+import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.JavaColorCodeFormatter;
 import com.junichi11.netbeans.modules.color.codes.preview.impl.utils.ColorsUtils;
+import com.junichi11.netbeans.modules.color.codes.preview.impl.utils.JavaColorType;
 import com.junichi11.netbeans.modules.color.codes.preview.options.ColorCodesPreviewOptions;
+import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodeFormatter;
+import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodeGeneratorItem;
 import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodesPreviewOptionsPanel;
 import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodesProvider;
 import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorValue;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -40,7 +46,7 @@ public class JavaColorCodesProvider extends AbstractColorCodesProvider {
 
     private static final String COLOR_PREFIX = "Color."; // NOI18N
     private static final String NEW_COLOR_PREFIX = "new Color("; // NOI18N
-
+    private static final String MIME_TYPE_JAVA = "text/x-java"; // NOI18N
     private static final Logger LOGGER = Logger.getLogger(JavaColorCodesProvider.class.getName());
 
     @Override
@@ -64,7 +70,7 @@ public class JavaColorCodesProvider extends AbstractColorCodesProvider {
     public boolean isProviderEnabled(Document document) {
         String mimeType = NbEditorUtilities.getMimeType(document);
         return ColorCodesPreviewOptions.getInstance().isEnabled(getId())
-                && "text/x-java".equals(mimeType); // NOI18N
+                && MIME_TYPE_JAVA.equals(mimeType);
     }
 
     @Override
@@ -98,6 +104,60 @@ public class JavaColorCodesProvider extends AbstractColorCodesProvider {
     @Override
     public ColorCodesPreviewOptionsPanel getOptionsPanel() {
         return ColorCodesPreviewOptionsPanel.createEmptyPanel();
+    }
+
+    @Override
+    public boolean canGenerateColorCode() {
+        return true;
+    }
+
+    @Override
+    public List<ColorCodeGeneratorItem> getColorCodeGeneratorItems(String mimeType) {
+        if (!mimeType.equals(MIME_TYPE_JAVA)) {
+            return Collections.emptyList();
+        }
+        return Arrays.asList(JavaColorCodeGeneratorItem.values());
+    }
+
+    private static enum JavaColorCodeGeneratorItem implements ColorCodeGeneratorItem {
+        INT_RGB(JavaColorType.JAVA_INT_RGB) {
+            @Override
+            public String getDisplayName() {
+                return "new Color(r, g, b)"; // NOI18N
+            }
+
+        },
+        INT_RGBA(JavaColorType.JAVA_INT_RGBA) {
+            @Override
+            public String getDisplayName() {
+                return "new Color(r, g, b, a)"; // NOI18N
+            }
+
+        },
+        DECODE(JavaColorType.DECODE) {
+            @Override
+            public String getDisplayName() {
+                return "Color.decode(\"#<hex>\")"; // NOI18N
+            }
+
+        };
+
+        private final JavaColorType type;
+
+        private JavaColorCodeGeneratorItem(JavaColorType type) {
+            this.type = type;
+        }
+
+        @Override
+        public ColorCodeFormatter getFormatter() {
+            return new JavaColorCodeFormatter(type);
+        }
+
+        @NbBundle.Messages("JavaColorCodeGeneratorItem.tooltipText=Generate Java Color class code")
+        @Override
+        public String getTooltipText() {
+            return Bundle.JavaColorCodeGeneratorItem_tooltipText();
+        }
     }
 
 }

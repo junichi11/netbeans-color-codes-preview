@@ -85,4 +85,15 @@ public class JavaColorCodeFormatterTest {
         assertEquals("new Color(0, 100, 200, 100)", result);
     }
 
+    @Test
+    public void testDecodeFormat() {
+        JavaColorCodeFormatter formatter = new JavaColorCodeFormatter(JavaColorType.DECODE);
+        String result = formatter.format(Color.BLACK);
+        assertEquals("Color.decode(\"#000000\")", result);
+        result = formatter.format(new Color(0, 100, 200));
+        assertEquals("Color.decode(\"#0064c8\")", result);
+        result = formatter.format(new Color(0, 100, 200, 100));
+        assertEquals("Color.decode(\"#0064c8\")", result);
+    }
+
 }

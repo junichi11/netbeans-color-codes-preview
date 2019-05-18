@@ -15,8 +15,8 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.api;
 
-import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodesProvider;
 import com.junichi11.netbeans.modules.color.codes.preview.options.ColorCodesPreviewOptions;
+import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodesProvider;
 
 /**
  *

@@ -15,8 +15,8 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.impl.colors;
 
-import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodeFormatter;
 import com.junichi11.netbeans.modules.color.codes.preview.impl.utils.JavaColorType;
+import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodeFormatter;
 import java.awt.Color;
 import org.netbeans.api.annotations.common.CheckForNull;
 
@@ -24,10 +24,11 @@ import org.netbeans.api.annotations.common.CheckForNull;
  *
  * @author junichi11
  */
-final class JavaColorCodeFormatter implements ColorCodeFormatter {
+public final class JavaColorCodeFormatter implements ColorCodeFormatter {
 
     private static final String RGB_VALUE_FORMAT = "Color(%s, %s, %s)"; // NOI18N
     private static final String RGBA_VALUE_FORMAT = "Color(%s, %s, %s, %s)"; // NOI18N
+    private static final String DECODE_HEX_VALUE_FORMAT = "Color.decode(\"#%02x%02x%02x\")"; // NOI18N
 
     private final JavaColorType type;
 
@@ -42,6 +43,8 @@ final class JavaColorCodeFormatter implements ColorCodeFormatter {
             if (standardJavaColor != null) {
                 return standardJavaColor;
             }
+        } else if (type == JavaColorType.DECODE) {
+            return asDecodeHexValue(color);
         }
         return "new " + asRGBIntColorValue(color); // NOI18N
     }
@@ -51,6 +54,10 @@ final class JavaColorCodeFormatter implements ColorCodeFormatter {
             return String.format(RGBA_VALUE_FORMAT, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
         }
         return String.format(RGB_VALUE_FORMAT, color.getRed(), color.getGreen(), color.getBlue());
+    }
+
+    private String asDecodeHexValue(Color color) {
+        return String.format(DECODE_HEX_VALUE_FORMAT, color.getRed(), color.getGreen(), color.getBlue());
     }
 
     @CheckForNull

@@ -175,6 +175,16 @@
 &lt;li&gt;An old color value will be changed to new one with the same format&lt;/li&gt;
 &lt;/ul&gt;
 
+&lt;h2&gt;Generate color codes&lt;/h2&gt;&lt;p&gt;You can generate color codes via a code generator(&lt;kbd&gt;Alt&lt;/kbd&gt; + &lt;kbd&gt;Ins&lt;/kbd&gt;).&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Run a code generator(Alt + Ins)&lt;/li&gt;
+&lt;li&gt;Choose &lt;code&gt;Color...&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Choose format you expect (e.g. &lt;code&gt;new Color(r, g, b)&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Choose a color&lt;/li&gt;
+&lt;li&gt;Click the OK button&lt;/li&gt;
+&lt;li&gt;A color code is generated at the caret position&lt;/li&gt;
+&lt;/ol&gt;
+
 &lt;h2&gt;Options&lt;/h2&gt;
 
         Tools &gt; Options &gt; Miscellaneous &gt; Color Codes Preview
