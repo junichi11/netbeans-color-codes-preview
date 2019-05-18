@@ -33,7 +33,7 @@ final class ColorCodesPreviewPanel extends javax.swing.JPanel {
     private final ColorCodesPreviewOptionsPanelController controller;
     private final Map<String, JCheckBox> enabledCheckBoxes = new HashMap<>();
     private final Map<ColorCodesProvider, ColorCodesPreviewOptionsPanel> providerOptionsPanels = new HashMap<>();
-    private ColorCodesPreviewOptionsPanel currentSelectedPanel = ColorCodesPreviewOptionsPanel.EMPTY_PANEL;
+    private ColorCodesPreviewOptionsPanel currentSelectedPanel = ColorCodesPreviewOptionsPanel.createEmptyPanel();
     private JCheckBox enabledCheckBox = new JCheckBox(Bundle.ColorCodesPreviewPanel_enabled());
 
     ColorCodesPreviewPanel(ColorCodesPreviewOptionsPanelController controller) {
@@ -51,7 +51,7 @@ final class ColorCodesPreviewPanel extends javax.swing.JPanel {
         for (ColorCodesProvider provider : getProviders()) {
             ColorCodesPreviewOptionsPanel panel = provider.getOptionsPanel();
             if (panel == null) {
-                panel = ColorCodesPreviewOptionsPanel.EMPTY_PANEL;
+                panel = ColorCodesPreviewOptionsPanel.createEmptyPanel();
             }
             panel.addChangeListener(controller);
             providerOptionsPanels.put(provider, panel);

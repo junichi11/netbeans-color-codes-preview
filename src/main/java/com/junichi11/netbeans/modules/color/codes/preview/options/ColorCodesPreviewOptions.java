@@ -28,7 +28,7 @@ public final class ColorCodesPreviewOptions {
 
     public static final String ENABLED_PREFIX = "color.codes.preview.enabled."; // NOI18N
     public static final String HEX_CSS_MIME_TYPE_REGEX = "color.codes.preview.mimetype.regex"; // NOI18N
-    private static final String HEX_CSS_DEFAULT_MIME_TYPE_REGEX = "^text/(x-)?(css|less|sass|scss)$"; // NOI18N
+    public static final String HEX_CSS_DEFAULT_MIME_TYPE_REGEX = "^text/(x-)?(css|less|sass|scss)$"; // NOI18N
     private static final String HEX_CSS_NAMED_COLORS = "color.codes.preview.color.types.named"; // NOI18N
     private static final String HEX_CSS_RESOLVE_CSS_VARIABLES = "color.codes.preview.resolve.css.variables"; // NOI18N
     private static final String ENABLED = ENABLED_PREFIX + "%s"; // NOI18N

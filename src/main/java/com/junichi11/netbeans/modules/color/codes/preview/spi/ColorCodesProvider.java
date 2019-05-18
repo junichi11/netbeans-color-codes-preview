@@ -86,4 +86,23 @@ public interface ColorCodesProvider {
      * @return the panel for Options
      */
     public ColorCodesPreviewOptionsPanel getOptionsPanel();
+
+    /**
+     * Check whether this provider provides generating color code feature.
+     *
+     * @since 0.12.1
+     * @return {@code true} if this provider provides generating color code
+     * feature, otherwise {@code false}
+     */
+    public boolean canGenerateColorCode();
+
+    /**
+     * Get items for color code generator.
+     *
+     * @since 0.12.1
+     * @param memeType the mime type
+     * @return ColorCodeGenaratorItems
+     */
+    public List<ColorCodeGeneratorItem> getColorCodeGeneratorItems(String memeType);
+
 }
