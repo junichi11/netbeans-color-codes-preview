@@ -15,31 +15,22 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.impl.colors;
 
-import com.junichi11.netbeans.modules.color.codes.preview.api.OffsetRange;
+import com.junichi11.netbeans.modules.color.codes.preview.impl.utils.ColorsUtils;
 import com.junichi11.netbeans.modules.color.codes.preview.impl.utils.HexCssColorType;
-import com.junichi11.netbeans.modules.color.codes.preview.spi.AbstractColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodeFormatter;
+import java.awt.Color;
 
-/**
- *
- * @author junichi11
- */
-abstract class HexCssColorValue extends AbstractColorValue {
+public final class HexCssColorCodeFormatter implements ColorCodeFormatter {
 
-    public HexCssColorValue(String value, OffsetRange offsetRange, int line) {
-        super(value, offsetRange, line);
+    private final HexCssColorType type;
+
+    public HexCssColorCodeFormatter(HexCssColorType type) {
+        this.type = type;
     }
 
     @Override
-    public boolean isEditable() {
-        return true;
+    public String format(Color color) {
+        return ColorsUtils.toFormattedString(color, type);
     }
-
-    @Override
-    public ColorCodeFormatter getFormatter() {
-        return new HexCssColorCodeFormatter(getType());
-    }
-
-    public abstract HexCssColorType getType();
 
 }

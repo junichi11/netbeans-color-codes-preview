@@ -24,12 +24,14 @@ import java.util.regex.Pattern;
 public enum JavaColorType implements ColorType {
     JAVA_STANDARD_COLOR(String.format(JavaColorType.JAVA_STANDARD_COLOR_FORMAT, JavaColorType.JAVA_STANDARD_COLORS_REGEX)),
     JAVA_INT_RGB(String.format(JavaColorType.JAVA_RGB_FORMAT, ColorType.INT_RGB_VALUE_FORMAT, ColorType.INT_RGB_VALUE_FORMAT, ColorType.INT_RGB_VALUE_FORMAT)),
-    JAVA_INT_RGBA(String.format(JavaColorType.JAVA_RGBA_FORMAT, ColorType.INT_RGB_VALUE_FORMAT, ColorType.INT_RGB_VALUE_FORMAT, ColorType.INT_RGB_VALUE_FORMAT, ColorType.INT_RGB_VALUE_FORMAT)),;
+    JAVA_INT_RGBA(String.format(JavaColorType.JAVA_RGBA_FORMAT, ColorType.INT_RGB_VALUE_FORMAT, ColorType.INT_RGB_VALUE_FORMAT, ColorType.INT_RGB_VALUE_FORMAT, ColorType.INT_RGB_VALUE_FORMAT)),
+    DECODE(JavaColorType.JAVA_COLOR_DECODE_REGEX);
 
     private static final String JAVA_STANDARD_COLORS_REGEX = "black|BLACK|blue|BLUE|cyan|CYAN|darkGray|DARK_GRAY|gray|GRAY|green|GREEN|lightGray|LIGHT_GRAY|magenta|MAGENTA|orange|ORANGE|pink|PINK|red|RED|white|WHITE|yellow|YELLOW"; // NOI18N
     private static final String JAVA_STANDARD_COLOR_FORMAT = "(?<javastandard>Color\\.(?<colorname>%s))"; // NOI18N
     private static final String JAVA_RGB_FORMAT = "(?<javargb>new Color\\((?<codenumber> *(?<r>%s) *, *(?<g>%s) *, *(?<b>%s) *)\\))"; // NOI18N
     private static final String JAVA_RGBA_FORMAT = "(?<javargba>new Color\\((?<codenumber> *(?<r>%s) *, *(?<g>%s) *, *(?<b>%s) *, *(?<a>%s) *)\\))"; // NOI18N
+    private static final String JAVA_COLOR_DECODE_REGEX = "(?<javadecode>Color\\.decode\\(\"(#(?<codenumber>[0-9a-fA-F]{6,}|[0-9a-fA-F]{3,})\")\\))"; // NOI18N
 
     private final Pattern pattern;
 
