@@ -168,6 +168,11 @@ public class HexCssColorCodesProvider implements ColorCodesProvider {
             public String getDisplayName() {
                 return "#<hex>"; // NOI18N
             }
+
+            @Override
+            public String getTooltipText() {
+                return Bundle.HexCssColorCodeGeneratorItem_hex_tooltipText();
+            }
         },
         CSS_INT_RGB(HexCssColorType.CSS_INT_RGB) {
             @Override
@@ -214,10 +219,13 @@ public class HexCssColorCodesProvider implements ColorCodesProvider {
             this.type = type;
         }
 
-        @NbBundle.Messages("HexCssColorCodeGeneratorItem.tooltipText=Generate Hex and CSS color codes")
+        @NbBundle.Messages({
+            "HexCssColorCodeGeneratorItem.hex.tooltipText=Generate Hex color codes (e.g. #ff00ff)",
+            "HexCssColorCodeGeneratorItem.css.tooltipText=Generate CSS color codes"
+        })
         @Override
         public String getTooltipText() {
-            return Bundle.HexCssColorCodeGeneratorItem_tooltipText();
+            return Bundle.HexCssColorCodeGeneratorItem_css_tooltipText();
         }
 
         @Override
