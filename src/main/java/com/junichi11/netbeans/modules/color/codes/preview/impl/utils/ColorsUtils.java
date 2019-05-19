@@ -697,7 +697,7 @@ public final class ColorsUtils {
     }
 
     /**
-     * Get a HSL Color.
+     * Get an HSL Color.
      * {@link http://www.w3.org/TR/2011/REC-css3-color-20110607/#hsl-color}
      *
      * @param h a hue value [0,1]
@@ -711,7 +711,7 @@ public final class ColorsUtils {
     }
 
     /**
-     * Get a HSLA Color.
+     * Get an HSLA Color.
      *
      * @param h a hue value [0,1]
      * @param s a saturation value [0,1]

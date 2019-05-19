@@ -44,7 +44,7 @@ You can generate color codes via a code generator(<kbd>Alt</kbd> + <kbd>Ins</kbd
 
 1. Run a code generator(<kbd>Alt</kbd> + <kbd>Ins</kbd>)
 2. Choose `Color...`
-3. Choose format you expect (e.g. `new Color(r, g, b)`)
+3. Choose the format you expect (e.g. `new Color(r, g, b)`)
 4. Choose a color
 5. Click the OK button
 6. A color code is generated at the caret position
