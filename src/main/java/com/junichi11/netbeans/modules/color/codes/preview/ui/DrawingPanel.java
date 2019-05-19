@@ -197,7 +197,7 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
                     }
 
                     // get color values
-                    List<ColorValue> colorValues = getAllColorValues(providers, line, -1, variableColorValues); // XXX add proper line number
+                    List<ColorValue> colorValues = getAllColorValues(providers, line, i + 1, variableColorValues);
 
                     if (i < startViewIndex) {
                         continue;
