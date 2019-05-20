@@ -46,9 +46,9 @@ import org.netbeans.api.annotations.common.CheckForNull;
 public final class ColorsUtils {
 
     private static final int SHORT_HEX_COLOR_CODE_LENGTH = 3;
-    private static final int SHORT_HEX_COLOR_CODE_FULL_LENGTH = 4;
+    private static final int SHORT_HEX_COLOR_CODE_WITH_HASH_LENGTH = 4;
     private static final int HEX_COLOR_CODE_LENGTH = 6;
-    private static final int HEX_COLOR_CODE_FULL_LENGTH = 7;
+    private static final int HEX_COLOR_CODE_WITH_HASH_LENGTH = 7;
 
     private static final String HEX_VALUE_FORMAT = "#%02x%02x%02x"; // NOI18N
     private static final String RGB_VALUE_FORMAT = "rgb(%s, %s, %s)"; // NOI18N
@@ -590,10 +590,10 @@ public final class ColorsUtils {
         Matcher matcher = getColorMatcher(code, HexCssColorType.HEX);
         if (matcher.matches()) {
             int length = code.length();
-            if (length == SHORT_HEX_COLOR_CODE_FULL_LENGTH) {
+            if (length == SHORT_HEX_COLOR_CODE_WITH_HASH_LENGTH) {
                 return Color.decode(convertToRRGGBB(code));
             }
-            if (length == HEX_COLOR_CODE_FULL_LENGTH) {
+            if (length == HEX_COLOR_CODE_WITH_HASH_LENGTH) {
                 return Color.decode(code);
             }
         }
