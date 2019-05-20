@@ -71,7 +71,7 @@ public final class ColorsUtils {
     private static final String GROUP_HUE = "h"; // NOI18N
     private static final String GROUP_SATURATION = "s"; // NOI18N
     private static final String GROUP_LIGHTNESS = "l"; // NOI18N
-    private static final String GROUP_COROR_NAME = "colorname"; // NOI18N
+    private static final String GROUP_COLOR_NAME = "colorname"; // NOI18N
 
     private static final Map<String, String> NAMED_COLOR_TABLE = new HashMap<>();
 
@@ -303,8 +303,8 @@ public final class ColorsUtils {
         Matcher matcher = getColorMatcher(line, HexCssColorType.NAMED_COLORS);
         ArrayList<ColorValue> colorValues = new ArrayList<>();
         while (matcher.find()) {
-            final String namedColor = matcher.group(0);
-            ColorValue colorValue = new NamedColorValue(namedColor, new OffsetRange(matcher.start(), matcher.end()), lineNumber);
+            final String namedColor = matcher.group(GROUP_COLOR_NAME);
+            ColorValue colorValue = new NamedColorValue(namedColor, new OffsetRange(matcher.start() + 1, matcher.end() - 1), lineNumber);
             colorValues.add(colorValue);
         }
         return colorValues;
@@ -435,7 +435,7 @@ public final class ColorsUtils {
         Matcher matcher = getColorMatcher(line, JavaColorType.JAVA_STANDARD_COLOR);
         ArrayList<ColorValue> colorValues = new ArrayList<>();
         while (matcher.find()) {
-            final String colorName = matcher.group(GROUP_COROR_NAME);
+            final String colorName = matcher.group(GROUP_COLOR_NAME);
             JavaStandardColor stdColor = JavaStandardColor.valueOf(colorName);
             ColorValue colorValue = new JavaStandardColorValue(matcher.group(GROUP_JAVA_STANDARD), new OffsetRange(matcher.start(), matcher.end()), lineNumber, stdColor.getColor());
             colorValues.add(colorValue);
@@ -602,9 +602,11 @@ public final class ColorsUtils {
 
     @CheckForNull
     private static Color decodeNamedColor(String code) {
-        Matcher matcher = getColorMatcher(code, HexCssColorType.NAMED_COLORS);
+        // Add white spaces to the top and the end to parse with the regex for named colors
+        String namedColorCode = String.format(" %s ", code); // NOI18N
+        Matcher matcher = getColorMatcher(namedColorCode, HexCssColorType.NAMED_COLORS);
         if (matcher.matches()) {
-            String hexColorCode = NAMED_COLOR_TABLE.get(matcher.group(1).toLowerCase());
+            String hexColorCode = NAMED_COLOR_TABLE.get(matcher.group(GROUP_COLOR_NAME).toLowerCase());
             return decodeHexColorCode(hexColorCode);
         }
         return null;

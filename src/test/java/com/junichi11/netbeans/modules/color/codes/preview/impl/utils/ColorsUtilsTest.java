@@ -439,19 +439,9 @@ public class ColorsUtilsTest {
      */
     @Test
     public void testDecodeNamedColor() {
-        Color result = ColorsUtils.decode(" black ");
+        Color result = ColorsUtils.decode("black");
         Assert.assertNotNull(result);
-        result = ColorsUtils.decode(" RED ");
-        Assert.assertNotNull(result);
-        result = ColorsUtils.decode(":RED;");
-        Assert.assertNotNull(result);
-        result = ColorsUtils.decode(" RED;");
-        Assert.assertNotNull(result);
-        result = ColorsUtils.decode(":RED ");
-        Assert.assertNotNull(result);
-        result = ColorsUtils.decode(",RED ");
-        Assert.assertNotNull(result);
-        result = ColorsUtils.decode(" RED\"");
+        result = ColorsUtils.decode("RED");
         Assert.assertNotNull(result);
 
         result = ColorsUtils.decode("test invalid");
