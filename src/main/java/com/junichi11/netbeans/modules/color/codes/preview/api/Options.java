@@ -19,6 +19,7 @@ import com.junichi11.netbeans.modules.color.codes.preview.options.ColorCodesPrev
 import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodesProvider;
 
 /**
+ * Options for each provider.
  *
  * @author junichi11
  */
@@ -30,7 +31,7 @@ public final class Options {
     }
 
     /**
-     * Get instance of Options.
+     * Get the instance of the Options.
      *
      * @since 0.10.0
      * @return Options

@@ -20,8 +20,16 @@ import java.util.Map;
 import javax.swing.text.Document;
 
 /**
- * @ServiceProvider add Language implementation to netbeans-color-codes-preview
- * plugin
+ * This provides support for showing the colors for the specific color code in
+ * the editor side bar. You can add your provider via a ServiceProvider
+ * annotation. e.g.
+ * <pre>
+ * &#64;ServiceProvider(service = ColorCodesProvider.class, position = 1000)
+ * public class MyColorCodesProvider implements ColorCodesProvider {
+ *     // implementations...
+ * }
+ * </pre>
+ *
  * @author junichi11, arsi
  * @since 0.10.0
  */
@@ -35,16 +43,16 @@ public interface ColorCodesProvider {
     public String getId();
 
     /**
-     * Get display name.
+     * Get the display name.
      *
-     * @return display name
+     * @return the display name
      */
     public String getDisplayName();
 
     /**
-     * Get description.
+     * Get the description.
      *
-     * @return description
+     * @return the description
      */
     public String getDescription();
 
@@ -52,7 +60,7 @@ public interface ColorCodesProvider {
      * Is this provider enabled.
      *
      * @since 0.10.0
-     * @param document
+     * @param document the document
      * @return {@code true} if enabled, otherwise {@code false}
      */
     public boolean isProviderEnabled(Document document);
@@ -61,21 +69,21 @@ public interface ColorCodesProvider {
      * Parse the line then return color values.
      *
      * @since 0.10.0
-     * @param document
-     * @param line string to parse
-     * @param lineNumber lineNumber to store to ColorValue
+     * @param document the document
+     * @param line the string to parse
+     * @param lineNumber line number to store to ColorValue
      * @param variableColorValues save colors of variables to this map
      * @return color values
      */
     public List<ColorValue> getColorValues(Document document, String line, int lineNumber, Map<String, List<ColorValue>> variableColorValues);
 
     /**
-     * Get start position for parsing lines.
+     * Get the start position for parsing lines.
      *
      * @since 0.10.0
-     * @param document
-     * @param currentIndex
-     * @return
+     * @param document the document
+     * @param currentIndex the line number
+     * @return the line number to start parsing
      */
     public int getStartIndex(Document document, int currentIndex);
 
@@ -88,7 +96,9 @@ public interface ColorCodesProvider {
     public ColorCodesPreviewOptionsPanel getOptionsPanel();
 
     /**
-     * Check whether this provider provides generating color code feature.
+     * Check whether this provider provides generating color code feature. If it
+     * is provided, please return ColorCodeGeneratorItems in
+     * getColorCodeGeneratorItems().
      *
      * @since 0.12.1
      * @return {@code true} if this provider provides generating color code
@@ -100,9 +110,9 @@ public interface ColorCodesProvider {
      * Get items for color code generator.
      *
      * @since 0.12.1
-     * @param memeType the mime type
+     * @param mimeType the mime type
      * @return ColorCodeGenaratorItems
      */
-    public List<ColorCodeGeneratorItem> getColorCodeGeneratorItems(String memeType);
+    public List<ColorCodeGeneratorItem> getColorCodeGeneratorItems(String mimeType);
 
 }

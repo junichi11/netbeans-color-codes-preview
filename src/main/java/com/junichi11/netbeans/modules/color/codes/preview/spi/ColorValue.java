@@ -18,7 +18,7 @@ package com.junichi11.netbeans.modules.color.codes.preview.spi;
 import java.awt.Color;
 
 /**
- * Color value record
+ * Color value object for the color code.
  *
  * @author junichi11
  * @since 0.10.0
@@ -34,7 +34,7 @@ public interface ColorValue {
     Color getColor();
 
     /**
-     * Get the start offset of the color.
+     * Get the start offset of the color from the top of the line.
      *
      * @since 0.10.0
      * @return the start offset
@@ -42,7 +42,7 @@ public interface ColorValue {
     int getStartOffset();
 
     /**
-     * Get the end offset of the color.
+     * Get the end offset of the color from the top of the line.
      *
      * @since 0.10.0
      * @return the end offset
@@ -58,7 +58,7 @@ public interface ColorValue {
     int getLine();
 
     /**
-     * Get color value.
+     * Get the color value.
      *
      * @since 0.10.0
      * @return the color value
@@ -74,7 +74,7 @@ public interface ColorValue {
     boolean isEditable();
 
     /**
-     * Get formatter.
+     * Get the formatter.
      *
      * @since 0.10.0
      * @return the formatter
