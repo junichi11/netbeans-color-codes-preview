@@ -64,6 +64,9 @@ public class JavaColorCodesProviderTest {
         assertEquals(2, result.get(0).getStartOffset());
         assertEquals(13, result.get(0).getEndOffset());
         assertEquals(true, result.get(0).isEditable());
+
+        result = provider.getColorValues(null, "  Color.Black;  // black", 0, Collections.emptyMap());
+        assertEquals(0, result.size());
     }
 
     @Test

@@ -820,6 +820,10 @@ public class ColorsUtilsTest {
         result = ColorsUtils.getJavaStandardColors("Color color = Color.WHITE;", 1);
         assertEquals(1, result.size());
 
+        result = ColorsUtils.getJavaStandardColors("Color color = Color.Black;", 1);
+        assertEquals(0, result.size());
+        result = ColorsUtils.getJavaStandardColors("Color color = Color.WhiTE;", 1);
+        assertEquals(0, result.size());
         result = ColorsUtils.getJavaStandardColors("Color color = Color.FOO;", 1);
         assertEquals(0, result.size());
         result = ColorsUtils.getJavaStandardColors("Color color = new Color(255, 255, 255);", 1);
