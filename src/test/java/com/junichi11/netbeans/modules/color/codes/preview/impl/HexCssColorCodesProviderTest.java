@@ -169,9 +169,9 @@ public class HexCssColorCodesProviderTest {
         List<ColorValue> result = provider.getColorValues(document, "color: black;", 0, Collections.emptyMap());
         assertEquals(1, result.size());
         assertEquals(Color.black, result.get(0).getColor());
-        assertEquals(" black;", result.get(0).getValue());
-        assertEquals(6, result.get(0).getStartOffset());
-        assertEquals(13, result.get(0).getEndOffset());
+        assertEquals("black", result.get(0).getValue());
+        assertEquals(7, result.get(0).getStartOffset());
+        assertEquals(12, result.get(0).getEndOffset());
         assertEquals(true, result.get(0).isEditable());
 
         result = provider.getColorValues(document, "color: hoge", 0, Collections.emptyMap());

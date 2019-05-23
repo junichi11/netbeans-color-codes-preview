@@ -32,7 +32,7 @@ public enum HexCssColorType implements ColorType {
     NAMED_COLORS(HexCssColorType.NAMED_COLORS_REGEX);
     static final String PERCENT_VALUE_FORMAT = "(100|[1-9]?[0-9])%"; // NOI18N
     // To prevent unexpected matches, check suffix and prefix
-    static final String NAMED_COLORS_REGEX = "[ :,\"](" // NOI18N
+    static final String NAMED_COLORS_REGEX = "(?<namedcolor>[ :,\"](?<colorname>" // NOI18N
             + "indianred|lightcoral|salmon|darksalmon|lightsalmon|crimson|red|firebrick|darkred|" // NOI18N
             + "pink|lightpink|hotpink|deeppink|mediumvioletred|palevioletred|" // NOI18N
             + "palevioletred|coral|tomato|orangered|darkorange|orange|" // NOI18N
@@ -43,7 +43,7 @@ public enum HexCssColorType implements ColorType {
             + "cornsilk|blanchedalmond|bisque|navajowhite|wheat|burlywood|tan|rosybrown|sandybrown|goldenrod|darkgoldenrod|peru|chocolate|saddlebrown|sienna|brown|maroon|" // NOI18N
             + "white|snow|honeydew|mintcream|azure|aliceblue|ghostwhite|whitesmoke|seashell|beige|oldlace|floralwhite|ivory|antiquewhite|linen|lavenderblush|mistyrose|" // NOI18N
             + "gainsboro|lightgray|silver|darkgray|gray|dimgray|lightslategray|slategray|darkslategray|black" // NOI18N
-            + ")[ ;,\"]"; // NOI18N
+            + ")[ ;,\"])"; // NOI18N
     static final String CSS_RGB_FORMAT = "(?<cssrgb>rgb\\((?<codenumber>(?<r>%s) *, *(?<g>%s) *, *(?<b>%s))\\))"; // NOI18N
     static final String CSS_RGBA_FORMAT = "(?<cssrgba>rgba\\((?<codenumber>(?<r>%s) *, *(?<g>%s) *, *(?<b>%s) *, *(?<a>%s))\\))"; // NOI18N
     static final String HUE_VALUE_FORMAT = "(360|3[0-5][0-9]|[1-2][0-9][0-9]|[1-9]?[0-9])"; // NOI18N

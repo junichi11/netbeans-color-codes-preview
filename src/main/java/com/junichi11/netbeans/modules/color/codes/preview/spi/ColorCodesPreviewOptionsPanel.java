@@ -19,7 +19,9 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeListener;
 
 /**
- * ColorCodesPreviewOptionsPanel.
+ * ColorCodesPreviewOptionsPanel. If you would like to add options for your
+ * provider, please use the panel extended this panel. (see
+ * ColorCodesProvider.getOptionsPanel())
  *
  * @since 0.11.1
  * @author junichi11
@@ -47,14 +49,16 @@ public abstract class ColorCodesPreviewOptionsPanel extends JPanel {
     }
 
     /**
-     * Load settings.
+     * Load settings. This is invoked when the Options panel is opened. e.g. You
+     * can set values to components of your panel from stored options.
      *
      * @since 0.11.1
      */
     public abstract void load();
 
     /**
-     * Store settings.
+     * Store settings. This is invoked when the OK button clicked in the Options
+     * panel. e.g. You can store components values to your options.
      *
      * @since 0.11.1
      */
@@ -78,7 +82,7 @@ public abstract class ColorCodesPreviewOptionsPanel extends JPanel {
     public abstract String getErrorMessage();
 
     /**
-     * Add ChangeListener.
+     * Add the ChangeListener.
      *
      * @since 0.11.1
      * @param listener the listener
@@ -86,7 +90,7 @@ public abstract class ColorCodesPreviewOptionsPanel extends JPanel {
     public abstract void addChangeListener(ChangeListener listener);
 
     /**
-     * Remove ChangeListener.
+     * Remove the ChangeListener.
      *
      * @since 0.11.1
      * @param listener the listener

@@ -36,7 +36,11 @@ public enum JavaColorType implements ColorType {
     private final Pattern pattern;
 
     private JavaColorType(String regex) {
-        this.pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+        if (regex.equals(String.format(JavaColorType.JAVA_STANDARD_COLOR_FORMAT, JavaColorType.JAVA_STANDARD_COLORS_REGEX))) {
+            this.pattern = Pattern.compile(regex);
+        } else {
+            this.pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+        }
     }
 
     @Override

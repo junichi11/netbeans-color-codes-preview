@@ -15,6 +15,7 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.options;
 
+import java.awt.Color;
 import java.util.prefs.PreferenceChangeListener;
 import java.util.prefs.Preferences;
 import org.openide.util.NbPreferences;
@@ -32,6 +33,11 @@ public final class ColorCodesPreviewOptions {
     private static final String HEX_CSS_NAMED_COLORS = "color.codes.preview.color.types.named"; // NOI18N
     private static final String HEX_CSS_RESOLVE_CSS_VARIABLES = "color.codes.preview.resolve.css.variables"; // NOI18N
     private static final String ENABLED = ENABLED_PREFIX + "%s"; // NOI18N
+    private static final String LAST_SELECTED_COLOR_RED = "color.codes.preview.last.color.red"; // NOI18N
+    private static final String LAST_SELECTED_COLOR_GREEN = "color.codes.preview.last.color.green"; // NOI18N
+    private static final String LAST_SELECTED_COLOR_BLUE = "color.codes.preview.last.color.blue"; // NOI18N
+    private static final String LAST_SELECTED_COLOR_ALPHA = "color.codes.preview.last.color.alpha"; // NOI18N
+    private static final String LAST_SELECTED_APPEND_SEMICOLON = "color.codes.preview.last.semicolon"; // NOI18N
 
     private static final ColorCodesPreviewOptions INSTANCE = new ColorCodesPreviewOptions();
 
@@ -72,6 +78,33 @@ public final class ColorCodesPreviewOptions {
 
     public void setEnabled(String providerId, boolean enabled) {
         getPreferences().putBoolean(String.format(ENABLED, providerId), enabled);
+    }
+
+    public Color getLastSelectedColor() {
+        // Default is Color.black
+        int r = getPreferences().getInt(LAST_SELECTED_COLOR_RED, 0);
+        int g = getPreferences().getInt(LAST_SELECTED_COLOR_GREEN, 0);
+        int b = getPreferences().getInt(LAST_SELECTED_COLOR_BLUE, 0);
+        int a = getPreferences().getInt(LAST_SELECTED_COLOR_ALPHA, 255);
+        return new Color(r, g, b, a);
+    }
+
+    public void setLastSelectedColor(Color color) {
+        if (color == null) {
+            return;
+        }
+        getPreferences().putInt(LAST_SELECTED_COLOR_RED, color.getRed());
+        getPreferences().putInt(LAST_SELECTED_COLOR_GREEN, color.getGreen());
+        getPreferences().putInt(LAST_SELECTED_COLOR_BLUE, color.getBlue());
+        getPreferences().putInt(LAST_SELECTED_COLOR_ALPHA, color.getAlpha());
+    }
+
+    public boolean isLastAppendSemicolonSelected() {
+        return getPreferences().getBoolean(LAST_SELECTED_APPEND_SEMICOLON, false);
+    }
+
+    public void setLastAppendSemicolonSelected(boolean isSelected) {
+        getPreferences().putBoolean(LAST_SELECTED_APPEND_SEMICOLON, isSelected);
     }
 
     public void addPreferenceChangeListener(PreferenceChangeListener listener) {

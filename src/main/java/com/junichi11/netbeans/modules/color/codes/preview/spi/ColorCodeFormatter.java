@@ -30,7 +30,7 @@ public interface ColorCodeFormatter {
      * Output the color with the specific format.
      *
      * @since 0.10.0
-     * @param color
+     * @param color the color
      * @return the formatted color
      */
     public @NonNull String format(Color color);

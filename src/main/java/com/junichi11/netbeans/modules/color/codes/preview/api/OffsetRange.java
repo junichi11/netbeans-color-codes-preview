@@ -61,4 +61,33 @@ public final class OffsetRange {
         return endOffset;
     }
 
+    @Override
+    public String toString() {
+        return "start offset: " + startOffset + ", end offset: " + endOffset; // NOI18N
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final OffsetRange other = (OffsetRange) obj;
+        if (this.startOffset != other.startOffset) {
+            return false;
+        }
+        return this.endOffset == other.endOffset;
+    }
+
 }

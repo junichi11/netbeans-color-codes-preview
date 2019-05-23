@@ -46,9 +46,9 @@ import org.netbeans.api.annotations.common.CheckForNull;
 public final class ColorsUtils {
 
     private static final int SHORT_HEX_COLOR_CODE_LENGTH = 3;
-    private static final int SHORT_HEX_COLOR_CODE_FULL_LENGTH = 4;
+    private static final int SHORT_HEX_COLOR_CODE_WITH_HASH_LENGTH = 4;
     private static final int HEX_COLOR_CODE_LENGTH = 6;
-    private static final int HEX_COLOR_CODE_FULL_LENGTH = 7;
+    private static final int HEX_COLOR_CODE_WITH_HASH_LENGTH = 7;
 
     private static final String HEX_VALUE_FORMAT = "#%02x%02x%02x"; // NOI18N
     private static final String RGB_VALUE_FORMAT = "rgb(%s, %s, %s)"; // NOI18N
@@ -71,7 +71,7 @@ public final class ColorsUtils {
     private static final String GROUP_HUE = "h"; // NOI18N
     private static final String GROUP_SATURATION = "s"; // NOI18N
     private static final String GROUP_LIGHTNESS = "l"; // NOI18N
-    private static final String GROUP_COROR_NAME = "colorname"; // NOI18N
+    private static final String GROUP_COLOR_NAME = "colorname"; // NOI18N
 
     private static final Map<String, String> NAMED_COLOR_TABLE = new HashMap<>();
 
@@ -303,8 +303,8 @@ public final class ColorsUtils {
         Matcher matcher = getColorMatcher(line, HexCssColorType.NAMED_COLORS);
         ArrayList<ColorValue> colorValues = new ArrayList<>();
         while (matcher.find()) {
-            final String namedColor = matcher.group(0);
-            ColorValue colorValue = new NamedColorValue(namedColor, new OffsetRange(matcher.start(), matcher.end()), lineNumber);
+            final String namedColor = matcher.group(GROUP_COLOR_NAME);
+            ColorValue colorValue = new NamedColorValue(namedColor, new OffsetRange(matcher.start() + 1, matcher.end() - 1), lineNumber);
             colorValues.add(colorValue);
         }
         return colorValues;
@@ -435,7 +435,7 @@ public final class ColorsUtils {
         Matcher matcher = getColorMatcher(line, JavaColorType.JAVA_STANDARD_COLOR);
         ArrayList<ColorValue> colorValues = new ArrayList<>();
         while (matcher.find()) {
-            final String colorName = matcher.group(GROUP_COROR_NAME);
+            final String colorName = matcher.group(GROUP_COLOR_NAME);
             JavaStandardColor stdColor = JavaStandardColor.valueOf(colorName);
             ColorValue colorValue = new JavaStandardColorValue(matcher.group(GROUP_JAVA_STANDARD), new OffsetRange(matcher.start(), matcher.end()), lineNumber, stdColor.getColor());
             colorValues.add(colorValue);
@@ -590,10 +590,10 @@ public final class ColorsUtils {
         Matcher matcher = getColorMatcher(code, HexCssColorType.HEX);
         if (matcher.matches()) {
             int length = code.length();
-            if (length == SHORT_HEX_COLOR_CODE_FULL_LENGTH) {
+            if (length == SHORT_HEX_COLOR_CODE_WITH_HASH_LENGTH) {
                 return Color.decode(convertToRRGGBB(code));
             }
-            if (length == HEX_COLOR_CODE_FULL_LENGTH) {
+            if (length == HEX_COLOR_CODE_WITH_HASH_LENGTH) {
                 return Color.decode(code);
             }
         }
@@ -602,9 +602,11 @@ public final class ColorsUtils {
 
     @CheckForNull
     private static Color decodeNamedColor(String code) {
-        Matcher matcher = getColorMatcher(code, HexCssColorType.NAMED_COLORS);
+        // Add white spaces to the top and the end to parse with the regex for named colors
+        String namedColorCode = String.format(" %s ", code); // NOI18N
+        Matcher matcher = getColorMatcher(namedColorCode, HexCssColorType.NAMED_COLORS);
         if (matcher.matches()) {
-            String hexColorCode = NAMED_COLOR_TABLE.get(matcher.group(1).toLowerCase());
+            String hexColorCode = NAMED_COLOR_TABLE.get(matcher.group(GROUP_COLOR_NAME).toLowerCase());
             return decodeHexColorCode(hexColorCode);
         }
         return null;
@@ -697,7 +699,7 @@ public final class ColorsUtils {
     }
 
     /**
-     * Get a HSL Color.
+     * Get an HSL Color.
      * {@link http://www.w3.org/TR/2011/REC-css3-color-20110607/#hsl-color}
      *
      * @param h a hue value [0,1]
@@ -711,7 +713,7 @@ public final class ColorsUtils {
     }
 
     /**
-     * Get a HSLA Color.
+     * Get an HSLA Color.
      *
      * @param h a hue value [0,1]
      * @param s a saturation value [0,1]

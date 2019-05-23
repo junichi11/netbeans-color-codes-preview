@@ -439,19 +439,9 @@ public class ColorsUtilsTest {
      */
     @Test
     public void testDecodeNamedColor() {
-        Color result = ColorsUtils.decode(" black ");
+        Color result = ColorsUtils.decode("black");
         Assert.assertNotNull(result);
-        result = ColorsUtils.decode(" RED ");
-        Assert.assertNotNull(result);
-        result = ColorsUtils.decode(":RED;");
-        Assert.assertNotNull(result);
-        result = ColorsUtils.decode(" RED;");
-        Assert.assertNotNull(result);
-        result = ColorsUtils.decode(":RED ");
-        Assert.assertNotNull(result);
-        result = ColorsUtils.decode(",RED ");
-        Assert.assertNotNull(result);
-        result = ColorsUtils.decode(" RED\"");
+        result = ColorsUtils.decode("RED");
         Assert.assertNotNull(result);
 
         result = ColorsUtils.decode("test invalid");
@@ -830,6 +820,10 @@ public class ColorsUtilsTest {
         result = ColorsUtils.getJavaStandardColors("Color color = Color.WHITE;", 1);
         assertEquals(1, result.size());
 
+        result = ColorsUtils.getJavaStandardColors("Color color = Color.Black;", 1);
+        assertEquals(0, result.size());
+        result = ColorsUtils.getJavaStandardColors("Color color = Color.WhiTE;", 1);
+        assertEquals(0, result.size());
         result = ColorsUtils.getJavaStandardColors("Color color = Color.FOO;", 1);
         assertEquals(0, result.size());
         result = ColorsUtils.getJavaStandardColors("Color color = new Color(255, 255, 255);", 1);
