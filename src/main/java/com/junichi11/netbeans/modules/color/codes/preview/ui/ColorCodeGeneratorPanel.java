@@ -15,6 +15,7 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.ui;
 
+import com.junichi11.netbeans.modules.color.codes.preview.options.ColorCodesPreviewOptions;
 import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodeGeneratorItem;
 import java.awt.Color;
 import java.awt.Component;
@@ -31,8 +32,8 @@ import javax.swing.ListCellRenderer;
 public final class ColorCodeGeneratorPanel extends JPanel {
 
     private static ColorCodeGeneratorItem LAST_SELECTED_ITEM = null;
-    private static Color LAST_SELECTED_COLOR = null;
-    private static boolean LAST_SELECTED_APPEND_SEMICOLON = false;
+    private static Color LAST_SELECTED_COLOR = ColorCodesPreviewOptions.getInstance().getLastSelectedColor();
+    private static boolean LAST_SELECTED_APPEND_SEMICOLON = ColorCodesPreviewOptions.getInstance().isLastAppendSemicolonSelected();
 
     private static final long serialVersionUID = 2893569100900202502L;
     private final List<ColorCodeGeneratorItem> generatorItems;
@@ -101,6 +102,14 @@ public final class ColorCodeGeneratorPanel extends JPanel {
 
     public Color getSelectedColor() {
         return generatorColorChooser.getSelectionModel().getSelectedColor();
+    }
+
+    public static Color getLastSelectedColor() {
+        return LAST_SELECTED_COLOR;
+    }
+
+    public static boolean isLastAppendSemicolonSelected() {
+        return LAST_SELECTED_APPEND_SEMICOLON;
     }
 
     public ColorCodeGeneratorItem getSelectedGeneratorItem() {

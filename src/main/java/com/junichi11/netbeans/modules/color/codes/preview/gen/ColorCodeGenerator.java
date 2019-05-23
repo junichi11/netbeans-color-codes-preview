@@ -107,8 +107,8 @@ public class ColorCodeGenerator implements CodeGenerator {
             } catch (BadLocationException ex) {
                 LOGGER.log(Level.WARNING, ex.getMessage());
             }
+            panel.setLastSelectedValues();
         }
-        panel.setLastSelectedValues();
         dialog.dispose();
     }
 

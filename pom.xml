@@ -146,6 +146,11 @@
             <artifactId>org-netbeans-modules-editor-document</artifactId>
             <version>${netbeans.api.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-modules</artifactId>
+            <version>${netbeans.api.version}</version>
+        </dependency>
     </dependencies>
     <name>Color Codes Preview</name>
     <description>Show color codes preview per line in a sidebar area of an editor.
