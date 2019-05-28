@@ -342,12 +342,8 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
 
     @Override
     public void preferenceChange(PreferenceChangeEvent evt) {
-        if (evt == null
-                || ColorsSideBarFactory.KEY_COLORS.equals(evt.getKey())
-                || ColorCodesPreviewOptions.HEX_CSS_MIME_TYPE_REGEX.equals(evt.getKey())
-                || evt.getKey().startsWith(ColorCodesPreviewOptions.ENABLED_PREFIX)) {
-            enabled = prefs.getBoolean(ColorsSideBarFactory.KEY_COLORS, ColorsSideBarFactory.DEFAULT_COLORS)
-                    && isProviderEnabled();
+        if (isOptionChanged(evt)) {
+            enabled = isPluginEnabled();
             setVisible(enabled);
             if (!enabled) {
                 release();
@@ -356,6 +352,18 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
                 initialize();
             }
         }
+    }
+
+    private boolean isOptionChanged(PreferenceChangeEvent event) {
+        return event == null
+                || ColorsSideBarFactory.KEY_COLORS.equals(event.getKey())
+                || ColorCodesPreviewOptions.HEX_CSS_MIME_TYPE_REGEX.equals(event.getKey())
+                || (event.getKey() != null && event.getKey().startsWith(ColorCodesPreviewOptions.ENABLED_PREFIX));
+    }
+
+    private boolean isPluginEnabled() {
+        return prefs.getBoolean(ColorsSideBarFactory.KEY_COLORS, ColorsSideBarFactory.DEFAULT_COLORS)
+                && isProviderEnabled();
     }
 
     private boolean isProviderEnabled() {
