@@ -36,8 +36,7 @@ import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * Supported colors: new Color[]{Color.blue, new Color(153, 255, 0)}; new
- * Color(0, 0, 0); Color.CYAN;
+ * Supported colors: new Color[]{Color.blue, new Color(153, 255, 0)}; new Color(0, 0, 0); Color.CYAN;
  *
  * @author junichi11
  */
@@ -80,6 +79,12 @@ public class JavaColorCodesProvider extends AbstractColorCodesProvider {
             collectStandardColors(line, colorValues, lineNumber);
             collectRGBColors(line, colorValues, lineNumber);
             collectRGBAColors(line, colorValues, lineNumber);
+            collectRGBIntColors(line, colorValues, lineNumber);
+            collectRGBAIntColors(line, colorValues, lineNumber);
+            collectRGBHexColors(line, colorValues, lineNumber);
+            collectRGBAHexColors(line, colorValues, lineNumber);
+            collectFloatRGBIntColors(line, colorValues, lineNumber);
+            collectFloatRGBAIntColors(line, colorValues, lineNumber);
         }
         return colorValues;
     }
@@ -99,6 +104,30 @@ public class JavaColorCodesProvider extends AbstractColorCodesProvider {
 
     private void collectRGBAColors(String line, List<ColorValue> colorValues, int lineNumber) {
         colorValues.addAll(ColorsUtils.getJavaIntRGBAColors(line, lineNumber));
+    }
+
+    private void collectFloatRGBIntColors(String line, List<ColorValue> colorValues, int lineNumber) {
+        colorValues.addAll(ColorsUtils.getJavaFloatRGBColors(line, lineNumber));
+    }
+
+    private void collectFloatRGBAIntColors(String line, List<ColorValue> colorValues, int lineNumber) {
+        colorValues.addAll(ColorsUtils.getJavaFloatRGBAColors(line, lineNumber));
+    }
+
+    private void collectRGBIntColors(String line, List<ColorValue> colorValues, int lineNumber) {
+        colorValues.addAll(ColorsUtils.getJavaIntRGBIntColors(line, lineNumber));
+    }
+
+    private void collectRGBAIntColors(String line, List<ColorValue> colorValues, int lineNumber) {
+        colorValues.addAll(ColorsUtils.getJavaIntRGBAIntColors(line, lineNumber));
+    }
+
+    private void collectRGBHexColors(String line, List<ColorValue> colorValues, int lineNumber) {
+        colorValues.addAll(ColorsUtils.getJavaIntRGBHexColors(line, lineNumber));
+    }
+
+    private void collectRGBAHexColors(String line, List<ColorValue> colorValues, int lineNumber) {
+        colorValues.addAll(ColorsUtils.getJavaIntRGBAHexColors(line, lineNumber));
     }
 
     @Override

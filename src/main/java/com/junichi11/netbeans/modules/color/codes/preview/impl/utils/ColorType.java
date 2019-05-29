@@ -23,7 +23,11 @@ import java.util.regex.Pattern;
  */
 public interface ColorType {
 
-    static final String INT_RGB_VALUE_FORMAT = "25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]"; // NOI18N
+    static final String BYTE_RGB_VALUE_FORMAT = "25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]"; // NOI18N
+    static final String INT_RGB_VALUE_FORMAT = "[0-9]+"; // NOI18N
+    static final String HEX_RGB_VALUE_FORMAT = "[0-9a-fA-F]{6,8}"; // NOI18N
+    static final String BOOL_VALUE_FORMAT = "true|false"; // NOI18N
+    static final String FLOAT_VALUE_FORMAT = "[0-9]+(\\.[0-9]*)?"; // NOI18N
 
     Pattern getPattern();
 }

@@ -78,11 +78,11 @@ public class ColorsUtilsTest {
     }
 
     /**
-     * Test of INT_RGB_VALUE_FORMAT regex, of class ColorsUtils.
+     * Test of BYTE_RGB_VALUE_FORMAT regex, of class ColorsUtils.
      */
     @Test
     public void testCssIntRGBValueRegex() {
-        Pattern pattern = Pattern.compile(String.format("(%s)", ColorType.INT_RGB_VALUE_FORMAT));
+        Pattern pattern = Pattern.compile(String.format("(%s)", ColorType.BYTE_RGB_VALUE_FORMAT));
         for (int i = 0; i < 256; i++) {
             Matcher matcher = pattern.matcher(String.valueOf(i));
             Assert.assertTrue(matcher.matches());
@@ -156,7 +156,7 @@ public class ColorsUtilsTest {
     }
 
     /**
-     * Test of INT_RGB_VALUE_FORMAT regex, of class ColorsUtils.
+     * Test of BYTE_RGB_VALUE_FORMAT regex, of class ColorsUtils.
      */
     @Test
     public void testHueValueRegex() {

@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import org.netbeans.api.annotations.common.CheckForNull;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -64,6 +65,12 @@ public final class ColorsUtils {
     private static final String GROUP_JAVA_STANDARD = "javastandard";// NOI18N
     private static final String GROUP_JAVA_RGB = "javargb";// NOI18N
     private static final String GROUP_JAVA_RGBA = "javargba";// NOI18N
+    private static final String GROUP_JAVA_INTRGB = "javaintrgb";// NOI18N
+    private static final String GROUP_JAVA_INTRGBA = "javaintrgba";// NOI18N
+    private static final String GROUP_JAVA_HEXRGB = "javahexrgb";// NOI18N
+    private static final String GROUP_JAVA_HEXRGBA = "javahexrgba";// NOI18N
+    private static final String GROUP_JAVA_FRGB = "javafrgb";// NOI18N
+    private static final String GROUP_JAVA_FRGBA = "javafrgba";// NOI18N
     private static final String GROUP_RED = "r"; // NOI18N
     private static final String GROUP_GREEN = "g"; // NOI18N
     private static final String GROUP_BLUE = "b"; // NOI18N
@@ -72,6 +79,9 @@ public final class ColorsUtils {
     private static final String GROUP_SATURATION = "s"; // NOI18N
     private static final String GROUP_LIGHTNESS = "l"; // NOI18N
     private static final String GROUP_COLOR_NAME = "colorname"; // NOI18N
+    private static final String GROUP_RGB_NAME = "rgb"; // NOI18N
+    private static final String GROUP_RGBA_NAME = "rgba"; // NOI18N
+    private static final String GROUP_BOOL_NAME = "bool"; // NOI18N
 
     private static final Map<String, String> NAMED_COLOR_TABLE = new HashMap<>();
 
@@ -488,6 +498,171 @@ public final class ColorsUtils {
         return colorValues;
     }
 
+    /**
+     * Get Java hex RGB colors.
+     *
+     * @param line the line text
+     * @param lineNumber the line number
+     * @return ColorValues
+     */
+    public static List<ColorValue> getJavaIntRGBIntColors(String line, int lineNumber) {
+        Matcher matcher = getColorMatcher(line, JavaColorType.JAVA_INT);
+        ArrayList<ColorValue> colorValues = new ArrayList<>();
+        while (matcher.find()) {
+            final String colorCode = matcher.group(GROUP_JAVA_INTRGB);
+            try {
+                int i = Integer.parseInt(matcher.group(GROUP_RGB_NAME));
+                Color color = new Color(i);
+                ColorValue colorValue = new JavaIntRGBColorValue(colorCode, new OffsetRange(matcher.start(), matcher.end()), lineNumber, color);
+                colorValues.add(colorValue);
+            } catch (Exception e) {
+                Exceptions.printStackTrace(e);
+            }
+        }
+        return colorValues;
+    }
+
+    /**
+     * Get Java hex RGBA colors.
+     *
+     * @param line the line text
+     * @param lineNumber the line number
+     * @return ColorValues
+     */
+    public static List<ColorValue> getJavaIntRGBAIntColors(String line, int lineNumber) {
+        Matcher matcher = getColorMatcher(line, JavaColorType.JAVA_INTA);
+        ArrayList<ColorValue> colorValues = new ArrayList<>();
+        while (matcher.find()) {
+            final String colorCode = matcher.group(GROUP_JAVA_INTRGBA);
+            try {
+                int i = Integer.parseInt(matcher.group(GROUP_RGBA_NAME));
+                boolean b = Boolean.parseBoolean(matcher.group(GROUP_BOOL_NAME));
+                Color color = new Color(validateIntColorValue(i), b);
+                ColorValue colorValue = new JavaIntRGBColorValue(colorCode, new OffsetRange(matcher.start(), matcher.end()), lineNumber, color);
+                colorValues.add(colorValue);
+            } catch (Exception e) {
+                Exceptions.printStackTrace(e);
+            }
+        }
+        return colorValues;
+    }
+
+    /**
+     * Get Java hex RGB colors.
+     *
+     * @param line the line text
+     * @param lineNumber the line number
+     * @return ColorValues
+     */
+    public static List<ColorValue> getJavaIntRGBHexColors(String line, int lineNumber) {
+        Matcher matcher = getColorMatcher(line, JavaColorType.JAVA_HEXINT);
+        ArrayList<ColorValue> colorValues = new ArrayList<>();
+        while (matcher.find()) {
+            final String colorCode = matcher.group(GROUP_JAVA_HEXRGB);
+            try {
+                int i = Integer.parseInt(matcher.group(GROUP_RGB_NAME), 16);
+                Color color = new Color(validateIntColorValue(i));
+                ColorValue colorValue = new JavaIntRGBColorValue(colorCode, new OffsetRange(matcher.start(), matcher.end()), lineNumber, color);
+                colorValues.add(colorValue);
+            } catch (Exception e) {
+                Exceptions.printStackTrace(e);
+            }
+        }
+        return colorValues;
+    }
+
+    /**
+     * Get Java hex RGBA colors.
+     *
+     * @param line the line text
+     * @param lineNumber the line number
+     * @return ColorValues
+     */
+    public static List<ColorValue> getJavaIntRGBAHexColors(String line, int lineNumber) {
+        Matcher matcher = getColorMatcher(line, JavaColorType.JAVA_HEXINTA);
+        ArrayList<ColorValue> colorValues = new ArrayList<>();
+        while (matcher.find()) {
+            final String colorCode = matcher.group(GROUP_JAVA_HEXRGBA);
+            try {
+                int i = Integer.parseInt(matcher.group(GROUP_RGBA_NAME), 16);
+                boolean b = Boolean.parseBoolean(matcher.group(GROUP_BOOL_NAME));
+                Color color = new Color(i, b);
+                ColorValue colorValue = new JavaIntRGBColorValue(colorCode, new OffsetRange(matcher.start(), matcher.end()), lineNumber, color);
+                colorValues.add(colorValue);
+            } catch (Exception e) {
+                Exceptions.printStackTrace(e);
+            }
+        }
+        return colorValues;
+    }
+
+    /**
+     * Get Java hex RGB colors.
+     *
+     * @param line the line text
+     * @param lineNumber the line number
+     * @return ColorValues
+     */
+    public static List<ColorValue> getJavaFloatRGBColors(String line, int lineNumber) {
+        Matcher matcher = getColorMatcher(line, JavaColorType.JAVA_FLOAT_RGB);
+        ArrayList<ColorValue> colorValues = new ArrayList<>();
+        while (matcher.find()) {
+            final String colorCode = matcher.group(GROUP_JAVA_FRGB);
+            try {
+                float r = validateFloatColorComponentValue(Float.parseFloat(matcher.group(GROUP_RED)));
+                float g = validateFloatColorComponentValue(Float.parseFloat(matcher.group(GROUP_GREEN)));
+                float b = validateFloatColorComponentValue(Float.parseFloat(matcher.group(GROUP_BLUE)));
+                Color color = new Color(r, g, b);
+                ColorValue colorValue = new JavaIntRGBColorValue(colorCode, new OffsetRange(matcher.start(), matcher.end()), lineNumber, color);
+                colorValues.add(colorValue);
+            } catch (Exception e) {
+                Exceptions.printStackTrace(e);
+            }
+        }
+        return colorValues;
+    }
+
+    /**
+     * Get Java hex RGBA colors.
+     *
+     * @param line the line text
+     * @param lineNumber the line number
+     * @return ColorValues
+     */
+    public static List<ColorValue> getJavaFloatRGBAColors(String line, int lineNumber) {
+        Matcher matcher = getColorMatcher(line, JavaColorType.JAVA_FLOAT_RGBA);
+        ArrayList<ColorValue> colorValues = new ArrayList<>();
+        while (matcher.find()) {
+            final String colorCode = matcher.group(GROUP_JAVA_FRGBA);
+            try {
+                float r = validateFloatColorComponentValue(Float.parseFloat(matcher.group(GROUP_RED)));
+                float g = validateFloatColorComponentValue(Float.parseFloat(matcher.group(GROUP_GREEN)));
+                float b = validateFloatColorComponentValue(Float.parseFloat(matcher.group(GROUP_BLUE)));
+                float a = validateFloatColorComponentValue(Float.parseFloat(matcher.group(GROUP_ALPHA)));
+                Color color = new Color(r, g, b, a);
+                ColorValue colorValue = new JavaIntRGBColorValue(colorCode, new OffsetRange(matcher.start(), matcher.end()), lineNumber, color);
+                colorValues.add(colorValue);
+            } catch (Exception e) {
+                Exceptions.printStackTrace(e);
+            }
+        }
+        return colorValues;
+    }
+
+    private static int validateIntColorValue(int v) {
+        return Math.max(0, v);
+    }
+
+    private static float validateFloatColorComponentValue(float v) {
+        if (v < 0f) {
+            return Math.max(0, v);
+        } else if (v > 1.0f) {
+            return Math.min(1.0f, v);
+        } else {
+            return v;
+        }
+    }
+
     private static Matcher getColorMatcher(String line, ColorType type) {
         return type.getPattern().matcher(line);
     }
@@ -531,12 +706,10 @@ public final class ColorsUtils {
     }
 
     /**
-     * Convert a String to a Color. Hex color code and css rgb code are
-     * available.
+     * Convert a String to a Color. Hex color code and css rgb code are available.
      *
      * @param code a color code
-     * @return {@link Color} if specified color string matches supported
-     * patterns, otherwise {@code null}
+     * @return {@link Color} if specified color string matches supported patterns, otherwise {@code null}
      */
     @CheckForNull
     public static Color decode(String code) {
@@ -550,8 +723,7 @@ public final class ColorsUtils {
     }
 
     /**
-     * Convert a String to a Color. Hex color code and css rgb code are
-     * available.
+     * Convert a String to a Color. Hex color code and css rgb code are available.
      *
      * @param code
      * @param type
@@ -699,8 +871,7 @@ public final class ColorsUtils {
     }
 
     /**
-     * Get an HSL Color.
-     * {@link http://www.w3.org/TR/2011/REC-css3-color-20110607/#hsl-color}
+     * Get an HSL Color. {@link http://www.w3.org/TR/2011/REC-css3-color-20110607/#hsl-color}
      *
      * @param h a hue value [0,1]
      * @param s a saturation value [0,1]
@@ -810,8 +981,7 @@ public final class ColorsUtils {
     }
 
     /**
-     * Convert a specific color to a css rgb color int value string. (e.g.
-     * rgb(0, 0, 0))
+     * Convert a specific color to a css rgb color int value string. (e.g. rgb(0, 0, 0))
      *
      * @param color a Color
      * @return a rgb color value string
@@ -821,8 +991,7 @@ public final class ColorsUtils {
     }
 
     /**
-     * Convert a specific color to a css rgb color percent value string. (e.g.
-     * rgb(50%, 10%, 0%))
+     * Convert a specific color to a css rgb color percent value string. (e.g. rgb(50%, 10%, 0%))
      *
      * @param color a Color
      * @return a rgb color value string
@@ -836,8 +1005,7 @@ public final class ColorsUtils {
     }
 
     /**
-     * Convert a specific color to a css rgba color int value string. (e.g.
-     * rgba(0, 0, 0, 0))
+     * Convert a specific color to a css rgba color int value string. (e.g. rgba(0, 0, 0, 0))
      *
      * @param color a Color
      * @return a rgba color value string
@@ -848,8 +1016,7 @@ public final class ColorsUtils {
     }
 
     /**
-     * Convert a specific color to a css rgba color percent value string. (e.g.
-     * rgba(50%, 10%, 0%, 0.5))
+     * Convert a specific color to a css rgba color percent value string. (e.g. rgba(50%, 10%, 0%, 0.5))
      *
      * @param color a Color
      * @return a rgba color value string
@@ -872,8 +1039,7 @@ public final class ColorsUtils {
     }
 
     /**
-     * Convert a specific color to a css hsl color value string. (e.g. hsl(120,
-     * 100%, 50%))
+     * Convert a specific color to a css hsl color value string. (e.g. hsl(120, 100%, 50%))
      *
      * @param color a Color
      * @return hsl color value string
@@ -890,8 +1056,7 @@ public final class ColorsUtils {
     }
 
     /**
-     * Convert a specific color to a css hsl color value string. (e.g. hsl(120,
-     * 100%, 50%))
+     * Convert a specific color to a css hsl color value string. (e.g. hsl(120, 100%, 50%))
      *
      * @param color a Color
      * @return
@@ -909,8 +1074,7 @@ public final class ColorsUtils {
     }
 
     /**
-     * Convert a specified color to a formatted string for a ColorType. Hex
-     * color code is returned as default.
+     * Convert a specified color to a formatted string for a ColorType. Hex color code is returned as default.
      *
      * @param color a Color
      * @param type HexCssColorType

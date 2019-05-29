@@ -23,9 +23,9 @@ import java.util.regex.Pattern;
  */
 public enum HexCssColorType implements ColorType {
     HEX("#(?<codenumber>[0-9a-fA-F]{6,}|[0-9a-fA-F]{3,})"), // NOI18N
-    CSS_INT_RGB(String.format(HexCssColorType.CSS_RGB_FORMAT, ColorType.INT_RGB_VALUE_FORMAT, ColorType.INT_RGB_VALUE_FORMAT, ColorType.INT_RGB_VALUE_FORMAT)),
+    CSS_INT_RGB(String.format(HexCssColorType.CSS_RGB_FORMAT, ColorType.BYTE_RGB_VALUE_FORMAT, ColorType.BYTE_RGB_VALUE_FORMAT, ColorType.BYTE_RGB_VALUE_FORMAT)),
     CSS_PERCENT_RGB(String.format(HexCssColorType.CSS_RGB_FORMAT, HexCssColorType.PERCENT_VALUE_FORMAT, HexCssColorType.PERCENT_VALUE_FORMAT, HexCssColorType.PERCENT_VALUE_FORMAT)),
-    CSS_INT_RGBA(String.format(HexCssColorType.CSS_RGBA_FORMAT, ColorType.INT_RGB_VALUE_FORMAT, ColorType.INT_RGB_VALUE_FORMAT, ColorType.INT_RGB_VALUE_FORMAT, HexCssColorType.ALPHA_VALUE_FORMAT)),
+    CSS_INT_RGBA(String.format(HexCssColorType.CSS_RGBA_FORMAT, ColorType.BYTE_RGB_VALUE_FORMAT, ColorType.BYTE_RGB_VALUE_FORMAT, ColorType.BYTE_RGB_VALUE_FORMAT, HexCssColorType.ALPHA_VALUE_FORMAT)),
     CSS_PERCENT_RGBA(String.format(HexCssColorType.CSS_RGBA_FORMAT, HexCssColorType.PERCENT_VALUE_FORMAT, HexCssColorType.PERCENT_VALUE_FORMAT, HexCssColorType.PERCENT_VALUE_FORMAT, HexCssColorType.ALPHA_VALUE_FORMAT)),
     CSS_HSL(String.format(HexCssColorType.CSS_HSL_FORMAT, HexCssColorType.HUE_VALUE_FORMAT, HexCssColorType.PERCENT_VALUE_FORMAT, HexCssColorType.PERCENT_VALUE_FORMAT)),
     CSS_HSLA(String.format(HexCssColorType.CSS_HSLA_FORMAT, HexCssColorType.HUE_VALUE_FORMAT, HexCssColorType.PERCENT_VALUE_FORMAT, HexCssColorType.PERCENT_VALUE_FORMAT, HexCssColorType.ALPHA_VALUE_FORMAT)),

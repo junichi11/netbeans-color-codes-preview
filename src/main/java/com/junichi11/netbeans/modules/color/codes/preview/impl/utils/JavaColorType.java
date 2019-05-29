@@ -23,8 +23,14 @@ import java.util.regex.Pattern;
  */
 public enum JavaColorType implements ColorType {
     JAVA_STANDARD_COLOR(String.format(JavaColorType.JAVA_STANDARD_COLOR_FORMAT, JavaColorType.JAVA_STANDARD_COLORS_REGEX)),
-    JAVA_INT_RGB(String.format(JavaColorType.JAVA_RGB_FORMAT, ColorType.INT_RGB_VALUE_FORMAT, ColorType.INT_RGB_VALUE_FORMAT, ColorType.INT_RGB_VALUE_FORMAT)),
-    JAVA_INT_RGBA(String.format(JavaColorType.JAVA_RGBA_FORMAT, ColorType.INT_RGB_VALUE_FORMAT, ColorType.INT_RGB_VALUE_FORMAT, ColorType.INT_RGB_VALUE_FORMAT, ColorType.INT_RGB_VALUE_FORMAT)),
+    JAVA_INT_RGB(String.format(JavaColorType.JAVA_RGB_FORMAT, ColorType.BYTE_RGB_VALUE_FORMAT, ColorType.BYTE_RGB_VALUE_FORMAT, ColorType.BYTE_RGB_VALUE_FORMAT)),
+    JAVA_INT_RGBA(String.format(JavaColorType.JAVA_RGBA_FORMAT, ColorType.BYTE_RGB_VALUE_FORMAT, ColorType.BYTE_RGB_VALUE_FORMAT, ColorType.BYTE_RGB_VALUE_FORMAT, ColorType.BYTE_RGB_VALUE_FORMAT)),
+    JAVA_INT(String.format(JavaColorType.JAVA_INT_FORMAT, ColorType.INT_RGB_VALUE_FORMAT)),
+    JAVA_INTA(String.format(JavaColorType.JAVA_INTA_FORMAT, ColorType.INT_RGB_VALUE_FORMAT, ColorType.BOOL_VALUE_FORMAT)),
+    JAVA_HEXINT(String.format(JavaColorType.JAVA_HEXINTRGB_FORMAT, ColorType.HEX_RGB_VALUE_FORMAT)),
+    JAVA_HEXINTA(String.format(JavaColorType.JAVA_HEXINTRGBA_FORMAT, ColorType.HEX_RGB_VALUE_FORMAT, ColorType.BOOL_VALUE_FORMAT)),
+    JAVA_FLOAT_RGB(String.format(JavaColorType.JAVA_FRGB_FORMAT, ColorType.FLOAT_VALUE_FORMAT, ColorType.FLOAT_VALUE_FORMAT, ColorType.FLOAT_VALUE_FORMAT)),
+    JAVA_FLOAT_RGBA(String.format(JavaColorType.JAVA_FRGBA_FORMAT, ColorType.FLOAT_VALUE_FORMAT, ColorType.FLOAT_VALUE_FORMAT, ColorType.FLOAT_VALUE_FORMAT, ColorType.FLOAT_VALUE_FORMAT)),
     DECODE(JavaColorType.JAVA_COLOR_DECODE_REGEX);
 
     private static final String JAVA_STANDARD_COLORS_REGEX = "black|BLACK|blue|BLUE|cyan|CYAN|darkGray|DARK_GRAY|gray|GRAY|green|GREEN|lightGray|LIGHT_GRAY|magenta|MAGENTA|orange|ORANGE|pink|PINK|red|RED|white|WHITE|yellow|YELLOW"; // NOI18N
@@ -32,6 +38,12 @@ public enum JavaColorType implements ColorType {
     private static final String JAVA_RGB_FORMAT = "(?<javargb>new Color\\((?<codenumber> *(?<r>%s) *, *(?<g>%s) *, *(?<b>%s) *)\\))"; // NOI18N
     private static final String JAVA_RGBA_FORMAT = "(?<javargba>new Color\\((?<codenumber> *(?<r>%s) *, *(?<g>%s) *, *(?<b>%s) *, *(?<a>%s) *)\\))"; // NOI18N
     private static final String JAVA_COLOR_DECODE_REGEX = "(?<javadecode>Color\\.decode\\(\"(#(?<codenumber>[0-9a-fA-F]{6,}|[0-9a-fA-F]{3,})\")\\))"; // NOI18N
+    private static final String JAVA_INT_FORMAT = "(?<javaintrgb>new Color\\((?<codenumber> *(?<rgb>%s)*)\\))"; // NOI18N
+    private static final String JAVA_INTA_FORMAT = "(?<javaintrgba>new Color\\((?<codenumber> *(?<rgba>%s)*, *(?<bool>%s) *)\\))"; // NOI18N
+    private static final String JAVA_HEXINTRGB_FORMAT = "(?<javahexrgb>new Color\\((?<codenumber> *0x(?<rgb>%s)*)\\))"; // NOI18N
+    private static final String JAVA_HEXINTRGBA_FORMAT = "(?<javahexrgba>new Color\\((?<codenumber> *0x(?<rgba>%s)*, *(?<bool>%s) *)\\))"; // NOI18N
+    private static final String JAVA_FRGB_FORMAT = "(?<javafrgb>new Color\\((?<codenumber> *(?<r>%s)f *, *(?<g>%s)f *, *(?<b>%s)f *)\\))"; // NOI18N
+    private static final String JAVA_FRGBA_FORMAT = "(?<javafrgba>new Color\\((?<codenumber> *(?<r>%s)f *, *(?<g>%s)f *, *(?<b>%s)f *, *(?<a>%s)f *)\\))"; // NOI18N
 
     private final Pattern pattern;
 
