@@ -272,7 +272,7 @@ public final class DrawingPanel extends JPanel implements DocumentListener, Pref
         for (ColorCodesProvider provider : providers) {
             Map<String, List<ColorValue>> variableValues = variableColorValues.get(provider);
             if (variableValues == null) {
-                variableValues = Collections.emptyMap();
+                variableValues = new HashMap<>();
             }
             colorValues.addAll(provider.getColorValues(document, lineString, lineNumber, variableValues));
         }
