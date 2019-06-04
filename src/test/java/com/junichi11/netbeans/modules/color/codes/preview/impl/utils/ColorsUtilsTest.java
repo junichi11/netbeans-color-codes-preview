@@ -78,11 +78,11 @@ public class ColorsUtilsTest {
     }
 
     /**
-     * Test of INT_RGB_VALUE_FORMAT regex, of class ColorsUtils.
+     * Test of DECIMAL_INT_R_G_B_VALUE_REGEX regex, of class ColorsUtils.
      */
     @Test
     public void testCssIntRGBValueRegex() {
-        Pattern pattern = Pattern.compile(String.format("(%s)", ColorType.INT_RGB_VALUE_FORMAT));
+        Pattern pattern = Pattern.compile(String.format("(%s)", ColorType.DECIMAL_INT_R_G_B_VALUE_REGEX));
         for (int i = 0; i < 256; i++) {
             Matcher matcher = pattern.matcher(String.valueOf(i));
             Assert.assertTrue(matcher.matches());
@@ -156,7 +156,7 @@ public class ColorsUtilsTest {
     }
 
     /**
-     * Test of INT_RGB_VALUE_FORMAT regex, of class ColorsUtils.
+     * Test of DECIMAL_INT_R_G_B_VALUE_REGEX regex, of class ColorsUtils.
      */
     @Test
     public void testHueValueRegex() {
@@ -834,63 +834,63 @@ public class ColorsUtilsTest {
 
     @Test
     public void testGetJavaIntRGBColors() {
-        List<ColorValue> result = ColorsUtils.getJavaIntRGBColors("Color color = new Color(255, 255, 0);", 1);
+        List<ColorValue> result = ColorsUtils.getJavaIntRGBsColors("Color color = new Color(255, 255, 0);", 1);
         assertEquals(1, result.size());
         assertEquals(new Color(255, 255, 0), result.get(0).getColor());
         assertEquals("new Color(255, 255, 0)", result.get(0).getValue());
         assertEquals(14, result.get(0).getStartOffset());
         assertEquals(36, result.get(0).getEndOffset());
 
-        result = ColorsUtils.getJavaIntRGBColors("Color color = Color.WHITE;", 1);
+        result = ColorsUtils.getJavaIntRGBsColors("Color color = Color.WHITE;", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getJavaIntRGBColors("Color color = Color.FOO;", 1);
+        result = ColorsUtils.getJavaIntRGBsColors("Color color = Color.FOO;", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getJavaIntRGBColors("Color color = new Color(255, 255, 255, 255);", 1);
+        result = ColorsUtils.getJavaIntRGBsColors("Color color = new Color(255, 255, 255, 255);", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getJavaIntRGBColors("Color color = new Color(256, 255, 255);", 1);
+        result = ColorsUtils.getJavaIntRGBsColors("Color color = new Color(256, 255, 255);", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getJavaIntRGBColors("Color color = new Color(-1, 255, 255);", 1);
+        result = ColorsUtils.getJavaIntRGBsColors("Color color = new Color(-1, 255, 255);", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getJavaIntRGBColors("Color color = new Color(255, 256, 255);", 1);
+        result = ColorsUtils.getJavaIntRGBsColors("Color color = new Color(255, 256, 255);", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getJavaIntRGBColors("Color color = new Color(255, -1, 255);", 1);
+        result = ColorsUtils.getJavaIntRGBsColors("Color color = new Color(255, -1, 255);", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getJavaIntRGBColors("Color color = new Color(255, 255, 256);", 1);
+        result = ColorsUtils.getJavaIntRGBsColors("Color color = new Color(255, 255, 256);", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getJavaIntRGBColors("Color color = new Color(255, 255, -1);", 1);
+        result = ColorsUtils.getJavaIntRGBsColors("Color color = new Color(255, 255, -1);", 1);
         assertEquals(0, result.size());
     }
 
     @Test
     public void testGetJavaIntRGBAColors() {
-        List<ColorValue> result = ColorsUtils.getJavaIntRGBAColors("Color color = new Color(255, 255, 255, 100);", 1);
+        List<ColorValue> result = ColorsUtils.getJavaIntRGBAsColors("Color color = new Color(255, 255, 255, 100);", 1);
         assertEquals(1, result.size());
         assertEquals(new Color(255, 255, 255, 100), result.get(0).getColor());
         assertEquals("new Color(255, 255, 255, 100)", result.get(0).getValue());
         assertEquals(14, result.get(0).getStartOffset());
         assertEquals(43, result.get(0).getEndOffset());
 
-        result = ColorsUtils.getJavaIntRGBAColors("Color color = Color.WHITE;", 1);
+        result = ColorsUtils.getJavaIntRGBAsColors("Color color = Color.WHITE;", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getJavaIntRGBAColors("Color color = Color.FOO;", 1);
+        result = ColorsUtils.getJavaIntRGBAsColors("Color color = Color.FOO;", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getJavaIntRGBAColors("Color color = new Color(255, 255, 255);", 1);
+        result = ColorsUtils.getJavaIntRGBAsColors("Color color = new Color(255, 255, 255);", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getJavaIntRGBAColors("Color color = new Color(256, 255, 255, 255);", 1);
+        result = ColorsUtils.getJavaIntRGBAsColors("Color color = new Color(256, 255, 255, 255);", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getJavaIntRGBAColors("Color color = new Color(-1, 255, 255, 255);", 1);
+        result = ColorsUtils.getJavaIntRGBAsColors("Color color = new Color(-1, 255, 255, 255);", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getJavaIntRGBAColors("Color color = new Color(255, 256, 255, 255);", 1);
+        result = ColorsUtils.getJavaIntRGBAsColors("Color color = new Color(255, 256, 255, 255);", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getJavaIntRGBAColors("Color color = new Color(255, -1, 255, 255);", 1);
+        result = ColorsUtils.getJavaIntRGBAsColors("Color color = new Color(255, -1, 255, 255);", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getJavaIntRGBAColors("Color color = new Color(255, 255, 256, 255);", 1);
+        result = ColorsUtils.getJavaIntRGBAsColors("Color color = new Color(255, 255, 256, 255);", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getJavaIntRGBAColors("Color color = new Color(255, 255, -1, 255);", 1);
+        result = ColorsUtils.getJavaIntRGBAsColors("Color color = new Color(255, 255, -1, 255);", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getJavaIntRGBAColors("Color color = new Color(255, 255, 255, 256);", 1);
+        result = ColorsUtils.getJavaIntRGBAsColors("Color color = new Color(255, 255, 255, 256);", 1);
         assertEquals(0, result.size());
-        result = ColorsUtils.getJavaIntRGBAColors("Color color = new Color(255, 255, 255, -1);", 1);
+        result = ColorsUtils.getJavaIntRGBAsColors("Color color = new Color(255, 255, 255, -1);", 1);
         assertEquals(0, result.size());
     }
 }

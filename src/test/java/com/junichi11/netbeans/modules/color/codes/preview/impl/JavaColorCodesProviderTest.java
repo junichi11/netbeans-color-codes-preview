@@ -70,14 +70,33 @@ public class JavaColorCodesProviderTest {
     }
 
     @Test
-    public void testGetColorValuesRGBColor() {
+    public void testGetColorValuesIntRGBsColor() {
         JavaColorCodesProvider provider = new JavaColorCodesProvider();
+        // decimal
         List<ColorValue> result = provider.getColorValues(null, "Color color = new Color( 0, 0, 255);", 0, Collections.emptyMap());
         assertEquals(1, result.size());
         assertEquals(new Color(0, 0, 255), result.get(0).getColor());
         assertEquals("new Color( 0, 0, 255)", result.get(0).getValue());
         assertEquals(14, result.get(0).getStartOffset());
         assertEquals(35, result.get(0).getEndOffset());
+        assertEquals(true, result.get(0).isEditable());
+
+        // hex
+        result = provider.getColorValues(null, "Color color = new Color( 0xff, 0x10, 0x00 );", 0, Collections.emptyMap());
+        assertEquals(1, result.size());
+        assertEquals(new Color(0xff, 0x10, 0x00), result.get(0).getColor());
+        assertEquals("new Color( 0xff, 0x10, 0x00 )", result.get(0).getValue());
+        assertEquals(14, result.get(0).getStartOffset());
+        assertEquals(43, result.get(0).getEndOffset());
+        assertEquals(true, result.get(0).isEditable());
+
+        // mixed
+        result = provider.getColorValues(null, "Color color = new Color( 255, 0x10, 0x00 );", 0, Collections.emptyMap());
+        assertEquals(1, result.size());
+        assertEquals(new Color(255, 0x10, 0x00), result.get(0).getColor());
+        assertEquals("new Color( 255, 0x10, 0x00 )", result.get(0).getValue());
+        assertEquals(14, result.get(0).getStartOffset());
+        assertEquals(42, result.get(0).getEndOffset());
         assertEquals(true, result.get(0).isEditable());
 
         try {
@@ -92,6 +111,8 @@ public class JavaColorCodesProviderTest {
             result = provider.getColorValues(null, "Color color = new Color(0, 0, 256);", 0, Collections.emptyMap());
             assertEquals(0, result.size());
             result = provider.getColorValues(null, "Color color = new Color(0, 0, -1);", 0, Collections.emptyMap());
+            assertEquals(0, result.size());
+            result = provider.getColorValues(null, "Color color = new Color(0xfff, 0, 0);", 0, Collections.emptyMap());
             assertEquals(0, result.size());
         } catch (Exception ex) {
             fail(ex.getMessage());
@@ -113,8 +134,9 @@ public class JavaColorCodesProviderTest {
     }
 
     @Test
-    public void testGetColorValuesRGBAColor() {
+    public void testGetColorValuesIntRGBAsColor() {
         JavaColorCodesProvider provider = new JavaColorCodesProvider();
+        // decimal
         List<ColorValue> result = provider.getColorValues(null, "Color color = new Color( 255, 0, 255, 100 );", 0, Collections.emptyMap());
         assertEquals(1, result.size());
         assertEquals(new Color(255, 0, 255, 100), result.get(0).getColor());
@@ -123,6 +145,23 @@ public class JavaColorCodesProviderTest {
         assertEquals(43, result.get(0).getEndOffset());
         assertEquals(true, result.get(0).isEditable());
 
+        // hex
+        result = provider.getColorValues(null, "Color color = new Color( 0xff, 0x00, 0xff, 0x64 );", 0, Collections.emptyMap());
+        assertEquals(1, result.size());
+        assertEquals(new Color(0xff, 0x00, 0xff, 0x64), result.get(0).getColor());
+        assertEquals("new Color( 0xff, 0x00, 0xff, 0x64 )", result.get(0).getValue());
+        assertEquals(14, result.get(0).getStartOffset());
+        assertEquals(49, result.get(0).getEndOffset());
+        assertEquals(true, result.get(0).isEditable());
+
+        // mixed
+        result = provider.getColorValues(null, "Color color = new Color( 0xff, 0x00, 100, 0x64 );", 0, Collections.emptyMap());
+        assertEquals(1, result.size());
+        assertEquals(new Color(0xff, 0x00, 100, 0x64), result.get(0).getColor());
+        assertEquals("new Color( 0xff, 0x00, 100, 0x64 )", result.get(0).getValue());
+        assertEquals(14, result.get(0).getStartOffset());
+        assertEquals(48, result.get(0).getEndOffset());
+        assertEquals(true, result.get(0).isEditable());
         try {
             result = provider.getColorValues(null, "Color color = new Color(256, 0, 0, 0);", 0, Collections.emptyMap());
             assertEquals(0, result.size());
@@ -139,6 +178,8 @@ public class JavaColorCodesProviderTest {
             result = provider.getColorValues(null, "Color color = new Color(0, 0, 255, 256);", 0, Collections.emptyMap());
             assertEquals(0, result.size());
             result = provider.getColorValues(null, "Color color = new Color(0, 0, 1, -1);", 0, Collections.emptyMap());
+            assertEquals(0, result.size());
+            result = provider.getColorValues(null, "Color color = new Color(0, 0, 1, 0xfff);", 0, Collections.emptyMap());
             assertEquals(0, result.size());
         } catch (Exception ex) {
             fail(ex.getMessage());

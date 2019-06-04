@@ -78,8 +78,8 @@ public class JavaColorCodesProvider extends AbstractColorCodesProvider {
         List<ColorValue> colorValues = new ArrayList<>();
         if (hasColorValue(line)) {
             collectStandardColors(line, colorValues, lineNumber);
-            collectRGBColors(line, colorValues, lineNumber);
-            collectRGBAColors(line, colorValues, lineNumber);
+            collectIntRGBsColors(line, colorValues, lineNumber);
+            collectIntRGBAsColors(line, colorValues, lineNumber);
         }
         return colorValues;
     }
@@ -93,12 +93,12 @@ public class JavaColorCodesProvider extends AbstractColorCodesProvider {
         colorValues.addAll(ColorsUtils.getJavaStandardColors(line, lineNumber));
     }
 
-    private void collectRGBColors(String line, List<ColorValue> colorValues, int lineNumber) {
-        colorValues.addAll(ColorsUtils.getJavaIntRGBColors(line, lineNumber));
+    private void collectIntRGBsColors(String line, List<ColorValue> colorValues, int lineNumber) {
+        colorValues.addAll(ColorsUtils.getJavaIntRGBsColors(line, lineNumber));
     }
 
-    private void collectRGBAColors(String line, List<ColorValue> colorValues, int lineNumber) {
-        colorValues.addAll(ColorsUtils.getJavaIntRGBAColors(line, lineNumber));
+    private void collectIntRGBAsColors(String line, List<ColorValue> colorValues, int lineNumber) {
+        colorValues.addAll(ColorsUtils.getJavaIntRGBAsColors(line, lineNumber));
     }
 
     @Override
@@ -120,14 +120,14 @@ public class JavaColorCodesProvider extends AbstractColorCodesProvider {
     }
 
     private static enum JavaColorCodeGeneratorItem implements ColorCodeGeneratorItem {
-        INT_RGB(JavaColorType.JAVA_INT_RGB) {
+        INT_RGB(JavaColorType.JAVA_INT_R_G_B) {
             @Override
             public String getDisplayName() {
                 return "new Color(r, g, b)"; // NOI18N
             }
 
         },
-        INT_RGBA(JavaColorType.JAVA_INT_RGBA) {
+        INT_RGBA(JavaColorType.JAVA_INT_R_G_B_A) {
             @Override
             public String getDisplayName() {
                 return "new Color(r, g, b, a)"; // NOI18N

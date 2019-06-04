@@ -13,18 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.junichi11.netbeans.modules.color.codes.preview.impl.utils;
-
-import java.util.regex.Pattern;
+package com.junichi11.netbeans.modules.color.codes.preview.impl.colors;
 
 /**
  *
  * @author junichi11
  */
-public interface ColorType {
+public enum IntType {
+    Decimal(10, "%d"), // NOI18N
+    Hex(16, "%02x"); // NOI18N
+    private final int radix;
+    private final String formatSpecifier;
 
-    static final String DECIMAL_INT_R_G_B_VALUE_REGEX = "25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]"; // NOI18N
-    static final String HEX_INT_R_G_B_VALUE_REGEX = "[0-9a-fA-F]{1,2}"; // NOI18N
+    private IntType(int radix, String formatSpecifier) {
+        this.radix = radix;
+        this.formatSpecifier = formatSpecifier;
+    }
 
-    Pattern getPattern();
+    public int getRadix() {
+        return radix;
+    }
+
+    public String getFormatSpecifier() {
+        return formatSpecifier;
+    }
 }
