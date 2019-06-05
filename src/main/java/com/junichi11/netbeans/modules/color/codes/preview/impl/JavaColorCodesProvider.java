@@ -15,7 +15,9 @@
  */
 package com.junichi11.netbeans.modules.color.codes.preview.impl;
 
+import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.IntType;
 import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.JavaColorCodeFormatter;
+import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.RGBAIntTypes;
 import com.junichi11.netbeans.modules.color.codes.preview.impl.utils.ColorsUtils;
 import com.junichi11.netbeans.modules.color.codes.preview.impl.utils.JavaColorType;
 import com.junichi11.netbeans.modules.color.codes.preview.options.ColorCodesPreviewOptions;
@@ -140,37 +142,76 @@ public class JavaColorCodesProvider extends AbstractColorCodesProvider {
     }
 
     private static enum JavaColorCodeGeneratorItem implements ColorCodeGeneratorItem {
-        INT_RGB(JavaColorType.JAVA_INT_R_G_B) {
+        INT_R_G_B(JavaColorType.JAVA_INT_R_G_B) {
             @Override
             public String getDisplayName() {
                 return "new Color(r, g, b)"; // NOI18N
             }
-
         },
-        INT_RGBA(JavaColorType.JAVA_INT_R_G_B_A) {
+        INT_R_G_B_A(JavaColorType.JAVA_INT_R_G_B_A) {
             @Override
             public String getDisplayName() {
                 return "new Color(r, g, b, a)"; // NOI18N
             }
-
+        },
+        INT_HEX_R_G_B(JavaColorType.JAVA_INT_R_G_B, new RGBAIntTypes(IntType.Hex, IntType.Hex, IntType.Hex)) {
+            @Override
+            public String getDisplayName() {
+                return "new Color(hex r, hex g, hex b)"; // NOI18N
+            }
+        },
+        INT_HEX_R_G_B_A(JavaColorType.JAVA_INT_R_G_B_A, new RGBAIntTypes(IntType.Hex, IntType.Hex, IntType.Hex, IntType.Hex)) {
+            @Override
+            public String getDisplayName() {
+                return "new Color(hex r, hex g, hex b, hex a)"; // NOI18N
+            }
+        },
+        INT_HEX_RGB(JavaColorType.JAVA_INT_RGB, new RGBAIntTypes(IntType.Hex)) {
+            @Override
+            public String getDisplayName() {
+                return "new Color(hex rgb)"; // NOI18N
+            }
+        },
+        INT_HEX_RGBA(JavaColorType.JAVA_INT_RGBA, new RGBAIntTypes(IntType.Hex)) {
+            @Override
+            public String getDisplayName() {
+                return "new Color(hex argb, true)"; // NOI18N
+            }
+        },
+        FLOAT_R_G_B(JavaColorType.JAVA_FLOAT_R_G_B) {
+            @Override
+            public String getDisplayName() {
+                return "new Color(rf, gf, bf)"; // NOI18N
+            }
+        },
+        FLOAT_R_G_B_A(JavaColorType.JAVA_FLOAT_R_G_B_A) {
+            @Override
+            public String getDisplayName() {
+                return "new Color(rf, gf, bf, af)"; // NOI18N
+            }
         },
         DECODE(JavaColorType.DECODE) {
             @Override
             public String getDisplayName() {
                 return "Color.decode(\"#<hex>\")"; // NOI18N
             }
-
         };
 
         private final JavaColorType type;
+        private final RGBAIntTypes rgbaIntTypes;
 
         private JavaColorCodeGeneratorItem(JavaColorType type) {
+            this(type, RGBAIntTypes.ALL_DECIMAL);
+        }
+
+        private JavaColorCodeGeneratorItem(JavaColorType type, RGBAIntTypes rgbaIntTypes) {
             this.type = type;
+            this.rgbaIntTypes = rgbaIntTypes;
         }
 
         @Override
         public ColorCodeFormatter getFormatter() {
-            return new JavaColorCodeFormatter(type);
+            return new JavaColorCodeFormatter(type, rgbaIntTypes);
         }
 
         @NbBundle.Messages("JavaColorCodeGeneratorItem.tooltipText=Generate Java Color class code")
