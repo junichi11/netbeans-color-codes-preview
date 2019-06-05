@@ -99,6 +99,39 @@ public class JavaColorCodesProviderTest {
         assertEquals(42, result.get(0).getEndOffset());
         assertEquals(true, result.get(0).isEditable());
 
+        // decimal
+        result = provider.getColorValues(null, "Color color = new Color(0);", 0, Collections.emptyMap());
+        assertEquals(1, result.size());
+        assertEquals(new Color(0), result.get(0).getColor());
+        assertEquals("new Color(0)", result.get(0).getValue());
+        assertEquals(14, result.get(0).getStartOffset());
+        assertEquals(26, result.get(0).getEndOffset());
+        assertEquals(true, result.get(0).isEditable());
+
+        result = provider.getColorValues(null, "Color color = new Color(-16777216);", 0, Collections.emptyMap());
+        assertEquals(1, result.size());
+        assertEquals(Color.BLACK, result.get(0).getColor());
+        assertEquals("new Color(-16777216)", result.get(0).getValue());
+        assertEquals(14, result.get(0).getStartOffset());
+        assertEquals(34, result.get(0).getEndOffset());
+        assertEquals(true, result.get(0).isEditable());
+
+        // hex
+        result = provider.getColorValues(null, "Color color = new Color(0x55aaff);", 0, Collections.emptyMap());
+        assertEquals(1, result.size());
+        assertEquals(new Color(0x55aaff), result.get(0).getColor());
+        assertEquals("new Color(0x55aaff)", result.get(0).getValue());
+        assertEquals(14, result.get(0).getStartOffset());
+        assertEquals(33, result.get(0).getEndOffset());
+        assertEquals(true, result.get(0).isEditable());
+
+        result = provider.getColorValues(null, "Color color = new Color(0, false);", 0, Collections.emptyMap());
+        assertEquals(1, result.size());
+        assertEquals(new Color(0, false), result.get(0).getColor());
+        assertEquals("new Color(0, false)", result.get(0).getValue());
+        assertEquals(14, result.get(0).getStartOffset());
+        assertEquals(33, result.get(0).getEndOffset());
+        assertEquals(true, result.get(0).isEditable());
         try {
             result = provider.getColorValues(null, "Color color = new Color(256, 0, 0);", 0, Collections.emptyMap());
             assertEquals(0, result.size());
@@ -119,15 +152,11 @@ public class JavaColorCodesProviderTest {
         }
 
         // unsupported patterns
-        result = provider.getColorValues(null, "Color color = new Color(0, true);", 0, Collections.emptyMap());
-        assertEquals(0, result.size());
         result = provider.getColorValues(null, "Color color = new Color(ColorSpace.getInstance(ColorSpace.CS_GRAY), components, 0);", 0, Collections.emptyMap());
         assertEquals(0, result.size());
         result = provider.getColorValues(null, "Color color = new Color(1.0f, 1.0f, 1.0f);", 0, Collections.emptyMap());
         assertEquals(0, result.size());
         result = provider.getColorValues(null, "Color color = new Color(0.0f, 0.1f, 0.5f, 0.0f);", 0, Collections.emptyMap());
-        assertEquals(0, result.size());
-        result = provider.getColorValues(null, "Color color = new Color(0);", 0, Collections.emptyMap());
         assertEquals(0, result.size());
         result = provider.getColorValues(null, "\"new Color(\";", 0, Collections.emptyMap());
         assertEquals(0, result.size());
@@ -161,6 +190,64 @@ public class JavaColorCodesProviderTest {
         assertEquals("new Color( 0xff, 0x00, 100, 0x64 )", result.get(0).getValue());
         assertEquals(14, result.get(0).getStartOffset());
         assertEquals(48, result.get(0).getEndOffset());
+        assertEquals(true, result.get(0).isEditable());
+
+        // decimal
+        result = provider.getColorValues(null, "Color color = new Color( 100,  true);", 0, Collections.emptyMap());
+        assertEquals(1, result.size());
+        assertEquals(new Color(100, true), result.get(0).getColor());
+        assertEquals("new Color( 100,  true)", result.get(0).getValue());
+        assertEquals(14, result.get(0).getStartOffset());
+        assertEquals(36, result.get(0).getEndOffset());
+        assertEquals(true, result.get(0).isEditable());
+
+        result = provider.getColorValues(null, "Color color = new Color( -16751416,  true);", 0, Collections.emptyMap());
+        assertEquals(1, result.size());
+        assertEquals(new Color(0, 100, 200), result.get(0).getColor());
+        assertEquals("new Color( -16751416,  true)", result.get(0).getValue());
+        assertEquals(14, result.get(0).getStartOffset());
+        assertEquals(42, result.get(0).getEndOffset());
+        assertEquals(true, result.get(0).isEditable());
+
+        // hex
+        result = provider.getColorValues(null, "Color color = new Color(0x00000000, true);", 0, Collections.emptyMap());
+        assertEquals(1, result.size());
+        assertEquals(new Color(0x00000000, true), result.get(0).getColor());
+        assertEquals("new Color(0x00000000, true)", result.get(0).getValue());
+        assertEquals(14, result.get(0).getStartOffset());
+        assertEquals(41, result.get(0).getEndOffset());
+        assertEquals(true, result.get(0).isEditable());
+
+        result = provider.getColorValues(null, "Color color = new Color(0x55aaff, true);", 0, Collections.emptyMap());
+        assertEquals(1, result.size());
+        assertEquals(new Color(0x55aaff, true), result.get(0).getColor());
+        assertEquals("new Color(0x55aaff, true)", result.get(0).getValue());
+        assertEquals(14, result.get(0).getStartOffset());
+        assertEquals(39, result.get(0).getEndOffset());
+        assertEquals(true, result.get(0).isEditable());
+
+        result = provider.getColorValues(null, "Color color = new Color(0x55aaffbb, true);", 0, Collections.emptyMap());
+        assertEquals(1, result.size());
+        assertEquals(new Color(0x55aaffbb, true), result.get(0).getColor());
+        assertEquals("new Color(0x55aaffbb, true)", result.get(0).getValue());
+        assertEquals(14, result.get(0).getStartOffset());
+        assertEquals(41, result.get(0).getEndOffset());
+        assertEquals(true, result.get(0).isEditable());
+
+        result = provider.getColorValues(null, "Color color = new Color(0xffffffff, false);", 0, Collections.emptyMap());
+        assertEquals(1, result.size());
+        assertEquals(new Color(0xffffffff, false), result.get(0).getColor());
+        assertEquals("new Color(0xffffffff, false)", result.get(0).getValue());
+        assertEquals(14, result.get(0).getStartOffset());
+        assertEquals(42, result.get(0).getEndOffset());
+        assertEquals(true, result.get(0).isEditable());
+
+        result = provider.getColorValues(null, "Color color = new Color(0xffffff, false);", 0, Collections.emptyMap());
+        assertEquals(1, result.size());
+        assertEquals(new Color(0xffffff, false), result.get(0).getColor());
+        assertEquals("new Color(0xffffff, false)", result.get(0).getValue());
+        assertEquals(14, result.get(0).getStartOffset());
+        assertEquals(40, result.get(0).getEndOffset());
         assertEquals(true, result.get(0).isEditable());
         try {
             result = provider.getColorValues(null, "Color color = new Color(256, 0, 0, 0);", 0, Collections.emptyMap());

@@ -22,6 +22,7 @@ import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodeFormatter
 import java.awt.Color;
 
 /**
+ * Represent Color.colorName.
  *
  * @author junichi11
  */

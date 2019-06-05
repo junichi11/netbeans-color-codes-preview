@@ -20,53 +20,36 @@ import com.junichi11.netbeans.modules.color.codes.preview.impl.utils.JavaColorTy
 import com.junichi11.netbeans.modules.color.codes.preview.spi.AbstractColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodeFormatter;
 import java.awt.Color;
-import javax.swing.UIManager;
 
 /**
- * Represent new Color(int r, int g, int b, int a).
+ * Represent new Color(int rgb).
  *
  * @author junichi11
  */
-public class JavaIntRGBAsColorValue extends AbstractColorValue {
+public class JavaIntRGBColorValue extends AbstractColorValue {
 
-    private final int r;
-    private final int g;
-    private final int b;
-    private final int a;
+    private final int rgb;
     private final RGBAIntTypes rgbaIntTypes;
-    private static final String GTK_LOOK_AND_FEEL_NAME = "GTK look and feel"; // NOI18N
-    private static final String LOOK_AND_FEEL_NAME = UIManager.getLookAndFeel().getName();
 
-    public JavaIntRGBAsColorValue(String value, OffsetRange offsetRange, int line, Color color, RGBAIntTypes rgbaIntTypes) {
+    public JavaIntRGBColorValue(String value, OffsetRange offsetRange, int line, Color color, RGBAIntTypes rgbaIntTypes) {
         super(value, offsetRange, line);
-        this.r = color.getRed();
-        this.g = color.getGreen();
-        this.b = color.getBlue();
-        this.a = color.getAlpha();
+        this.rgb = color.getRGB();
         this.rgbaIntTypes = rgbaIntTypes;
     }
 
     @Override
     public Color getColor() {
-        return new Color(r, g, b, a);
-    }
-
-    public JavaColorType getType() {
-        return JavaColorType.JAVA_INT_R_G_B_A;
+        return new Color(rgb);
     }
 
     @Override
     public boolean isEditable() {
-        // ColorChooser of GTK cannot change transparency
-        return !GTK_LOOK_AND_FEEL_NAME.equals(LOOK_AND_FEEL_NAME);
+        return true;
     }
 
     @Override
     public ColorCodeFormatter getFormatter() {
-        return new JavaColorCodeFormatter(getType(), getRGBAIntTypes());
+        return new JavaColorCodeFormatter(JavaColorType.JAVA_INT_RGB, rgbaIntTypes);
     }
 
-    public RGBAIntTypes getRGBAIntTypes() {
-        return rgbaIntTypes;
-    }
 }

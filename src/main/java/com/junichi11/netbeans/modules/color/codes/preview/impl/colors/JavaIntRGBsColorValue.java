@@ -22,6 +22,7 @@ import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodeFormatter
 import java.awt.Color;
 
 /**
+ * Represent new Color(int r, int g, int b).
  *
  * @author arsi
  */
@@ -56,7 +57,7 @@ public class JavaIntRGBsColorValue extends AbstractColorValue {
 
     @Override
     public ColorCodeFormatter getFormatter() {
-        return new JavaColorCodeFormatter(getType());
+        return new JavaColorCodeFormatter(getType(), getRGBAIntTypes());
     }
 
     public RGBAIntTypes getRGBAIntTypes() {
