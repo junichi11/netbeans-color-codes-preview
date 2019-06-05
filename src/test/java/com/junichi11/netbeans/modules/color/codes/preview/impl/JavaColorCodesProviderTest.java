@@ -70,6 +70,72 @@ public class JavaColorCodesProviderTest {
     }
 
     @Test
+    public void testGetColorValuesFloatRGBsColor() {
+        JavaColorCodesProvider provider = new JavaColorCodesProvider();
+        List<ColorValue> result = provider.getColorValues(null, "Color color = new Color(1.0f, 1.00f, 1f);", 0, Collections.emptyMap());
+        assertEquals(1, result.size());
+        assertEquals(new Color(255, 255, 255), result.get(0).getColor());
+        assertEquals("new Color(1.0f, 1.00f, 1f)", result.get(0).getValue());
+        assertEquals(14, result.get(0).getStartOffset());
+        assertEquals(40, result.get(0).getEndOffset());
+        assertEquals(true, result.get(0).isEditable());
+
+        result = provider.getColorValues(null, "Color color = new Color(0.0f, 0f, .0f);", 0, Collections.emptyMap());
+        assertEquals(1, result.size());
+        assertEquals(new Color(0, 0, 0), result.get(0).getColor());
+        assertEquals("new Color(0.0f, 0f, .0f)", result.get(0).getValue());
+        assertEquals(14, result.get(0).getStartOffset());
+        assertEquals(38, result.get(0).getEndOffset());
+        assertEquals(true, result.get(0).isEditable());
+
+        result = provider.getColorValues(null, "Color color = new Color(0.5f, .3f, 0.25F);", 0, Collections.emptyMap());
+        assertEquals(1, result.size());
+        assertEquals(new Color(0.5f, 0.3f, 0.25f), result.get(0).getColor());
+        assertEquals("new Color(0.5f, .3f, 0.25F)", result.get(0).getValue());
+        assertEquals(14, result.get(0).getStartOffset());
+        assertEquals(41, result.get(0).getEndOffset());
+        assertEquals(true, result.get(0).isEditable());
+
+        result = provider.getColorValues(null, "Color color = new Color(1.01f, 0f, .0f);", 0, Collections.emptyMap());
+        assertEquals(0, result.size());
+        result = provider.getColorValues(null, "Color color = new Color(1.0, 0f, -0.1f);", 0, Collections.emptyMap());
+        assertEquals(0, result.size());
+    }
+
+    @Test
+    public void testGetColorValuesFloatRGBAsColor() {
+        JavaColorCodesProvider provider = new JavaColorCodesProvider();
+        List<ColorValue> result = provider.getColorValues(null, "Color color = new Color(1.0f, 1.00f, 1f, 1.0f);", 0, Collections.emptyMap());
+        assertEquals(1, result.size());
+        assertEquals(new Color(255, 255, 255, 255), result.get(0).getColor());
+        assertEquals("new Color(1.0f, 1.00f, 1f, 1.0f)", result.get(0).getValue());
+        assertEquals(14, result.get(0).getStartOffset());
+        assertEquals(46, result.get(0).getEndOffset());
+        assertEquals(true, result.get(0).isEditable());
+
+        result = provider.getColorValues(null, "Color color = new Color(0.0f, 0f, .0f, 0.0f);", 0, Collections.emptyMap());
+        assertEquals(1, result.size());
+        assertEquals(new Color(0, 0, 0, 0), result.get(0).getColor());
+        assertEquals("new Color(0.0f, 0f, .0f, 0.0f)", result.get(0).getValue());
+        assertEquals(14, result.get(0).getStartOffset());
+        assertEquals(44, result.get(0).getEndOffset());
+        assertEquals(true, result.get(0).isEditable());
+
+        result = provider.getColorValues(null, "Color color = new Color(0.5f, .3f, 0.25F, 0.72f);", 0, Collections.emptyMap());
+        assertEquals(1, result.size());
+        assertEquals(new Color(0.5f, 0.3f, 0.25f, 0.72f), result.get(0).getColor());
+        assertEquals("new Color(0.5f, .3f, 0.25F, 0.72f)", result.get(0).getValue());
+        assertEquals(14, result.get(0).getStartOffset());
+        assertEquals(48, result.get(0).getEndOffset());
+        assertEquals(true, result.get(0).isEditable());
+
+        result = provider.getColorValues(null, "Color color = new Color(1.01f, 0f, .0f, 0.2f);", 0, Collections.emptyMap());
+        assertEquals(0, result.size());
+        result = provider.getColorValues(null, "Color color = new Color(1.0, 0f, -0.1f, 0.0f);", 0, Collections.emptyMap());
+        assertEquals(0, result.size());
+    }
+
+    @Test
     public void testGetColorValuesIntRGBsColor() {
         JavaColorCodesProvider provider = new JavaColorCodesProvider();
         // decimal
@@ -153,10 +219,6 @@ public class JavaColorCodesProviderTest {
 
         // unsupported patterns
         result = provider.getColorValues(null, "Color color = new Color(ColorSpace.getInstance(ColorSpace.CS_GRAY), components, 0);", 0, Collections.emptyMap());
-        assertEquals(0, result.size());
-        result = provider.getColorValues(null, "Color color = new Color(1.0f, 1.0f, 1.0f);", 0, Collections.emptyMap());
-        assertEquals(0, result.size());
-        result = provider.getColorValues(null, "Color color = new Color(0.0f, 0.1f, 0.5f, 0.0f);", 0, Collections.emptyMap());
         assertEquals(0, result.size());
         result = provider.getColorValues(null, "\"new Color(\";", 0, Collections.emptyMap());
         assertEquals(0, result.size());

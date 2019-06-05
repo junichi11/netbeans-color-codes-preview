@@ -26,6 +26,8 @@ import org.netbeans.api.annotations.common.CheckForNull;
  */
 public final class JavaColorCodeFormatter implements ColorCodeFormatter {
 
+    private static final String FLOAT_R_G_B_FORMAT = "new Color(%.2ff, %.2ff, %.2ff)"; // NOI18N
+    private static final String FLOAT_R_G_B_A_FORMAT = "new Color(%.2ff, %.2ff, %.2ff, %.2ff)"; // NOI18N
     private static final String DECODE_HEX_VALUE_FORMAT = "Color.decode(\"#%02x%02x%02x\")"; // NOI18N
 
     private final JavaColorType type;
@@ -55,10 +57,22 @@ public final class JavaColorCodeFormatter implements ColorCodeFormatter {
                 return asRGBIntColorValue(color);
             case JAVA_INT_RGBA:
                 return asRGBAIntColorValue(color);
+            case JAVA_FLOAT_R_G_B:
+                return asRGBFloatColorValue(color);
+            case JAVA_FLOAT_R_G_B_A:
+                return asRGBAFloatColorValue(color);
             default:
                 break;
         }
         return "new " + asRGBsIntColorValue(color); // NOI18N
+    }
+
+    private String asRGBFloatColorValue(Color color) {
+        return String.format(FLOAT_R_G_B_FORMAT, color.getRed()/255f, color.getGreen()/255f, color.getBlue()/255f);
+    }
+
+    private String asRGBAFloatColorValue(Color color) {
+        return String.format(FLOAT_R_G_B_A_FORMAT, color.getRed()/255f, color.getGreen()/255f, color.getBlue()/255f, color.getAlpha()/255f);
     }
 
     private String asRGBAIntColorValue(Color color) {

@@ -82,6 +82,8 @@ public class JavaColorCodesProvider extends AbstractColorCodesProvider {
             collectIntRGBAsColors(line, colorValues, lineNumber);
             collectIntRGBColors(line, colorValues, lineNumber);
             collectIntRGBAColors(line, colorValues, lineNumber);
+            collectFloatRGBsColors(line, colorValues, lineNumber);
+            collectFloatRGBAsColors(line, colorValues, lineNumber);
         }
         return colorValues;
     }
@@ -93,6 +95,14 @@ public class JavaColorCodesProvider extends AbstractColorCodesProvider {
 
     private void collectStandardColors(String line, List<ColorValue> colorValues, int lineNumber) {
         colorValues.addAll(ColorsUtils.getJavaStandardColors(line, lineNumber));
+    }
+
+    private void collectFloatRGBsColors(String line, List<ColorValue> colorValues, int lineNumber) {
+        colorValues.addAll(ColorsUtils.getJavaFloatRGBsColors(line, lineNumber));
+    }
+
+    private void collectFloatRGBAsColors(String line, List<ColorValue> colorValues, int lineNumber) {
+        colorValues.addAll(ColorsUtils.getJavaFloatRGBAsColors(line, lineNumber));
     }
 
     private void collectIntRGBsColors(String line, List<ColorValue> colorValues, int lineNumber) {

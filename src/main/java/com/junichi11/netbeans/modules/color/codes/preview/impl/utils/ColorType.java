@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
  */
 public interface ColorType {
 
+    static final String FLOAT_R_G_B_A_VALUE_REGEX = "(0|[0]?\\.[0-9]+|1|1\\.0*)"; // NOI18N
     static final String DECIMAL_INT_R_G_B_VALUE_REGEX = "25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]"; // NOI18N
     static final String DECIMAL_INT_RGBA_VALUE_REGEX = "(\\+|\\-)?[0-9]{1,9}"; // NOI18N
     static final String HEX_INT_R_G_B_VALUE_REGEX = "[0-9a-fA-F]{1,2}"; // NOI18N

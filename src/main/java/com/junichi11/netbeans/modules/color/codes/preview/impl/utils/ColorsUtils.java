@@ -24,6 +24,8 @@ import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.CssPercent
 import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.CssPercentRGBColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.HexColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.IntType;
+import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.JavaFloatRGBAsColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.JavaFloatRGBsColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.JavaIntRGBAColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.JavaIntRGBAsColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.JavaIntRGBColorValue;
@@ -41,6 +43,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
+import javax.swing.UIManager;
 import org.netbeans.api.annotations.common.CheckForNull;
 import org.openide.util.Pair;
 
@@ -86,6 +89,8 @@ public final class ColorsUtils {
     private static final String GROUP_COLOR_NAME = "colorname"; // NOI18N
 
     private static final Map<String, String> NAMED_COLOR_TABLE = new HashMap<>();
+    public static final String GTK_LOOK_AND_FEEL_NAME = "GTK look and feel"; // NOI18N
+    public static final String LOOK_AND_FEEL_NAME = UIManager.getLookAndFeel().getName();
 
     static {
         // red html color names
@@ -552,6 +557,51 @@ public final class ColorsUtils {
             Color color = new Color(r, g, b, a);
             RGBAIntTypes rgbaIntTypes = new RGBAIntTypes(red.second(), green.second(), blue.second(), alpha.second());
             ColorValue colorValue = new JavaIntRGBAsColorValue(colorCode, new OffsetRange(matcher.start(), matcher.end()), lineNumber, color, rgbaIntTypes);
+            colorValues.add(colorValue);
+        }
+        return colorValues;
+    }
+
+    /**
+     * Get Java float RGB colors.
+     *
+     * @param line the line text
+     * @param lineNumber the line number
+     * @return ColorValues
+     */
+    public static List<ColorValue> getJavaFloatRGBsColors(String line, int lineNumber) {
+        Matcher matcher = getColorMatcher(line, JavaColorType.JAVA_FLOAT_R_G_B);
+        ArrayList<ColorValue> colorValues = new ArrayList<>();
+        while (matcher.find()) {
+            final String colorCode = matcher.group(GROUP_JAVA_RGB);
+            float r = Float.parseFloat(matcher.group(GROUP_RED));
+            float g = Float.parseFloat(matcher.group(GROUP_GREEN));
+            float b = Float.parseFloat(matcher.group(GROUP_BLUE));
+            Color color = new Color(r, g, b);
+            ColorValue colorValue = new JavaFloatRGBsColorValue(colorCode, new OffsetRange(matcher.start(), matcher.end()), lineNumber, color);
+            colorValues.add(colorValue);
+        }
+        return colorValues;
+    }
+
+    /**
+     * Get Java float RGBA colors.
+     *
+     * @param line the line text
+     * @param lineNumber the line number
+     * @return ColorValues
+     */
+    public static List<ColorValue> getJavaFloatRGBAsColors(String line, int lineNumber) {
+        Matcher matcher = getColorMatcher(line, JavaColorType.JAVA_FLOAT_R_G_B_A);
+        ArrayList<ColorValue> colorValues = new ArrayList<>();
+        while (matcher.find()) {
+            final String colorCode = matcher.group(GROUP_JAVA_RGBA);
+            float r = Float.parseFloat(matcher.group(GROUP_RED));
+            float g = Float.parseFloat(matcher.group(GROUP_GREEN));
+            float b = Float.parseFloat(matcher.group(GROUP_BLUE));
+            float a = Float.parseFloat(matcher.group(GROUP_ALPHA));
+            Color color = new Color(r, g, b, a);
+            ColorValue colorValue = new JavaFloatRGBAsColorValue(colorCode, new OffsetRange(matcher.start(), matcher.end()), lineNumber, color);
             colorValues.add(colorValue);
         }
         return colorValues;
@@ -1033,5 +1083,14 @@ public final class ColorsUtils {
             default:
                 return hexValueString(color);
         }
+    }
+
+    /**
+     * Check whether Look and Feel is the GTK.
+     *
+     * @return {@code true} if LAF is the GTK, otherwise {@code false}
+     */
+    public static boolean isGTKLookAndFeel() {
+        return GTK_LOOK_AND_FEEL_NAME.equals(LOOK_AND_FEEL_NAME);
     }
 }

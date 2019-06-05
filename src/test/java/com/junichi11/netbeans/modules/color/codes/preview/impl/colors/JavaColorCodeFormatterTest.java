@@ -64,6 +64,36 @@ public class JavaColorCodeFormatterTest {
     }
 
     @Test
+    public void testFloatRGBsFormat() {
+        JavaColorCodeFormatter formatter = new JavaColorCodeFormatter(JavaColorType.JAVA_FLOAT_R_G_B);
+        String result = formatter.format(Color.BLACK);
+        assertEquals("new Color(0.00f, 0.00f, 0.00f)", result);
+        result = formatter.format(new Color(0, 100, 200));
+        assertEquals("new Color(0.00f, 0.39f, 0.78f)", result);
+        result = formatter.format(new Color(0, 0, 0));
+        assertEquals("new Color(0.00f, 0.00f, 0.00f)", result);
+        result = formatter.format(new Color(255, 255, 255));
+        assertEquals("new Color(1.00f, 1.00f, 1.00f)", result);
+        result = formatter.format(new Color(0, 100, 200, 100));
+        assertEquals("new Color(0.00f, 0.39f, 0.78f)", result);
+    }
+
+    @Test
+    public void testFloatRGBAsFormat() {
+        JavaColorCodeFormatter formatter = new JavaColorCodeFormatter(JavaColorType.JAVA_FLOAT_R_G_B_A);
+        String result = formatter.format(Color.BLACK);
+        assertEquals("new Color(0.00f, 0.00f, 0.00f, 1.00f)", result);
+        result = formatter.format(new Color(0, 100, 200));
+        assertEquals("new Color(0.00f, 0.39f, 0.78f, 1.00f)", result);
+        result = formatter.format(new Color(0, 100, 200, 100));
+        assertEquals("new Color(0.00f, 0.39f, 0.78f, 0.39f)", result);
+        result = formatter.format(new Color(255, 255, 255, 255));
+        assertEquals("new Color(1.00f, 1.00f, 1.00f, 1.00f)", result);
+        result = formatter.format(new Color(0, 0, 0, 0));
+        assertEquals("new Color(0.00f, 0.00f, 0.00f, 0.00f)", result);
+    }
+
+    @Test
     public void testIntRGBFormat() {
         // decimal
         JavaColorCodeFormatter formatter = new JavaColorCodeFormatter(JavaColorType.JAVA_INT_RGB);

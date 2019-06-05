@@ -24,34 +24,28 @@ import java.awt.Color;
 import org.openide.awt.StatusDisplayer;
 
 /**
- * Represent new Color(int r, int g, int b, int a).
+ * Represent new Color(float r, float g, float b, float a).
  *
  * @author junichi11
  */
-public class JavaIntRGBAsColorValue extends AbstractColorValue {
+public class JavaFloatRGBAsColorValue extends AbstractColorValue {
 
     private final int r;
     private final int g;
     private final int b;
     private final int a;
-    private final RGBAIntTypes rgbaIntTypes;
 
-    public JavaIntRGBAsColorValue(String value, OffsetRange offsetRange, int line, Color color, RGBAIntTypes rgbaIntTypes) {
+    public JavaFloatRGBAsColorValue(String value, OffsetRange offsetRange, int line, Color color) {
         super(value, offsetRange, line);
         this.r = color.getRed();
         this.g = color.getGreen();
         this.b = color.getBlue();
         this.a = color.getAlpha();
-        this.rgbaIntTypes = rgbaIntTypes;
     }
 
     @Override
     public Color getColor() {
         return new Color(r, g, b, a);
-    }
-
-    public JavaColorType getType() {
-        return JavaColorType.JAVA_INT_R_G_B_A;
     }
 
     @Override
@@ -66,10 +60,10 @@ public class JavaIntRGBAsColorValue extends AbstractColorValue {
 
     @Override
     public ColorCodeFormatter getFormatter() {
-        return new JavaColorCodeFormatter(getType(), getRGBAIntTypes());
+        return new JavaColorCodeFormatter(getType());
     }
 
-    public RGBAIntTypes getRGBAIntTypes() {
-        return rgbaIntTypes;
+    public JavaColorType getType() {
+        return JavaColorType.JAVA_INT_R_G_B_A;
     }
 }

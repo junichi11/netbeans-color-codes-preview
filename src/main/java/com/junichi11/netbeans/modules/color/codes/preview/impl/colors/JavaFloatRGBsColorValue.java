@@ -16,60 +16,46 @@
 package com.junichi11.netbeans.modules.color.codes.preview.impl.colors;
 
 import com.junichi11.netbeans.modules.color.codes.preview.api.OffsetRange;
-import com.junichi11.netbeans.modules.color.codes.preview.impl.utils.ColorsUtils;
 import com.junichi11.netbeans.modules.color.codes.preview.impl.utils.JavaColorType;
 import com.junichi11.netbeans.modules.color.codes.preview.spi.AbstractColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodeFormatter;
 import java.awt.Color;
-import org.openide.awt.StatusDisplayer;
 
 /**
- * Represent new Color(int r, int g, int b, int a).
+ * Represent new Color(float r, float g, float b).
  *
  * @author junichi11
  */
-public class JavaIntRGBAsColorValue extends AbstractColorValue {
+public class JavaFloatRGBsColorValue extends AbstractColorValue {
 
     private final int r;
     private final int g;
     private final int b;
-    private final int a;
-    private final RGBAIntTypes rgbaIntTypes;
 
-    public JavaIntRGBAsColorValue(String value, OffsetRange offsetRange, int line, Color color, RGBAIntTypes rgbaIntTypes) {
+    public JavaFloatRGBsColorValue(String value, OffsetRange offsetRange, int line, Color color) {
         super(value, offsetRange, line);
         this.r = color.getRed();
         this.g = color.getGreen();
         this.b = color.getBlue();
-        this.a = color.getAlpha();
-        this.rgbaIntTypes = rgbaIntTypes;
     }
 
     @Override
     public Color getColor() {
-        return new Color(r, g, b, a);
-    }
-
-    public JavaColorType getType() {
-        return JavaColorType.JAVA_INT_R_G_B_A;
+        return new Color(r, g, b);
     }
 
     @Override
     public boolean isEditable() {
-        // ColorChooser of GTK cannot change transparency
-        if (ColorsUtils.isGTKLookAndFeel()) {
-            StatusDisplayer.getDefault().setStatusText("You can't modify an alpha value with GTK LAF.");
-            return false;
-        }
         return true;
     }
 
     @Override
     public ColorCodeFormatter getFormatter() {
-        return new JavaColorCodeFormatter(getType(), getRGBAIntTypes());
+        return new JavaColorCodeFormatter(getType());
     }
 
-    public RGBAIntTypes getRGBAIntTypes() {
-        return rgbaIntTypes;
+    public JavaColorType getType() {
+        return JavaColorType.JAVA_FLOAT_R_G_B;
     }
+
 }
