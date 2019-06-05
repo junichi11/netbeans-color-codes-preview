@@ -99,6 +99,7 @@ If you find typos or incorrect English, please let me know. If you would like to
 - Colors may be shown if they are not color codes. e.g. "#feature" contains `#fea`. This plugin recognizes it as a hex color code.
 - If you use the GTK Look and Feel, you cannot change an alpha value in the color chooser.
 - Hsl or hsla color values may not be changed correctly when you use the color chooser. (There may be 1% errors.)
+- Doesn't recognize the following Java Color case: `new Color(0.25f, 0.50f, 0);`, in such a case, please add `f`. i.e. `0f` or `1f`.
 
 ## Donation
 
