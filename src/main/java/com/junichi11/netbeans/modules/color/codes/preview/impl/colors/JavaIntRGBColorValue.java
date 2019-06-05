@@ -22,29 +22,24 @@ import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodeFormatter
 import java.awt.Color;
 
 /**
+ * Represent new Color(int rgb).
  *
- * @author arsi
+ * @author junichi11
  */
 public class JavaIntRGBColorValue extends AbstractColorValue {
 
-    private final int r;
-    private final int g;
-    private final int b;
+    private final int rgb;
+    private final RGBAIntTypes rgbaIntTypes;
 
-    public JavaIntRGBColorValue(String value, OffsetRange offsetRange, int line, Color color) {
+    public JavaIntRGBColorValue(String value, OffsetRange offsetRange, int line, Color color, RGBAIntTypes rgbaIntTypes) {
         super(value, offsetRange, line);
-        this.r = color.getRed();
-        this.g = color.getGreen();
-        this.b = color.getBlue();
+        this.rgb = color.getRGB();
+        this.rgbaIntTypes = rgbaIntTypes;
     }
 
     @Override
     public Color getColor() {
-        return new Color(r, g, b);
-    }
-
-    public JavaColorType getType() {
-        return JavaColorType.JAVA_INT_RGB;
+        return new Color(rgb);
     }
 
     @Override
@@ -54,7 +49,7 @@ public class JavaIntRGBColorValue extends AbstractColorValue {
 
     @Override
     public ColorCodeFormatter getFormatter() {
-        return new JavaColorCodeFormatter(getType());
+        return new JavaColorCodeFormatter(JavaColorType.JAVA_INT_RGB, rgbaIntTypes);
     }
 
 }

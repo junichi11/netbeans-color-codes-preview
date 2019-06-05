@@ -83,11 +83,23 @@ This option is `false` by default. If you would like to show named colors, pleas
 
 If you would like to show colors of `Color.decode(<hex>)` e.g. `Color.decode("#000000")`, Please add `java` to "Regex for enabled mime-types" of Hex and CSS e.g. (`^text/(x-)?(css|less|sass|scss|java)$`)
 
+## Contributing
+
+### Bugs & New Features
+
+If you have some requests, problems, and more, first of all, please submit them to [Issues](https://github.com/junichi11/netbeans-color-codes-preview/issues).
+Please don't create PRs soon. I'll request creating PRs if I need your help.
+
+### Typos
+
+If you find typos or incorrect English, please let me know. If you would like to create a PR for fixing them, please do that.
+
 ## NOTE
 
 - Colors may be shown if they are not color codes. e.g. "#feature" contains `#fea`. This plugin recognizes it as a hex color code.
 - If you use the GTK Look and Feel, you cannot change an alpha value in the color chooser.
 - Hsl or hsla color values may not be changed correctly when you use the color chooser. (There may be 1% errors.)
+- Doesn't recognize the following Java Color case: `new Color(0.25f, 0.50f, 0);`, in such a case, please add `f`. i.e. `0f` or `1f`.
 
 ## Donation
 

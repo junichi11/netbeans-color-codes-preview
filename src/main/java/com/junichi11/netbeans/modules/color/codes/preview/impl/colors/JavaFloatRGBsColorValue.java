@@ -22,32 +22,26 @@ import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodeFormatter
 import java.awt.Color;
 
 /**
- * Represent new Color(int rgba, boolean hasalpha).
+ * Represent new Color(float r, float g, float b).
  *
  * @author junichi11
  */
-public class JavaIntRGBAColorValue extends AbstractColorValue {
+public class JavaFloatRGBsColorValue extends AbstractColorValue {
 
     private final int r;
     private final int g;
     private final int b;
-    private final int a;
-    private final boolean hasAlpha;
-    private final RGBAIntTypes rgbaIntTypes;
 
-    public JavaIntRGBAColorValue(String value, OffsetRange offsetRange, int line, Color color, boolean hasAlpha, RGBAIntTypes rgbaIntTypes) {
+    public JavaFloatRGBsColorValue(String value, OffsetRange offsetRange, int line, Color color) {
         super(value, offsetRange, line);
         this.r = color.getRed();
         this.g = color.getGreen();
         this.b = color.getBlue();
-        this.a = color.getAlpha();
-        this.hasAlpha = hasAlpha;
-        this.rgbaIntTypes = rgbaIntTypes;
     }
 
     @Override
     public Color getColor() {
-        return hasAlpha ? new Color(r, g, b, a) : new Color(r, g, b);
+        return new Color(r, g, b);
     }
 
     @Override
@@ -57,7 +51,11 @@ public class JavaIntRGBAColorValue extends AbstractColorValue {
 
     @Override
     public ColorCodeFormatter getFormatter() {
-        return new JavaColorCodeFormatter(JavaColorType.JAVA_INT_RGBA, rgbaIntTypes);
+        return new JavaColorCodeFormatter(getType());
+    }
+
+    public JavaColorType getType() {
+        return JavaColorType.JAVA_FLOAT_R_G_B;
     }
 
 }

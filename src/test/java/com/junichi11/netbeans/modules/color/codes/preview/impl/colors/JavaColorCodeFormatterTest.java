@@ -64,25 +64,139 @@ public class JavaColorCodeFormatterTest {
     }
 
     @Test
+    public void testFloatRGBsFormat() {
+        JavaColorCodeFormatter formatter = new JavaColorCodeFormatter(JavaColorType.JAVA_FLOAT_R_G_B);
+        String result = formatter.format(Color.BLACK);
+        assertEquals("new Color(0.00f, 0.00f, 0.00f)", result);
+        result = formatter.format(new Color(0, 100, 200));
+        assertEquals("new Color(0.00f, 0.39f, 0.78f)", result);
+        result = formatter.format(new Color(0, 0, 0));
+        assertEquals("new Color(0.00f, 0.00f, 0.00f)", result);
+        result = formatter.format(new Color(255, 255, 255));
+        assertEquals("new Color(1.00f, 1.00f, 1.00f)", result);
+        result = formatter.format(new Color(0, 100, 200, 100));
+        assertEquals("new Color(0.00f, 0.39f, 0.78f)", result);
+    }
+
+    @Test
+    public void testFloatRGBAsFormat() {
+        JavaColorCodeFormatter formatter = new JavaColorCodeFormatter(JavaColorType.JAVA_FLOAT_R_G_B_A);
+        String result = formatter.format(Color.BLACK);
+        assertEquals("new Color(0.00f, 0.00f, 0.00f, 1.00f)", result);
+        result = formatter.format(new Color(0, 100, 200));
+        assertEquals("new Color(0.00f, 0.39f, 0.78f, 1.00f)", result);
+        result = formatter.format(new Color(0, 100, 200, 100));
+        assertEquals("new Color(0.00f, 0.39f, 0.78f, 0.39f)", result);
+        result = formatter.format(new Color(255, 255, 255, 255));
+        assertEquals("new Color(1.00f, 1.00f, 1.00f, 1.00f)", result);
+        result = formatter.format(new Color(0, 0, 0, 0));
+        assertEquals("new Color(0.00f, 0.00f, 0.00f, 0.00f)", result);
+    }
+
+    @Test
     public void testIntRGBFormat() {
+        // decimal
         JavaColorCodeFormatter formatter = new JavaColorCodeFormatter(JavaColorType.JAVA_INT_RGB);
+        String result = formatter.format(Color.BLACK);
+        assertEquals("new Color(0)", result);
+        result = formatter.format(new Color(0, 100, 200));
+        assertEquals("new Color(25800)", result);
+        result = formatter.format(new Color(0, 100, 200, 100));
+        assertEquals("new Color(25800)", result);
+
+        // hex
+        formatter = new JavaColorCodeFormatter(JavaColorType.JAVA_INT_RGB, new RGBAIntTypes(IntType.Hex));
+        result = formatter.format(Color.BLACK);
+        assertEquals("new Color(0x000000)", result);
+        result = formatter.format(new Color(0, 0x50, 0xa0));
+        assertEquals("new Color(0x0050a0)", result);
+        result = formatter.format(new Color(0, 0x07, 0x50, 0x77));
+        assertEquals("new Color(0x000750)", result);
+    }
+
+    @Test
+    public void testIntRGBAFormat() {
+        // decimal
+        JavaColorCodeFormatter formatter = new JavaColorCodeFormatter(JavaColorType.JAVA_INT_RGBA);
+        String result = formatter.format(Color.BLACK);
+        assertEquals("new Color(-16777216, true)", result);
+        result = formatter.format(new Color(0, 100, 200, 100));
+        assertEquals("new Color(1677747400, true)", result);
+        result = formatter.format(new Color(0, 100, 200));
+        assertEquals("new Color(-16751416, true)", result);
+        result = formatter.format(new Color(255, 255, 255));
+        assertEquals("new Color(-1, true)", result);
+
+        // hex
+        formatter = new JavaColorCodeFormatter(JavaColorType.JAVA_INT_RGBA, new RGBAIntTypes(IntType.Hex));
+        result = formatter.format(Color.BLACK);
+        assertEquals("new Color(0xff000000, true)", result);
+        result = formatter.format(new Color(0, 0x50, 0xa0));
+        assertEquals("new Color(0xff0050a0, true)", result);
+        result = formatter.format(new Color(0, 0x07, 0x50, 0x77));
+        assertEquals("new Color(0x77000750, true)", result);
+        result = formatter.format(new Color(0xff, 0xff, 0xff, 0xff));
+        assertEquals("new Color(0xffffffff, true)", result);
+    }
+
+    @Test
+    public void testIntRGBsFormat() {
+        // decimal
+        JavaColorCodeFormatter formatter = new JavaColorCodeFormatter(JavaColorType.JAVA_INT_R_G_B);
         String result = formatter.format(Color.BLACK);
         assertEquals("new Color(0, 0, 0)", result);
         result = formatter.format(new Color(0, 100, 200));
         assertEquals("new Color(0, 100, 200)", result);
         result = formatter.format(new Color(0, 100, 200, 100));
         assertEquals("new Color(0, 100, 200, 100)", result);
+
+        // hex
+        formatter = new JavaColorCodeFormatter(JavaColorType.JAVA_INT_R_G_B, new RGBAIntTypes(IntType.Hex, IntType.Hex, IntType.Hex));
+        result = formatter.format(Color.BLACK);
+        assertEquals("new Color(0x00, 0x00, 0x00)", result);
+        result = formatter.format(new Color(0, 0x50, 0xa0));
+        assertEquals("new Color(0x00, 0x50, 0xa0)", result);
+        result = formatter.format(new Color(0, 0x07, 0x50, 0x77));
+        assertEquals("new Color(0x00, 0x07, 0x50, 0x77)", result);
+
+        // mixed
+        formatter = new JavaColorCodeFormatter(JavaColorType.JAVA_INT_R_G_B, new RGBAIntTypes(IntType.Hex, IntType.Decimal, IntType.Hex));
+        result = formatter.format(Color.BLACK);
+        assertEquals("new Color(0x00, 0, 0x00)", result);
+        result = formatter.format(new Color(0, 100, 0xa0));
+        assertEquals("new Color(0x00, 100, 0xa0)", result);
+        result = formatter.format(new Color(0, 255, 0xff, 0x77));
+        assertEquals("new Color(0x00, 255, 0xff, 0x77)", result);
     }
 
     @Test
-    public void testIntRGBAFormat() {
-        JavaColorCodeFormatter formatter = new JavaColorCodeFormatter(JavaColorType.JAVA_INT_RGBA);
+    public void testIntRGBAsFormat() {
+        // decimal
+        JavaColorCodeFormatter formatter = new JavaColorCodeFormatter(JavaColorType.JAVA_INT_R_G_B_A);
         String result = formatter.format(Color.BLACK);
         assertEquals("new Color(0, 0, 0, 255)", result);
         result = formatter.format(new Color(0, 100, 200));
         assertEquals("new Color(0, 100, 200, 255)", result);
         result = formatter.format(new Color(0, 100, 200, 100));
         assertEquals("new Color(0, 100, 200, 100)", result);
+
+        // hex
+        formatter = new JavaColorCodeFormatter(JavaColorType.JAVA_INT_R_G_B_A, RGBAIntTypes.ALL_HEX);
+        result = formatter.format(Color.BLACK);
+        assertEquals("new Color(0x00, 0x00, 0x00, 0xff)", result);
+        result = formatter.format(new Color(0, 100, 200));
+        assertEquals("new Color(0x00, 0x64, 0xc8, 0xff)", result);
+        result = formatter.format(new Color(0, 100, 200, 100));
+        assertEquals("new Color(0x00, 0x64, 0xc8, 0x64)", result);
+
+        // mixed
+        formatter = new JavaColorCodeFormatter(JavaColorType.JAVA_INT_R_G_B_A, new RGBAIntTypes(IntType.Hex, IntType.Decimal, IntType.Hex, IntType.Decimal));
+        result = formatter.format(Color.BLACK);
+        assertEquals("new Color(0x00, 0, 0x00, 255)", result);
+        result = formatter.format(new Color(0, 100, 200));
+        assertEquals("new Color(0x00, 100, 0xc8, 255)", result);
+        result = formatter.format(new Color(0, 100, 200, 100));
+        assertEquals("new Color(0x00, 100, 0xc8, 100)", result);
     }
 
     @Test

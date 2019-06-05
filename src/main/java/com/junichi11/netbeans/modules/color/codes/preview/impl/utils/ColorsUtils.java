@@ -23,11 +23,17 @@ import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.CssIntRGBC
 import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.CssPercentRGBAColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.CssPercentRGBColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.HexColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.IntType;
+import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.JavaFloatRGBAsColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.JavaFloatRGBsColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.JavaIntRGBAColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.JavaIntRGBAsColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.JavaIntRGBColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.JavaIntRGBsColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.JavaStandardColor;
 import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.JavaStandardColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.NamedColorValue;
+import com.junichi11.netbeans.modules.color.codes.preview.impl.colors.RGBAIntTypes;
 import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorValue;
 import java.awt.Color;
 import java.math.BigDecimal;
@@ -37,7 +43,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
+import javax.swing.UIManager;
 import org.netbeans.api.annotations.common.CheckForNull;
+import org.openide.util.Pair;
 
 /**
  *
@@ -68,12 +76,21 @@ public final class ColorsUtils {
     private static final String GROUP_GREEN = "g"; // NOI18N
     private static final String GROUP_BLUE = "b"; // NOI18N
     private static final String GROUP_ALPHA = "a"; // NOI18N
+    private static final String GROUP_RGBA = "intrgba"; // NOI18N
+    private static final String GROUP_HEX_RED = "hexr"; // NOI18N
+    private static final String GROUP_HEX_GREEN = "hexg"; // NOI18N
+    private static final String GROUP_HEX_BLUE = "hexb"; // NOI18N
+    private static final String GROUP_HEX_ALPHA = "hexa"; // NOI18N
+    private static final String GROUP_HEX_RGBA = "hexrgba"; // NOI18N
     private static final String GROUP_HUE = "h"; // NOI18N
     private static final String GROUP_SATURATION = "s"; // NOI18N
     private static final String GROUP_LIGHTNESS = "l"; // NOI18N
+    private static final String GROUP_BOOL = "bool"; // NOI18N
     private static final String GROUP_COLOR_NAME = "colorname"; // NOI18N
 
     private static final Map<String, String> NAMED_COLOR_TABLE = new HashMap<>();
+    public static final String GTK_LOOK_AND_FEEL_NAME = "GTK look and feel"; // NOI18N
+    public static final String LOOK_AND_FEEL_NAME = UIManager.getLookAndFeel().getName();
 
     static {
         // red html color names
@@ -455,11 +472,12 @@ public final class ColorsUtils {
         ArrayList<ColorValue> colorValues = new ArrayList<>();
         while (matcher.find()) {
             final String colorCode = matcher.group(GROUP_JAVA_RGB);
-            int r = Integer.parseInt(matcher.group(GROUP_RED));
-            int g = Integer.parseInt(matcher.group(GROUP_GREEN));
-            int b = Integer.parseInt(matcher.group(GROUP_BLUE));
-            Color color = new Color(r, g, b);
-            ColorValue colorValue = new JavaIntRGBColorValue(colorCode, new OffsetRange(matcher.start(), matcher.end()), lineNumber, color);
+            Pair<String, IntType> rgbaPair = getJavaIntRGBAValue(matcher, GROUP_RGBA);
+            // prevent NubmerFormatException
+            int rgba = (int) Long.parseLong(rgbaPair.first(), rgbaPair.second().getRadix());
+            Color color = new Color(rgba);
+            RGBAIntTypes rgbaIntTypes = new RGBAIntTypes(rgbaPair.second());
+            ColorValue colorValue = new JavaIntRGBColorValue(colorCode, new OffsetRange(matcher.start(), matcher.end()), lineNumber, color, rgbaIntTypes);
             colorValues.add(colorValue);
         }
         return colorValues;
@@ -477,15 +495,145 @@ public final class ColorsUtils {
         ArrayList<ColorValue> colorValues = new ArrayList<>();
         while (matcher.find()) {
             final String colorCode = matcher.group(GROUP_JAVA_RGBA);
-            int r = Integer.parseInt(matcher.group(GROUP_RED));
-            int g = Integer.parseInt(matcher.group(GROUP_GREEN));
-            int b = Integer.parseInt(matcher.group(GROUP_BLUE));
-            int a = Integer.parseInt(matcher.group(GROUP_ALPHA));
-            Color color = new Color(r, g, b, a);
-            ColorValue colorValue = new JavaIntRGBAColorValue(colorCode, new OffsetRange(matcher.start(), matcher.end()), lineNumber, color);
+            Pair<String, IntType> rgbaPair = getJavaIntRGBAValue(matcher, GROUP_RGBA);
+            // prevent NubmerFormatException
+            int rgba = (int) Long.parseLong(rgbaPair.first(), rgbaPair.second().getRadix());
+            String bool = matcher.group(GROUP_BOOL);
+            boolean hasAlpha = Boolean.parseBoolean(bool);
+            Color color = new Color(rgba, hasAlpha);
+            RGBAIntTypes rgbaIntTypes = new RGBAIntTypes(rgbaPair.second());
+            ColorValue colorValue = new JavaIntRGBAColorValue(colorCode, new OffsetRange(matcher.start(), matcher.end()), lineNumber, color, hasAlpha, rgbaIntTypes);
             colorValues.add(colorValue);
         }
         return colorValues;
+    }
+
+    /**
+     * Get Java int RGB colors.
+     *
+     * @param line the line text
+     * @param lineNumber the line number
+     * @return ColorValues
+     */
+    public static List<ColorValue> getJavaIntRGBsColors(String line, int lineNumber) {
+        Matcher matcher = getColorMatcher(line, JavaColorType.JAVA_INT_R_G_B);
+        ArrayList<ColorValue> colorValues = new ArrayList<>();
+        while (matcher.find()) {
+            final String colorCode = matcher.group(GROUP_JAVA_RGB);
+            Pair<String, IntType> red = getJavaIntRGBAValue(matcher, GROUP_RED);
+            Pair<String, IntType> green = getJavaIntRGBAValue(matcher, GROUP_GREEN);
+            Pair<String, IntType> blue = getJavaIntRGBAValue(matcher, GROUP_BLUE);
+            int r = Integer.parseInt(red.first(), red.second().getRadix());
+            int g = Integer.parseInt(green.first(), green.second().getRadix());
+            int b = Integer.parseInt(blue.first(), blue.second().getRadix());
+            Color color = new Color(r, g, b);
+            RGBAIntTypes rgbaIntTypes = new RGBAIntTypes(red.second(), green.second(), blue.second());
+            ColorValue colorValue = new JavaIntRGBsColorValue(colorCode, new OffsetRange(matcher.start(), matcher.end()), lineNumber, color, rgbaIntTypes);
+            colorValues.add(colorValue);
+        }
+        return colorValues;
+    }
+
+    /**
+     * Get Java int RGBA colors.
+     *
+     * @param line the line text
+     * @param lineNumber the line number
+     * @return ColorValues
+     */
+    public static List<ColorValue> getJavaIntRGBAsColors(String line, int lineNumber) {
+        Matcher matcher = getColorMatcher(line, JavaColorType.JAVA_INT_R_G_B_A);
+        ArrayList<ColorValue> colorValues = new ArrayList<>();
+        while (matcher.find()) {
+            final String colorCode = matcher.group(GROUP_JAVA_RGBA);
+            Pair<String, IntType> red = getJavaIntRGBAValue(matcher, GROUP_RED);
+            Pair<String, IntType> green = getJavaIntRGBAValue(matcher, GROUP_GREEN);
+            Pair<String, IntType> blue = getJavaIntRGBAValue(matcher, GROUP_BLUE);
+            Pair<String, IntType> alpha = getJavaIntRGBAValue(matcher, GROUP_ALPHA);
+            int r = Integer.parseInt(red.first(), red.second().getRadix());
+            int g = Integer.parseInt(green.first(), green.second().getRadix());
+            int b = Integer.parseInt(blue.first(), blue.second().getRadix());
+            int a = Integer.parseInt(alpha.first(), alpha.second().getRadix());
+            Color color = new Color(r, g, b, a);
+            RGBAIntTypes rgbaIntTypes = new RGBAIntTypes(red.second(), green.second(), blue.second(), alpha.second());
+            ColorValue colorValue = new JavaIntRGBAsColorValue(colorCode, new OffsetRange(matcher.start(), matcher.end()), lineNumber, color, rgbaIntTypes);
+            colorValues.add(colorValue);
+        }
+        return colorValues;
+    }
+
+    /**
+     * Get Java float RGB colors.
+     *
+     * @param line the line text
+     * @param lineNumber the line number
+     * @return ColorValues
+     */
+    public static List<ColorValue> getJavaFloatRGBsColors(String line, int lineNumber) {
+        Matcher matcher = getColorMatcher(line, JavaColorType.JAVA_FLOAT_R_G_B);
+        ArrayList<ColorValue> colorValues = new ArrayList<>();
+        while (matcher.find()) {
+            final String colorCode = matcher.group(GROUP_JAVA_RGB);
+            float r = Float.parseFloat(matcher.group(GROUP_RED));
+            float g = Float.parseFloat(matcher.group(GROUP_GREEN));
+            float b = Float.parseFloat(matcher.group(GROUP_BLUE));
+            Color color = new Color(r, g, b);
+            ColorValue colorValue = new JavaFloatRGBsColorValue(colorCode, new OffsetRange(matcher.start(), matcher.end()), lineNumber, color);
+            colorValues.add(colorValue);
+        }
+        return colorValues;
+    }
+
+    /**
+     * Get Java float RGBA colors.
+     *
+     * @param line the line text
+     * @param lineNumber the line number
+     * @return ColorValues
+     */
+    public static List<ColorValue> getJavaFloatRGBAsColors(String line, int lineNumber) {
+        Matcher matcher = getColorMatcher(line, JavaColorType.JAVA_FLOAT_R_G_B_A);
+        ArrayList<ColorValue> colorValues = new ArrayList<>();
+        while (matcher.find()) {
+            final String colorCode = matcher.group(GROUP_JAVA_RGBA);
+            float r = Float.parseFloat(matcher.group(GROUP_RED));
+            float g = Float.parseFloat(matcher.group(GROUP_GREEN));
+            float b = Float.parseFloat(matcher.group(GROUP_BLUE));
+            float a = Float.parseFloat(matcher.group(GROUP_ALPHA));
+            Color color = new Color(r, g, b, a);
+            ColorValue colorValue = new JavaFloatRGBAsColorValue(colorCode, new OffsetRange(matcher.start(), matcher.end()), lineNumber, color);
+            colorValues.add(colorValue);
+        }
+        return colorValues;
+    }
+
+    private static Pair<String, IntType> getJavaIntRGBAValue(Matcher matcher, String decimalIntGroup) {
+        String value = matcher.group(decimalIntGroup);
+        IntType intType = IntType.Decimal;
+        if (value == null || value.isEmpty()) {
+            switch (decimalIntGroup) {
+                case GROUP_RED:
+                    value = matcher.group(GROUP_HEX_RED);
+                    break;
+                case GROUP_GREEN:
+                    value = matcher.group(GROUP_HEX_GREEN);
+                    break;
+                case GROUP_BLUE:
+                    value = matcher.group(GROUP_HEX_BLUE);
+                    break;
+                case GROUP_ALPHA:
+                    value = matcher.group(GROUP_HEX_ALPHA);
+                    break;
+                case GROUP_RGBA:
+                    value = matcher.group(GROUP_HEX_RGBA);
+                    break;
+                default:
+                    throw new AssertionError();
+            }
+            intType = IntType.Hex;
+        }
+        assert value != null;
+        return Pair.of(value, intType);
     }
 
     private static Matcher getColorMatcher(String line, ColorType type) {
@@ -935,5 +1083,14 @@ public final class ColorsUtils {
             default:
                 return hexValueString(color);
         }
+    }
+
+    /**
+     * Check whether Look and Feel is the GTK.
+     *
+     * @return {@code true} if LAF is the GTK, otherwise {@code false}
+     */
+    public static boolean isGTKLookAndFeel() {
+        return GTK_LOOK_AND_FEEL_NAME.equals(LOOK_AND_FEEL_NAME);
     }
 }

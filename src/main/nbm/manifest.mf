@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
 OpenIDE-Module-Install: com/junichi11/netbeans/modules/color/codes/preview/Installer.class
+OpenIDE-Module-Layer: com/junichi11/netbeans/modules/color/codes/preview/resources/layer.xml
 OpenIDE-Module-Localizing-Bundle: com/junichi11/netbeans/modules/color/codes/preview/Bundle.properties
 OpenIDE-Module-Recommends: com.junichi11.netbeans.modules.color.codes.preview.colors.spi.ColorCodesProvider

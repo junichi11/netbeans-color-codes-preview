@@ -16,48 +16,60 @@
 package com.junichi11.netbeans.modules.color.codes.preview.impl.colors;
 
 import com.junichi11.netbeans.modules.color.codes.preview.api.OffsetRange;
+import com.junichi11.netbeans.modules.color.codes.preview.impl.utils.ColorsUtils;
 import com.junichi11.netbeans.modules.color.codes.preview.impl.utils.JavaColorType;
 import com.junichi11.netbeans.modules.color.codes.preview.spi.AbstractColorValue;
 import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodeFormatter;
 import java.awt.Color;
+import org.openide.awt.StatusDisplayer;
 
 /**
- * Represent new Color(int rgba, boolean hasalpha).
+ * Represent new Color(int r, int g, int b, int a).
  *
  * @author junichi11
  */
-public class JavaIntRGBAColorValue extends AbstractColorValue {
+public class JavaIntRGBAsColorValue extends AbstractColorValue {
 
     private final int r;
     private final int g;
     private final int b;
     private final int a;
-    private final boolean hasAlpha;
     private final RGBAIntTypes rgbaIntTypes;
 
-    public JavaIntRGBAColorValue(String value, OffsetRange offsetRange, int line, Color color, boolean hasAlpha, RGBAIntTypes rgbaIntTypes) {
+    public JavaIntRGBAsColorValue(String value, OffsetRange offsetRange, int line, Color color, RGBAIntTypes rgbaIntTypes) {
         super(value, offsetRange, line);
         this.r = color.getRed();
         this.g = color.getGreen();
         this.b = color.getBlue();
         this.a = color.getAlpha();
-        this.hasAlpha = hasAlpha;
         this.rgbaIntTypes = rgbaIntTypes;
     }
 
     @Override
     public Color getColor() {
-        return hasAlpha ? new Color(r, g, b, a) : new Color(r, g, b);
+        return new Color(r, g, b, a);
+    }
+
+    public JavaColorType getType() {
+        return JavaColorType.JAVA_INT_R_G_B_A;
     }
 
     @Override
     public boolean isEditable() {
+        // ColorChooser of GTK cannot change transparency
+        if (ColorsUtils.isGTKLookAndFeel()) {
+            StatusDisplayer.getDefault().setStatusText("You can't modify an alpha value with GTK LAF.");
+            return false;
+        }
         return true;
     }
 
     @Override
     public ColorCodeFormatter getFormatter() {
-        return new JavaColorCodeFormatter(JavaColorType.JAVA_INT_RGBA, rgbaIntTypes);
+        return new JavaColorCodeFormatter(getType(), getRGBAIntTypes());
     }
 
+    public RGBAIntTypes getRGBAIntTypes() {
+        return rgbaIntTypes;
+    }
 }

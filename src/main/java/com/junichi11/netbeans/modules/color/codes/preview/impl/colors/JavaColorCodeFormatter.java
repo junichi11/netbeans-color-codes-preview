@@ -26,38 +26,132 @@ import org.netbeans.api.annotations.common.CheckForNull;
  */
 public final class JavaColorCodeFormatter implements ColorCodeFormatter {
 
-    private static final String RGB_VALUE_FORMAT = "Color(%s, %s, %s)"; // NOI18N
-    private static final String RGBA_VALUE_FORMAT = "Color(%s, %s, %s, %s)"; // NOI18N
+    private static final String FLOAT_R_G_B_FORMAT = "new Color(%.2ff, %.2ff, %.2ff)"; // NOI18N
+    private static final String FLOAT_R_G_B_A_FORMAT = "new Color(%.2ff, %.2ff, %.2ff, %.2ff)"; // NOI18N
     private static final String DECODE_HEX_VALUE_FORMAT = "Color.decode(\"#%02x%02x%02x\")"; // NOI18N
 
     private final JavaColorType type;
+    private final RGBAIntTypes rgbaIntTypes;
+
+    public JavaColorCodeFormatter(JavaColorType type, RGBAIntTypes rgbaIntTypes) {
+        this.type = type;
+        this.rgbaIntTypes = rgbaIntTypes;
+    }
 
     public JavaColorCodeFormatter(JavaColorType type) {
-        this.type = type;
+        this(type, RGBAIntTypes.ALL_DECIMAL);
     }
 
     @Override
     public String format(Color color) {
-        if (type == JavaColorType.JAVA_STANDARD_COLOR) {
-            String standardJavaColor = getStandardJavaColor(color);
-            if (standardJavaColor != null) {
-                return standardJavaColor;
-            }
-        } else if (type == JavaColorType.DECODE) {
-            return asDecodeHexValue(color);
+        switch (type) {
+            case JAVA_STANDARD_COLOR:
+                String standardJavaColor = getStandardJavaColor(color);
+                if (standardJavaColor != null) {
+                    return standardJavaColor;
+                }
+                break;
+            case DECODE:
+                return asDecodeHexValue(color);
+            case JAVA_INT_RGB:
+                return asRGBIntColorValue(color);
+            case JAVA_INT_RGBA:
+                return asRGBAIntColorValue(color);
+            case JAVA_FLOAT_R_G_B:
+                return asRGBFloatColorValue(color);
+            case JAVA_FLOAT_R_G_B_A:
+                return asRGBAFloatColorValue(color);
+            default:
+                break;
         }
-        return "new " + asRGBIntColorValue(color); // NOI18N
+        return "new " + asRGBsIntColorValue(color); // NOI18N
+    }
+
+    private String asRGBFloatColorValue(Color color) {
+        return String.format(FLOAT_R_G_B_FORMAT, color.getRed()/255f, color.getGreen()/255f, color.getBlue()/255f);
+    }
+
+    private String asRGBAFloatColorValue(Color color) {
+        return String.format(FLOAT_R_G_B_A_FORMAT, color.getRed()/255f, color.getGreen()/255f, color.getBlue()/255f, color.getAlpha()/255f);
+    }
+
+    private String asRGBAIntColorValue(Color color) {
+        if (IntType.Decimal == rgbaIntTypes.getRgba()) {
+            return String.format(buildColorRGBAFormat(rgbaIntTypes, true), color.getRGB(), "true"); // NOI18N
+        }
+        return String.format(buildColorRGBAFormat(rgbaIntTypes, true), color.getAlpha(), color.getRed(), color.getGreen(), color.getBlue(), "true"); // NOI18N
     }
 
     private String asRGBIntColorValue(Color color) {
-        if (type == JavaColorType.JAVA_INT_RGBA || color.getAlpha() != 255) {
-            return String.format(RGBA_VALUE_FORMAT, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+        if (IntType.Decimal == rgbaIntTypes.getRgba()) {
+            String hexString = String.format("%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue()); // NOI18N
+            return String.format(buildColorRGBAFormat(rgbaIntTypes, false), Integer.parseInt(hexString, IntType.Hex.getRadix()));
         }
-        return String.format(RGB_VALUE_FORMAT, color.getRed(), color.getGreen(), color.getBlue());
+        return String.format(buildColorRGBAFormat(rgbaIntTypes, false), color.getRed(), color.getGreen(), color.getBlue());
+    }
+
+    private String asRGBsIntColorValue(Color color) {
+        assert rgbaIntTypes != null;
+        if (type == JavaColorType.JAVA_INT_R_G_B_A || color.getAlpha() != 255) {
+            return String.format(buildColorRGBAsFormat(rgbaIntTypes, true), color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+        }
+        return String.format(buildColorRGBAsFormat(rgbaIntTypes, false), color.getRed(), color.getGreen(), color.getBlue());
     }
 
     private String asDecodeHexValue(Color color) {
         return String.format(DECODE_HEX_VALUE_FORMAT, color.getRed(), color.getGreen(), color.getBlue());
+    }
+
+    private static String buildColorRGBAFormat(RGBAIntTypes rgbaIntTypes, boolean hasAlpha) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("new Color("); // NOI18N
+        if (IntType.Hex == rgbaIntTypes.getRgba()) {
+            sb.append("0x"); // NOI18N
+            int rgbaCount = hasAlpha ? 4 : 3; // 0xffffffff or 0xffffff
+            for (int i = 0; i < rgbaCount; i++) {
+                sb.append(IntType.Hex.getFormatSpecifier());
+            }
+        } else {
+            sb.append(rgbaIntTypes.getRgba().getFormatSpecifier());
+        }
+
+        if (hasAlpha) {
+            sb.append(", %s"); // NOI18N
+        }
+        sb.append(")"); // NOI18N
+        return sb.toString();
+    }
+
+    private static String buildColorRGBAsFormat(RGBAIntTypes rgbaIntTypes, boolean hasAlpha) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Color("); // NOI18N
+        if (IntType.Hex == rgbaIntTypes.getRed()) {
+            sb.append("0x"); // NOI18N
+        }
+        sb.append(rgbaIntTypes.getRed().getFormatSpecifier());
+        sb.append(", "); // NOI18N
+        if (IntType.Hex == rgbaIntTypes.getGreen()) {
+            sb.append("0x"); // NOI18N
+        }
+        sb.append(rgbaIntTypes.getGreen().getFormatSpecifier());
+        sb.append(", "); // NOI18N
+        if (IntType.Hex == rgbaIntTypes.getBlue()) {
+            sb.append("0x"); // NOI18N
+        }
+        sb.append(rgbaIntTypes.getBlue().getFormatSpecifier());
+        if (hasAlpha) {
+            sb.append(", "); // NOI18N
+            IntType alpha = rgbaIntTypes.getAlpha();
+            if (alpha == null) {
+                alpha = rgbaIntTypes.getRed();
+            }
+            if (IntType.Hex == alpha) {
+                sb.append("0x"); // NOI18N
+            }
+            sb.append(alpha.getFormatSpecifier());
+        }
+        sb.append(")"); // NOI18N
+        return sb.toString();
     }
 
     @CheckForNull
