@@ -63,4 +63,10 @@ public class JavaIntRGBsColorValue extends AbstractColorValue {
     public RGBAIntTypes getRGBAIntTypes() {
         return rgbaIntTypes;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + " JavaIntRGBsColorValue{" + "r=" + r + ", g=" + g + ", b=" + b + ", rgbaIntTypes=" + rgbaIntTypes + '}'; // NOI18N
+    }
+
 }

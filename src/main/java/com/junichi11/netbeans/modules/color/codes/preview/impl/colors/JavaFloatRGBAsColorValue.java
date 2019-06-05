@@ -66,4 +66,10 @@ public class JavaFloatRGBAsColorValue extends AbstractColorValue {
     public JavaColorType getType() {
         return JavaColorType.JAVA_INT_R_G_B_A;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + " JavaFloatRGBAsColorValue{" + "r=" + r + ", g=" + g + ", b=" + b + ", a=" + a + '}'; // NOI18N
+    }
+
 }
