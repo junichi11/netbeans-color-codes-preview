@@ -60,7 +60,7 @@ public class JavaFloatRGBsColorValue extends AbstractColorValue {
 
     @Override
     public String toString() {
-        return "JavaFloatRGBsColorValue{" + "r=" + r + ", g=" + g + ", b=" + b + '}'; // NOI18N
+        return super.toString() + " JavaFloatRGBsColorValue{" + "r=" + r + ", g=" + g + ", b=" + b + '}'; // NOI18N
     }
 
 }
