@@ -65,6 +65,14 @@ public class JavaColorCodesProviderTest {
         assertEquals(13, result.get(0).getEndOffset());
         assertEquals(true, result.get(0).isEditable());
 
+        result = provider.getColorValues(null, "  java.awt.Color.black;  // black", 0, Collections.emptyMap());
+        assertEquals(1, result.size());
+        assertEquals(Color.black, result.get(0).getColor());
+        assertEquals("Color.black", result.get(0).getValue());
+        assertEquals(11, result.get(0).getStartOffset());
+        assertEquals(22, result.get(0).getEndOffset());
+        assertEquals(true, result.get(0).isEditable());
+
         result = provider.getColorValues(null, "  Color.Black;  // black", 0, Collections.emptyMap());
         assertEquals(0, result.size());
     }
@@ -94,6 +102,14 @@ public class JavaColorCodesProviderTest {
         assertEquals("new Color(0.5f, .3f, 0.25F)", result.get(0).getValue());
         assertEquals(14, result.get(0).getStartOffset());
         assertEquals(41, result.get(0).getEndOffset());
+        assertEquals(true, result.get(0).isEditable());
+
+        result = provider.getColorValues(null, "Color color = new java.awt.Color(0.5f, .3f, 0.25F);", 0, Collections.emptyMap());
+        assertEquals(1, result.size());
+        assertEquals(new Color(0.5f, 0.3f, 0.25f), result.get(0).getColor());
+        assertEquals("new java.awt.Color(0.5f, .3f, 0.25F)", result.get(0).getValue());
+        assertEquals(14, result.get(0).getStartOffset());
+        assertEquals(50, result.get(0).getEndOffset());
         assertEquals(true, result.get(0).isEditable());
 
         result = provider.getColorValues(null, "Color color = new Color(1.01f, 0f, .0f);", 0, Collections.emptyMap());
@@ -127,6 +143,14 @@ public class JavaColorCodesProviderTest {
         assertEquals("new Color(0.5f, .3f, 0.25F, 0.72f)", result.get(0).getValue());
         assertEquals(14, result.get(0).getStartOffset());
         assertEquals(48, result.get(0).getEndOffset());
+        assertEquals(true, result.get(0).isEditable());
+
+        result = provider.getColorValues(null, "Color color = new java.awt.Color(0.5f, .3f, 0.25F, 0.72f);", 0, Collections.emptyMap());
+        assertEquals(1, result.size());
+        assertEquals(new Color(0.5f, 0.3f, 0.25f, 0.72f), result.get(0).getColor());
+        assertEquals("new java.awt.Color(0.5f, .3f, 0.25F, 0.72f)", result.get(0).getValue());
+        assertEquals(14, result.get(0).getStartOffset());
+        assertEquals(57, result.get(0).getEndOffset());
         assertEquals(true, result.get(0).isEditable());
 
         result = provider.getColorValues(null, "Color color = new Color(1.01f, 0f, .0f, 0.2f);", 0, Collections.emptyMap());
@@ -163,6 +187,15 @@ public class JavaColorCodesProviderTest {
         assertEquals("new Color( 255, 0x10, 0x00 )", result.get(0).getValue());
         assertEquals(14, result.get(0).getStartOffset());
         assertEquals(42, result.get(0).getEndOffset());
+        assertEquals(true, result.get(0).isEditable());
+
+        // mixed
+        result = provider.getColorValues(null, "Color color = new java.awt.Color( 255, 0x10, 0x00 );", 0, Collections.emptyMap());
+        assertEquals(1, result.size());
+        assertEquals(new Color(255, 0x10, 0x00), result.get(0).getColor());
+        assertEquals("new java.awt.Color( 255, 0x10, 0x00 )", result.get(0).getValue());
+        assertEquals(14, result.get(0).getStartOffset());
+        assertEquals(51, result.get(0).getEndOffset());
         assertEquals(true, result.get(0).isEditable());
 
         // decimal
@@ -254,6 +287,15 @@ public class JavaColorCodesProviderTest {
         assertEquals(48, result.get(0).getEndOffset());
         assertEquals(true, result.get(0).isEditable());
 
+        // mixed
+        result = provider.getColorValues(null, "Color color = new java.awt.Color( 0xff, 0x00, 100, 0x64 );", 0, Collections.emptyMap());
+        assertEquals(1, result.size());
+        assertEquals(new Color(0xff, 0x00, 100, 0x64), result.get(0).getColor());
+        assertEquals("new java.awt.Color( 0xff, 0x00, 100, 0x64 )", result.get(0).getValue());
+        assertEquals(14, result.get(0).getStartOffset());
+        assertEquals(57, result.get(0).getEndOffset());
+        assertEquals(true, result.get(0).isEditable());
+
         // decimal
         result = provider.getColorValues(null, "Color color = new Color( 100,  true);", 0, Collections.emptyMap());
         assertEquals(1, result.size());
@@ -311,6 +353,14 @@ public class JavaColorCodesProviderTest {
         assertEquals(14, result.get(0).getStartOffset());
         assertEquals(40, result.get(0).getEndOffset());
         assertEquals(true, result.get(0).isEditable());
+
+        result = provider.getColorValues(null, "Color color = new java.awt.Color(0xffffff, false);", 0, Collections.emptyMap());
+        assertEquals(1, result.size());
+        assertEquals(new Color(0xffffff, false), result.get(0).getColor());
+        assertEquals("new java.awt.Color(0xffffff, false)", result.get(0).getValue());
+        assertEquals(14, result.get(0).getStartOffset());
+        assertEquals(49, result.get(0).getEndOffset());
+        assertEquals(true, result.get(0).isEditable());
         try {
             result = provider.getColorValues(null, "Color color = new Color(256, 0, 0, 0);", 0, Collections.emptyMap());
             assertEquals(0, result.size());
@@ -348,6 +398,17 @@ public class JavaColorCodesProviderTest {
         assertEquals(22, result.get(0).getEndOffset());
         assertEquals(24, result.get(1).getStartOffset());
         assertEquals(46, result.get(1).getEndOffset());
+
+        result = provider.getColorValues(null, "new Color[]{java.awt.Color.blue, new java.awt.Color(153, 255, 0)};", 0, Collections.emptyMap());
+        assertEquals(2, result.size());
+        assertEquals(Color.blue, result.get(0).getColor());
+        assertEquals(new Color(153, 255, 0), result.get(1).getColor());
+        assertEquals("Color.blue", result.get(0).getValue());
+        assertEquals("new java.awt.Color(153, 255, 0)", result.get(1).getValue());
+        assertEquals(21, result.get(0).getStartOffset());
+        assertEquals(31, result.get(0).getEndOffset());
+        assertEquals(33, result.get(1).getStartOffset());
+        assertEquals(64, result.get(1).getEndOffset());
     }
 
 }

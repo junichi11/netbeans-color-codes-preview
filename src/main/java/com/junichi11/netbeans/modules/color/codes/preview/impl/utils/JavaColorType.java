@@ -56,12 +56,12 @@ public enum JavaColorType implements ColorType {
 
     private static final String JAVA_STANDARD_COLORS_REGEX = "black|BLACK|blue|BLUE|cyan|CYAN|darkGray|DARK_GRAY|gray|GRAY|green|GREEN|lightGray|LIGHT_GRAY|magenta|MAGENTA|orange|ORANGE|pink|PINK|red|RED|white|WHITE|yellow|YELLOW"; // NOI18N
     private static final String JAVA_STANDARD_COLOR_FORMAT = "(?<javastandard>Color\\.(?<colorname>%s))"; // NOI18N
-    private static final String JAVA_FLOAT_R_G_B_FORMAT = "(?<javargb>new Color\\((?<codenumber> *(?<r>%s)f *, *(?<g>%s)f *, *(?<b>%s)f *)\\))"; // NOI18N
-    private static final String JAVA_FLOAT_R_G_B_A_FORMAT = "(?<javargba>new Color\\((?<codenumber> *(?<r>%s)f *, *(?<g>%s)f *, *(?<b>%s)f *, *(?<a>%s)f *)\\))"; // NOI18N
-    private static final String JAVA_INT_R_G_B_FORMAT = "(?<javargb>new Color\\((?<codenumber> *((?<r>%s)|0x(?<hexr>%s)) *, *((?<g>%s)|0x(?<hexg>%s)) *, *((?<b>%s)|0x(?<hexb>%s)) *)\\))"; // NOI18N
-    private static final String JAVA_INT_R_G_B_A_FORMAT = "(?<javargba>new Color\\((?<codenumber> *((?<r>%s)|0x(?<hexr>%s)) *, *((?<g>%s)|0x(?<hexg>%s)) *, *((?<b>%s)|0x(?<hexb>%s)) *, *((?<a>%s)|0x(?<hexa>%s)) *)\\))"; // NOI18N
-    private static final String JAVA_INT_RGB_FORMAT = "(?<javargb>new Color\\((?<codenumber> *((?<intrgba>%s)|0x(?<hexrgba>%s)) *)\\))"; // NOI18N
-    private static final String JAVA_INT_RGBA_FORMAT = "(?<javargba>new Color\\((?<codenumber> *((?<intrgba>%s)|0x(?<hexrgba>%s)) *, * (?<bool>%s) *)\\))"; // NOI18N
+    private static final String JAVA_FLOAT_R_G_B_FORMAT = "(?<javargb>new (java\\.awt\\.)?Color\\((?<codenumber> *(?<r>%s)f *, *(?<g>%s)f *, *(?<b>%s)f *)\\))"; // NOI18N
+    private static final String JAVA_FLOAT_R_G_B_A_FORMAT = "(?<javargba>new (java\\.awt\\.)?Color\\((?<codenumber> *(?<r>%s)f *, *(?<g>%s)f *, *(?<b>%s)f *, *(?<a>%s)f *)\\))"; // NOI18N
+    private static final String JAVA_INT_R_G_B_FORMAT = "(?<javargb>new (java\\.awt\\.)?Color\\((?<codenumber> *((?<r>%s)|0x(?<hexr>%s)) *, *((?<g>%s)|0x(?<hexg>%s)) *, *((?<b>%s)|0x(?<hexb>%s)) *)\\))"; // NOI18N
+    private static final String JAVA_INT_R_G_B_A_FORMAT = "(?<javargba>new (java\\.awt\\.)?Color\\((?<codenumber> *((?<r>%s)|0x(?<hexr>%s)) *, *((?<g>%s)|0x(?<hexg>%s)) *, *((?<b>%s)|0x(?<hexb>%s)) *, *((?<a>%s)|0x(?<hexa>%s)) *)\\))"; // NOI18N
+    private static final String JAVA_INT_RGB_FORMAT = "(?<javargb>new (java\\.awt\\.)?Color\\((?<codenumber> *((?<intrgba>%s)|0x(?<hexrgba>%s)) *)\\))"; // NOI18N
+    private static final String JAVA_INT_RGBA_FORMAT = "(?<javargba>new (java\\.awt\\.)?Color\\((?<codenumber> *((?<intrgba>%s)|0x(?<hexrgba>%s)) *, * (?<bool>%s) *)\\))"; // NOI18N
     private static final String JAVA_COLOR_DECODE_REGEX = "(?<javadecode>Color\\.decode\\(\"(#(?<codenumber>[0-9a-fA-F]{6,}|[0-9a-fA-F]{3,})\")\\))"; // NOI18N
 
     private final Pattern pattern;

@@ -60,7 +60,7 @@ public class JavaFloatRGBAsColorValue extends AbstractColorValue {
 
     @Override
     public ColorCodeFormatter getFormatter() {
-        return new JavaColorCodeFormatter(getType());
+        return new JavaColorCodeFormatter(getType(), JavaColorCodeFormatter.hasPackageName(getValue()));
     }
 
     public JavaColorType getType() {
