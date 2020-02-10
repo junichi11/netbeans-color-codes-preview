@@ -66,4 +66,8 @@ public abstract class AbstractColorValue implements ColorValue {
         return value;
     }
 
+    @Override
+    public String toString() {
+        return "[line=" + line + ", startOffset=" + startOffset + ", endOffset=" + endOffset + ", value=" + value + ']'; // NOI18N
+    }
 }

@@ -51,7 +51,12 @@ public class JavaStandardColorValue extends AbstractColorValue {
 
     @Override
     public ColorCodeFormatter getFormatter() {
-        return new JavaColorCodeFormatter(getType());
+        return new JavaColorCodeFormatter(getType(), JavaColorCodeFormatter.hasPackageName(getValue()));
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + " JavaStandardColorValue{" + "color=" + color + '}';
     }
 
 }

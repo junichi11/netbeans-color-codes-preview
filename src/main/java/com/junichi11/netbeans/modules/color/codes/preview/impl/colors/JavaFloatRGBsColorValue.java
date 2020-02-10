@@ -51,11 +51,16 @@ public class JavaFloatRGBsColorValue extends AbstractColorValue {
 
     @Override
     public ColorCodeFormatter getFormatter() {
-        return new JavaColorCodeFormatter(getType());
+        return new JavaColorCodeFormatter(getType(), JavaColorCodeFormatter.hasPackageName(getValue()));
     }
 
     public JavaColorType getType() {
         return JavaColorType.JAVA_FLOAT_R_G_B;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + " JavaFloatRGBsColorValue{" + "r=" + r + ", g=" + g + ", b=" + b + '}'; // NOI18N
     }
 
 }

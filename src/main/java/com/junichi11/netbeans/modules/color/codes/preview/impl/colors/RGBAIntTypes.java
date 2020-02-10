@@ -78,4 +78,9 @@ public final class RGBAIntTypes {
         return rgba;
     }
 
+    @Override
+    public String toString() {
+        return "RGBAIntTypes{" + "r=" + r + ", g=" + g + ", b=" + b + ", a=" + a + ", rgba=" + rgba + '}'; // NOI18N
+    }
+
 }

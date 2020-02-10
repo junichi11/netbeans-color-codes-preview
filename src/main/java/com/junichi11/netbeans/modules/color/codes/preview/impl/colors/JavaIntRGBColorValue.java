@@ -49,7 +49,12 @@ public class JavaIntRGBColorValue extends AbstractColorValue {
 
     @Override
     public ColorCodeFormatter getFormatter() {
-        return new JavaColorCodeFormatter(JavaColorType.JAVA_INT_RGB, rgbaIntTypes);
+        return new JavaColorCodeFormatter(JavaColorType.JAVA_INT_RGB, rgbaIntTypes, JavaColorCodeFormatter.hasPackageName(getValue()));
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + " JavaIntRGBColorValue{" + "rgb=" + rgb + ", rgbaIntTypes=" + rgbaIntTypes + '}'; // NOI18N
     }
 
 }

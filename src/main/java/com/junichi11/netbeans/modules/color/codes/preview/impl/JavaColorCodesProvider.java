@@ -48,6 +48,7 @@ public class JavaColorCodesProvider extends AbstractColorCodesProvider {
 
     private static final String COLOR_PREFIX = "Color."; // NOI18N
     private static final String NEW_COLOR_PREFIX = "new Color("; // NOI18N
+    private static final String NEW_JAVA_AWT_COLOR_PREFIX = "new java.awt.Color("; // NOI18N
     private static final String MIME_TYPE_JAVA = "text/x-java"; // NOI18N
     private static final Logger LOGGER = Logger.getLogger(JavaColorCodesProvider.class.getName());
 
@@ -91,7 +92,9 @@ public class JavaColorCodesProvider extends AbstractColorCodesProvider {
     }
 
     private boolean hasColorValue(String line) {
-        return (line.contains(COLOR_PREFIX) || line.contains(NEW_COLOR_PREFIX))
+        return (line.contains(COLOR_PREFIX)
+                || line.contains(NEW_COLOR_PREFIX)
+                || line.contains(NEW_JAVA_AWT_COLOR_PREFIX))
                 && !line.contains("import"); // NOI18N
     }
 
@@ -211,7 +214,7 @@ public class JavaColorCodesProvider extends AbstractColorCodesProvider {
 
         @Override
         public ColorCodeFormatter getFormatter() {
-            return new JavaColorCodeFormatter(type, rgbaIntTypes);
+            return new JavaColorCodeFormatter(type, rgbaIntTypes, false);
         }
 
         @NbBundle.Messages("JavaColorCodeGeneratorItem.tooltipText=Generate Java Color class code")
