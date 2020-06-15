@@ -1,10 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.junichi11</groupId>
+    <groupId>com.junichi11.netbeans.modules</groupId>
     <artifactId>netbeans-color-codes-preview</artifactId>
     <version>0.12.4</version>
     <packaging>nbm</packaging>
+    <name>Color Codes Preview</name>
+    <url>https://github.com/junichi11/netbeans-color-codes-preview</url>
+    <developers>
+        <developer>
+            <id>junichi11</id>
+            <name>Junichi Yamamoto</name>
+            <url>https://github.com/junichi11</url>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git:https://github.com/junichi11/netbeans-color-codes-preview.git</connection>
+        <developerConnection>scm:git:https://github.com/junichi11/netbeans-color-codes-preview.git</developerConnection>
+        <url>https://github.com/junichi11/netbeans-color-codes-preview/tree/${project.scm.tag}</url>
+        <tag>master</tag>
+    </scm>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+        </license>
+    </licenses>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <netbeans.api.version>RELEASE110</netbeans.api.version>
@@ -12,15 +33,26 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.7</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.netbeans.utilities</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
-                <version>3.13</version>
+                <version>4.4</version>
                 <extensions>true</extensions>
                 <configuration>
                     <codeNameBase>com.junichi11.netbeans.modules.color.codes.preview</codeNameBase>
                     <licenseName>Apache License, Version 2.0</licenseName>
                     <licenseFile>license.txt</licenseFile>
-                    <author>junichi11(Junichi Yamamoto)</author>
+                    <author>Junichi Yamamoto</author>
                     <homePageUrl>https://github.com/junichi11/netbeans-color-codes-preview</homePageUrl>
                     <publicPackages>
                         <publicPackage>com.junichi11.netbeans.modules.color.codes.preview.api</publicPackage>
@@ -31,7 +63,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.5.1</version>
+                <version>3.8.1</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
@@ -40,15 +72,31 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
+                <version>3.2.0</version>
                 <configuration>
-                    <useDefaultManifestFile>true</useDefaultManifestFile>
+                    <archive>
+                        <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.15</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
@@ -152,7 +200,6 @@
             <version>${netbeans.api.version}</version>
         </dependency>
     </dependencies>
-    <name>Color Codes Preview</name>
     <description>Show color codes preview per line in a sidebar area of an editor.
 &lt;h2&gt;Disable / Enable&lt;/h2&gt;
         Check/Uncheck View &gt; Show Colors
