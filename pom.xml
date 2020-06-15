@@ -29,6 +29,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <netbeans.api.version>RELEASE110</netbeans.api.version>
+        <!-- deploy: mvn -Dgpg.skip=false deploy -->
+        <gpg.skip>true</gpg.skip>
     </properties>
     <build>
         <plugins>
