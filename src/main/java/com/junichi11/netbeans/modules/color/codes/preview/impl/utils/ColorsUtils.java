@@ -848,7 +848,7 @@ public final class ColorsUtils {
 
     /**
      * Get an HSL Color.
-     * {@link http://www.w3.org/TR/2011/REC-css3-color-20110607/#hsl-color}
+     * @see <a href="http://www.w3.org/TR/2011/REC-css3-color-20110607/#hsl-color">http://www.w3.org/TR/2011/REC-css3-color-20110607/#hsl-color</a>
      *
      * @param h a hue value [0,1]
      * @param s a saturation value [0,1]
