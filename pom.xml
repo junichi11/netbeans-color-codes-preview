@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.junichi11.netbeans.modules</groupId>
     <artifactId>netbeans-color-codes-preview</artifactId>
-    <version>0.13.0</version>
+    <version>0.13.2</version>
     <packaging>nbm</packaging>
     <name>Color Codes Preview</name>
     <url>https://github.com/junichi11/netbeans-color-codes-preview</url>
@@ -29,6 +29,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <netbeans.api.version>RELEASE110</netbeans.api.version>
+        <!-- deploy: mvn -Dgpg.skip=false deploy -->
+        <gpg.skip>true</gpg.skip>
     </properties>
     <build>
         <plugins>
@@ -110,6 +112,16 @@
             </snapshots>
         </repository>
     </repositories>
+    <distributionManagement>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
     <dependencies>
         <dependency>
             <groupId>org.netbeans.api</groupId>
