@@ -17,8 +17,8 @@
     <scm>
         <connection>scm:git:https://github.com/junichi11/netbeans-color-codes-preview.git</connection>
         <developerConnection>scm:git:https://github.com/junichi11/netbeans-color-codes-preview.git</developerConnection>
-        <url>https://github.com/junichi11/netbeans-color-codes-preview/tree/${project.scm.tag}</url>
-        <tag>master</tag>
+        <url>https://github.com/junichi11/netbeans-color-codes-preview</url>
+        <tag>HEAD</tag>
     </scm>
     <licenses>
         <license>
