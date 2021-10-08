@@ -762,6 +762,12 @@ public class ColorsUtilsTest {
         assertEquals(0, result.size());
         result = ColorsUtils.getCssHSLAs("hsl(0, 0%, 0%)", 1);
         assertEquals(0, result.size());
+
+        // #47
+        result = ColorsUtils.getCssHSLAs("hsla(60, 100%, 50%, 0.5)", 1);
+        assertEquals(1, result.size());
+        Color color = result.get(0).getColor();
+        assertEquals(255, color.getRed());
     }
 
     /**

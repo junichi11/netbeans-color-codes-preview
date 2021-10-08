@@ -156,6 +156,15 @@ public class HexCssColorCodesProviderTest {
         assertEquals(25, result.get(0).getEndOffset());
         assertEquals(true, result.get(0).isEditable());
 
+        // #47
+        result = provider.getColorValues(document, "color: hsla(60, 100%, 50%, 0.5);", 0, Collections.emptyMap());
+        assertEquals(1, result.size());
+        assertEquals(new Color(255, 255, 0, 127), result.get(0).getColor());
+        assertEquals("hsla(60, 100%, 50%, 0.5)", result.get(0).getValue());
+        assertEquals(7, result.get(0).getStartOffset());
+        assertEquals(31, result.get(0).getEndOffset());
+        assertEquals(true, result.get(0).isEditable());
+
         result = provider.getColorValues(document, "color: hsla(-10, 0%, 0%, 0);", 0, Collections.emptyMap());
         assertEquals(0, result.size());
     }
