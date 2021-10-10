@@ -16,14 +16,20 @@
 package com.junichi11.netbeans.modules.color.codes.preview.ui;
 
 import com.junichi11.netbeans.modules.color.codes.preview.options.ColorCodesPreviewOptions;
+import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodeFormatter;
 import com.junichi11.netbeans.modules.color.codes.preview.spi.ColorCodeGeneratorItem;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.EventQueue;
 import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.ListCellRenderer;
+import javax.swing.colorchooser.AbstractColorChooserPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  *
@@ -59,6 +65,39 @@ public final class ColorCodeGeneratorPanel extends JPanel {
         setLastSelectedGeneratorItem();
         setAppendSemicolonCheckBox();
         setLastSelectedColor();
+
+        // #48
+        ChangeListener changeListener = (ChangeEvent e) -> updatePreview();
+        AbstractColorChooserPanel[] chooserPanels = generatorColorChooser.getChooserPanels();
+        for (AbstractColorChooserPanel chooserPanel : chooserPanels) {
+            for (Component component : chooserPanel.getComponents()) {
+                if (component instanceof JPanel) {
+                    for (Component c : ((JPanel) component).getComponents()) {
+                        if (c instanceof JSpinner) {
+                            JSpinner spinner = (JSpinner) c;
+                            spinner.addChangeListener(changeListener);
+                        }
+                    }
+                }
+                // GTK
+                if (component instanceof JSpinner) {
+                    JSpinner spinner = (JSpinner) component;
+                    spinner.addChangeListener(changeListener);
+                }
+            }
+        }
+        updatePreview();
+    }
+
+    private void updatePreview() {
+        assert EventQueue.isDispatchThread();
+        ColorCodeGeneratorItem selectedItem = getSelectedGeneratorItem();
+        ColorCodeFormatter formatter = selectedItem.getFormatter();
+        String formattedColor = ""; // NOI18N
+        if (formatter != null) {
+            formattedColor = formatter.format(getSelectedColor());
+        }
+        previewLabel.setText(formattedColor);
     }
 
     private void setLastSelectedGeneratorItem() {
@@ -134,10 +173,19 @@ public final class ColorCodeGeneratorPanel extends JPanel {
         generatorColorChooser = new javax.swing.JColorChooser();
         formatLabel = new javax.swing.JLabel();
         appendSemicolonCheckBox = new javax.swing.JCheckBox();
+        previewLabel = new javax.swing.JLabel();
+
+        generatorItemComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generatorItemComboBoxActionPerformed(evt);
+            }
+        });
 
         org.openide.awt.Mnemonics.setLocalizedText(formatLabel, org.openide.util.NbBundle.getMessage(ColorCodeGeneratorPanel.class, "ColorCodeGeneratorPanel.formatLabel.text")); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(appendSemicolonCheckBox, org.openide.util.NbBundle.getMessage(ColorCodeGeneratorPanel.class, "ColorCodeGeneratorPanel.appendSemicolonCheckBox.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(previewLabel, "PREVIEW"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -151,8 +199,9 @@ public final class ColorCodeGeneratorPanel extends JPanel {
                         .addComponent(formatLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(generatorItemComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(appendSemicolonCheckBox)))
+                        .addGap(18, 18, 18)
+                        .addComponent(previewLabel))
+                    .addComponent(appendSemicolonCheckBox))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -161,11 +210,17 @@ public final class ColorCodeGeneratorPanel extends JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(generatorItemComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(formatLabel)
-                    .addComponent(appendSemicolonCheckBox))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(previewLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(appendSemicolonCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(generatorColorChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void generatorItemComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generatorItemComboBoxActionPerformed
+        updatePreview();
+    }//GEN-LAST:event_generatorItemComboBoxActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -173,6 +228,7 @@ public final class ColorCodeGeneratorPanel extends JPanel {
     private javax.swing.JLabel formatLabel;
     private javax.swing.JColorChooser generatorColorChooser;
     private javax.swing.JComboBox<ColorCodeGeneratorItem> generatorItemComboBox;
+    private javax.swing.JLabel previewLabel;
     // End of variables declaration//GEN-END:variables
 
     private static class ListCellRendererImpl implements ListCellRenderer<ColorCodeGeneratorItem> {
