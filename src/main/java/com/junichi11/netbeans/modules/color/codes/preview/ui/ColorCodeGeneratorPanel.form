@@ -4,7 +4,7 @@
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="1"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
-    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
@@ -24,9 +24,10 @@
                       <Component id="formatLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="generatorItemComboBox" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="appendSemicolonCheckBox" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="previewLabel" min="-2" max="-2" attributes="0"/>
                   </Group>
+                  <Component id="appendSemicolonCheckBox" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
           </Group>
@@ -38,9 +39,11 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="generatorItemComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="formatLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="appendSemicolonCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="previewLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+              <Component id="appendSemicolonCheckBox" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="generatorColorChooser" min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -53,6 +56,9 @@
           <StringArray count="0"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="generatorItemComboBoxActionPerformed"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;ColorCodeGeneratorItem&gt;"/>
       </AuxValues>
@@ -71,6 +77,11 @@
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
           <ResourceString bundle="com/junichi11/netbeans/modules/color/codes/preview/ui/Bundle.properties" key="ColorCodeGeneratorPanel.appendSemicolonCheckBox.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="previewLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="PREVIEW" noResource="true"/>
       </Properties>
     </Component>
   </SubComponents>

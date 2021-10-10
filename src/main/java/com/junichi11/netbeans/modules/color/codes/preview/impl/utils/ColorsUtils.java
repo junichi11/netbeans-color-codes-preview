@@ -889,7 +889,17 @@ public final class ColorsUtils {
         float r = hueToRgb(m1, m2, h + 1.0f / 3.0f);
         float g = hueToRgb(m1, m2, h);
         float b = hueToRgb(m1, m2, h - 1.0f / 3.0f);
-        return new float[]{r, g, b};
+        return new float[]{fixFloatRgbRange(r), fixFloatRgbRange(g), fixFloatRgbRange(b)};
+    }
+
+    private static float fixFloatRgbRange(float f) {
+        if (f > 1.0f) {
+            return 1.0f;
+        }
+        if (f < 0.0f) {
+            return 0.0f;
+        }
+        return f;
     }
 
     private static float hueToRgb(float m1, float m2, float h) {

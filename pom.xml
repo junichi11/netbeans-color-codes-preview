@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.junichi11.netbeans.modules</groupId>
     <artifactId>netbeans-color-codes-preview</artifactId>
-    <version>0.13.2</version>
+    <version>0.13.3</version>
     <packaging>nbm</packaging>
     <name>Color Codes Preview</name>
     <url>https://github.com/junichi11/netbeans-color-codes-preview</url>
@@ -17,8 +17,8 @@
     <scm>
         <connection>scm:git:https://github.com/junichi11/netbeans-color-codes-preview.git</connection>
         <developerConnection>scm:git:https://github.com/junichi11/netbeans-color-codes-preview.git</developerConnection>
-        <url>https://github.com/junichi11/netbeans-color-codes-preview/tree/${project.scm.tag}</url>
-        <tag>master</tag>
+        <url>https://github.com/junichi11/netbeans-color-codes-preview</url>
+        <tag>HEAD</tag>
     </scm>
     <licenses>
         <license>
@@ -173,7 +173,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.10</version>
+            <version>4.13.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
