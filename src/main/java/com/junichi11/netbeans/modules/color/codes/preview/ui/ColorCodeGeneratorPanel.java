@@ -31,12 +31,10 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JSpinner;
 import javax.swing.LayoutStyle;
 import javax.swing.ListCellRenderer;
-import javax.swing.colorchooser.AbstractColorChooserPanel;
+import javax.swing.colorchooser.ColorSelectionModel;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import org.openide.awt.Mnemonics;
 import org.openide.util.NbBundle;
 
@@ -76,25 +74,8 @@ public final class ColorCodeGeneratorPanel extends JPanel {
         setLastSelectedColor();
 
         // #48
-        ChangeListener changeListener = (ChangeEvent e) -> updatePreview();
-        AbstractColorChooserPanel[] chooserPanels = generatorColorChooser.getChooserPanels();
-        for (AbstractColorChooserPanel chooserPanel : chooserPanels) {
-            for (Component component : chooserPanel.getComponents()) {
-                if (component instanceof JPanel) {
-                    for (Component c : ((JPanel) component).getComponents()) {
-                        if (c instanceof JSpinner) {
-                            JSpinner spinner = (JSpinner) c;
-                            spinner.addChangeListener(changeListener);
-                        }
-                    }
-                }
-                // GTK
-                if (component instanceof JSpinner) {
-                    JSpinner spinner = (JSpinner) component;
-                    spinner.addChangeListener(changeListener);
-                }
-            }
-        }
+        ColorSelectionModel colorSelectionModel = generatorColorChooser.getSelectionModel();
+        colorSelectionModel.addChangeListener((ChangeEvent e) -> updatePreview());
         updatePreview();
     }
 
