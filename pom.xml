@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.junichi11.netbeans.modules</groupId>
     <artifactId>netbeans-color-codes-preview</artifactId>
-    <version>0.13.2</version>
+    <version>0.13.3</version>
     <packaging>nbm</packaging>
     <name>Color Codes Preview</name>
     <url>https://github.com/junichi11/netbeans-color-codes-preview</url>
